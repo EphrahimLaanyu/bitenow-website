@@ -17,7 +17,7 @@ export function ProtectedRoute({ children }: Readonly<{ children: React.ReactNod
 
   if (status !== "authenticated") {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#07111f] text-sm text-[#91a4bc]">
+      <div className="flex min-h-screen items-center justify-center bg-[var(--surface)] text-sm text-[var(--muted)]">
         Checking access...
       </div>
     );

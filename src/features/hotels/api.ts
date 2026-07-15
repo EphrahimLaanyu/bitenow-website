@@ -10,6 +10,19 @@ export function getHotel(id: UUID) {
   return apiRequest<Hotel>(`${apiEndpoints.hotels}${id}/`);
 }
 
+export function listGuestHotels(params?: ListParams) {
+  return apiRequest<PaginatedResponse<Hotel>>(apiEndpoints.hotels, {
+    auth: false,
+    params
+  });
+}
+
+export function getGuestHotel(id: UUID) {
+  return apiRequest<Hotel>(`${apiEndpoints.hotels}${id}/`, {
+    auth: false
+  });
+}
+
 export function createHotel(payload: HotelPayload) {
   return apiRequest<Hotel>(apiEndpoints.hotels, {
     body: JSON.stringify(payload),

@@ -12,6 +12,7 @@ export const apiEndpoints = {
   },
   tables: "/api/v1/tables/",
   orders: "/api/v1/orders/",
+  orderItems: "/api/v1/order-items/",
   payments: "/api/v1/payments/",
   notifications: "/api/v1/notifications/",
   auditLogs: "/api/v1/audit-logs/"

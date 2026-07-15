@@ -6,9 +6,9 @@ type CheckboxProps = Omit<InputHTMLAttributes<HTMLInputElement>, "type"> & {
 
 export function Checkbox({ label, ...props }: CheckboxProps) {
   return (
-    <label className="flex items-center gap-3 rounded-md border border-[#1e3350] bg-[#07111f] px-3 py-3 text-sm text-[#edf4ff]">
+    <label className="flex items-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm font-semibold text-[var(--foreground)]">
       <input
-        className="h-4 w-4 accent-[#f97316]"
+        className="h-4 w-4 accent-[var(--primary)]"
         type="checkbox"
         {...props}
       />

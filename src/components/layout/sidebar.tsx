@@ -32,20 +32,18 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="hidden min-h-screen w-72 border-r border-[#1e3350] bg-[#07111f]/92 px-4 py-5 lg:block">
+    <aside className="hidden min-h-screen w-72 border-r border-[var(--border)] bg-[var(--surface)] px-4 py-5 lg:block">
       <div className="mb-8 flex items-center gap-3 px-2">
-        <span className="flex h-11 w-11 items-center justify-center rounded-md bg-[#f97316] text-[#111827]">
+        <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[var(--primary)] text-[var(--primary-foreground)] shadow-lg shadow-blue-500/20">
           <ShieldCheck size={22} aria-hidden="true" />
         </span>
         <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#f97316]">
-            Hotel OS
-          </p>
-          <p className="text-xs text-[#91a4bc]">Ordering console</p>
+          <p className="text-lg font-extrabold tracking-tight text-[var(--foreground)]">BiteNow</p>
+          <p className="text-xs font-semibold text-[var(--muted)]">Operations console</p>
         </div>
       </div>
 
-      <nav className="space-y-1">
+      <nav className="space-y-1.5">
         {navItems.map((item) => {
           const Icon = item.icon;
           const active = pathname === item.href;
@@ -53,8 +51,8 @@ export function Sidebar() {
           return (
             <Link
               className={cn(
-                "flex h-11 items-center gap-3 rounded-md px-3 text-sm font-medium text-[#91a4bc] transition-colors hover:bg-[#102a4c] hover:text-white",
-                active && "bg-[#102a4c] text-white"
+                "flex h-11 items-center gap-3 rounded-2xl px-3 text-sm font-bold text-[var(--muted)] transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--foreground)]",
+                active && "bg-[var(--primary)] text-[var(--primary-foreground)] shadow-sm"
               )}
               href={item.href}
               key={item.href}

@@ -1,9 +1,21 @@
 import type { Metadata } from "next";
+import { Manrope, Plus_Jakarta_Sans } from "next/font/google";
+import { AppProviders } from "@/app/providers";
 import "./globals.css";
 
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-plus-jakarta"
+});
+
+const manrope = Manrope({
+  subsets: ["latin"],
+  variable: "--font-manrope"
+});
+
 export const metadata: Metadata = {
-  title: "Hotel Ordering System",
-  description: "Frontend foundation for hotel ordering and restaurant management."
+  title: "BiteNow",
+  description: "Premium hotel and restaurant ordering."
 };
 
 export default function RootLayout({
@@ -12,8 +24,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html className={`${plusJakarta.variable} ${manrope.variable}`} lang="en" suppressHydrationWarning>
+      <body>
+        <AppProviders>{children}</AppProviders>
+      </body>
     </html>
   );
 }

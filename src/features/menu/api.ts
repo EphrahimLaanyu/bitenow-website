@@ -17,6 +17,12 @@ export function listMenuCategories(params?: ListParams) {
   });
 }
 
+export function getMenuCategory(id: UUID, hotelId?: UUID) {
+  return apiRequest<MenuCategory>(`${apiEndpoints.menu.categories}${id}/`, {
+    hotelId
+  });
+}
+
 export function createMenuCategory(payload: MenuCategoryPayload) {
   return apiRequest<MenuCategory>(apiEndpoints.menu.categories, {
     body: JSON.stringify(payload),
@@ -44,6 +50,12 @@ export function listMenuItems(params?: ListParams) {
   return apiRequest<PaginatedResponse<MenuItem>>(apiEndpoints.menu.items, {
     hotelId: params?.hotel,
     params
+  });
+}
+
+export function getMenuItem(id: UUID, hotelId?: UUID) {
+  return apiRequest<MenuItem>(`${apiEndpoints.menu.items}${id}/`, {
+    hotelId
   });
 }
 

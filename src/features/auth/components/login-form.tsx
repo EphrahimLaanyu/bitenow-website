@@ -6,6 +6,7 @@ import { ApiError } from "@/lib/api/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { login } from "@/features/auth/api";
+import { useAuth } from "@/lib/auth/auth-context";
 import { getAccessToken } from "@/lib/auth/token-storage";
 
 type LoginErrorState = {
@@ -17,6 +18,7 @@ type LoginErrorState = {
 export function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { bootstrapSession } = useAuth();
   const nextUrl = getSafeNextUrl(searchParams.get("next"));
   const [error, setError] = useState<LoginErrorState | null>(null);
   const [loading, setLoading] = useState(false);
@@ -28,9 +30,13 @@ export function LoginForm() {
     }
 
     if (getAccessToken()) {
-      router.replace(nextUrl);
+      void bootstrapSession().then((authenticated) => {
+        if (authenticated) {
+          router.replace(nextUrl);
+        }
+      });
     }
-  }, [nextUrl, router, searchParams]);
+  }, [bootstrapSession, nextUrl, router, searchParams]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -43,6 +49,7 @@ export function LoginForm() {
 
     try {
       await login({ email, password });
+      await bootstrapSession();
       router.replace(nextUrl);
       router.refresh();
     } catch (authError) {
@@ -59,7 +66,7 @@ export function LoginForm() {
         disabled={loading}
         label="Email"
         name="email"
-        placeholder="manager@hotel.com"
+        placeholder="you@bitenow.com"
         required
         type="email"
       />
@@ -76,7 +83,7 @@ export function LoginForm() {
       {error ? (
         <div
           aria-live="polite"
-          className="rounded-md border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-100"
+          className="rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-600 dark:text-red-100"
           role="alert"
         >
           <div className="flex items-start justify-between gap-3">
@@ -87,7 +94,7 @@ export function LoginForm() {
               </span>
             ) : null}
           </div>
-          <ul className="mt-2 space-y-1 text-red-100/90">
+          <ul className="mt-2 space-y-1 text-red-600/90 dark:text-red-100/90">
             {error.messages.map((message) => (
               <li key={message}>{message}</li>
             ))}
@@ -95,7 +102,7 @@ export function LoginForm() {
         </div>
       ) : null}
 
-      <Button className="w-full" disabled={loading} type="submit">
+      <Button className="w-full" disabled={loading} type="submit" variant="primary">
         {loading ? "Signing in..." : "Continue"}
       </Button>
     </form>

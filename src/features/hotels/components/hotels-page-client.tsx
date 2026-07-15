@@ -49,14 +49,14 @@ export function HotelsPageClient() {
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <Badge>Hotels API</Badge>
-          <h1 className="mt-3 text-3xl font-bold text-white">Hotels</h1>
-          <p className="mt-2 max-w-2xl text-sm text-[#91a4bc]">
+          <h1 className="mt-3 text-3xl font-bold text-[var(--foreground)]">Hotels</h1>
+          <p className="mt-2 max-w-2xl text-sm text-[var(--muted)]">
             Live hotel records from the backend. These hotels provide the operating context for
             tables, menu, orders, payments, and staff roles.
           </p>
         </div>
         <Link
-          className="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-[#f97316] px-4 text-sm font-semibold text-[#111827] transition-colors hover:bg-[#fb923c]"
+          className="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-[var(--accent)] px-4 text-sm font-semibold text-[var(--accent-foreground)] transition-colors hover:bg-[var(--accent-hover)]"
           href="/hotels/new"
         >
           <Plus aria-hidden size={18} />
@@ -68,7 +68,7 @@ export function HotelsPageClient() {
         <div className="relative">
           <Search
             aria-hidden
-            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#60758f]"
+            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)]"
             size={18}
           />
           <Input
@@ -92,7 +92,7 @@ export function HotelsPageClient() {
         {loading
           ? Array.from({ length: 3 }).map((_, index) => (
               <div
-                className="h-52 animate-pulse rounded-lg border border-[#1e3350] bg-[#0b1f3a]/70"
+                className="h-52 animate-pulse rounded-lg border border-[var(--border)] bg-[var(--surface-2)]/70"
                 key={index}
               />
             ))
@@ -101,12 +101,12 @@ export function HotelsPageClient() {
 
       {!loading && hotels.length === 0 ? (
         <Card>
-          <p className="text-sm text-[#91a4bc]">No hotels were returned by the API.</p>
+          <p className="text-sm text-[var(--muted)]">No hotels were returned by the API.</p>
         </Card>
       ) : null}
 
       {!loading && count > hotels.length ? (
-        <p className="text-sm text-[#91a4bc]">
+        <p className="text-sm text-[var(--muted)]">
           Showing {hotels.length} of {count} hotels. Search and pagination can be added next.
         </p>
       ) : null}
@@ -119,43 +119,43 @@ function HotelCard({ hotel }: { hotel: Hotel }) {
     <Card className="space-y-5">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
-          <div className="flex items-center gap-2 text-[#f97316]">
+          <div className="flex items-center gap-2 text-[var(--accent)]">
             <Building2 aria-hidden size={18} />
             <span className="text-xs font-semibold uppercase tracking-[0.16em]">{hotel.code}</span>
           </div>
-          <h2 className="mt-3 truncate text-xl font-bold text-white">{hotel.name}</h2>
+          <h2 className="mt-3 truncate text-xl font-bold text-[var(--foreground)]">{hotel.name}</h2>
         </div>
-        <Badge className={hotel.is_active ? undefined : "border-[#60758f] bg-[#60758f]/10 text-[#91a4bc]"}>
+        <Badge className={hotel.is_active ? undefined : "border-[var(--border)] bg-[var(--surface-3)] text-[var(--muted)]"}>
           {hotel.is_active ? "Active" : "Inactive"}
         </Badge>
       </div>
 
-      <div className="grid gap-3 text-sm text-[#91a4bc]">
+      <div className="grid gap-3 text-sm text-[var(--muted)]">
         <HotelLine label="Currency" value={hotel.currency} />
         <HotelLine label="Timezone" value={hotel.timezone} />
         <HotelLine label="Address" value={hotel.address} />
       </div>
 
-      <div className="space-y-2 border-t border-[#1e3350] pt-4 text-sm text-[#91a4bc]">
+      <div className="space-y-2 border-t border-[var(--border)] pt-4 text-sm text-[var(--muted)]">
         <p className="flex items-center gap-2">
-          <Mail aria-hidden className="text-[#f97316]" size={16} />
+          <Mail aria-hidden className="text-[var(--accent)]" size={16} />
           <span className="truncate">{hotel.email || "No email set"}</span>
         </p>
         <p className="flex items-center gap-2">
-          <Phone aria-hidden className="text-[#f97316]" size={16} />
+          <Phone aria-hidden className="text-[var(--accent)]" size={16} />
           <span>{hotel.phone || "No phone set"}</span>
         </p>
       </div>
 
-      <div className="flex flex-wrap gap-2 border-t border-[#1e3350] pt-4">
+      <div className="flex flex-wrap gap-2 border-t border-[var(--border)] pt-4">
         <Link
-          className="inline-flex h-10 items-center justify-center rounded-md border border-[#1e3350] bg-[#102a4c] px-3 text-sm font-semibold text-white transition-colors hover:bg-[#173a67]"
+          className="inline-flex h-10 items-center justify-center rounded-md border border-[var(--border)] bg-[var(--surface-2)] px-3 text-sm font-semibold text-[var(--foreground)] transition-colors hover:bg-[var(--surface-2)]"
           href={`/hotels/${hotel.id}`}
         >
           View details
         </Link>
         <Link
-          className="inline-flex h-10 items-center justify-center rounded-md px-3 text-sm font-semibold text-[#91a4bc] transition-colors hover:bg-[#102a4c] hover:text-white"
+          className="inline-flex h-10 items-center justify-center rounded-md px-3 text-sm font-semibold text-[var(--muted)] transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--foreground)]"
           href={`/hotels/${hotel.id}/edit`}
         >
           Edit
@@ -169,7 +169,7 @@ function HotelLine({ label, value }: { label: string; value?: string }) {
   return (
     <p className="flex justify-between gap-4">
       <span>{label}</span>
-      <span className="truncate text-right text-white">{value || "Not set"}</span>
+      <span className="truncate text-right text-[var(--foreground)]">{value || "Not set"}</span>
     </p>
   );
 }

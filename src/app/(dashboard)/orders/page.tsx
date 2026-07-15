@@ -1,5 +1,5 @@
-import { FeaturePlaceholder } from "@/components/layout/feature-placeholder";
+import { OrdersPageClient } from "@/features/orders/components/orders-page-client";
 
 export default function OrdersPage() {
-  return <FeaturePlaceholder title="Orders" description="Dine-in, takeaway, and delivery orders." />;
+  return <OrdersPageClient />;
 }

@@ -10,11 +10,14 @@ export type PaginatedResponse<T> = {
 };
 
 export type ListParams = {
+  created_by?: string;
   hotel?: string;
+  order?: string;
   ordering?: string;
   page?: number;
   page_size?: number;
   search?: string;
+  status?: string;
 };
 
 export type LoginPayload = {
@@ -92,6 +95,14 @@ export type DiningTable = {
   updated_at: ISODateTime;
 };
 
+export type DiningTablePayload = {
+  hotel: UUID;
+  table_number: string;
+  capacity?: number;
+  status?: DiningTableStatus;
+  notes?: string;
+};
+
 export type MenuItem = {
   id: UUID;
   hotel: UUID;
@@ -162,11 +173,73 @@ export type Order = {
   customer_name?: string;
   customer_phone?: string;
   notes?: string;
+  subtotal?: DecimalString;
+  tax_amount?: DecimalString;
+  service_charge?: DecimalString;
+  discount_amount?: DecimalString;
   total_amount?: DecimalString;
+  items?: OrderItem[];
+  status_history?: OrderStatusHistory[];
+  payments?: Payment[];
   placed_at: ISODateTime | null;
   completed_at: ISODateTime | null;
   created_at: ISODateTime;
   updated_at: ISODateTime;
+};
+
+export type OrderPayload = {
+  hotel: UUID;
+  order_number?: string;
+  created_by?: UUID;
+  table?: UUID | null;
+  order_type?: OrderType;
+  status?: OrderStatus;
+  customer_name?: string;
+  customer_phone?: string;
+  notes?: string;
+  items?: OrderItemCreatePayload[];
+};
+
+export type OrderStatusPayload = {
+  status: OrderStatus;
+  note?: string;
+};
+
+export type OrderItem = {
+  id: UUID;
+  order: UUID;
+  menu_item: UUID;
+  quantity?: number;
+  unit_price: DecimalString;
+  line_total?: DecimalString;
+  notes?: string;
+  created_at: ISODateTime;
+  updated_at: ISODateTime;
+};
+
+export type OrderItemPayload = {
+  order: UUID;
+  menu_item: UUID;
+  quantity?: number;
+  unit_price: DecimalString;
+  notes?: string;
+};
+
+export type OrderItemCreatePayload = {
+  menu_item: UUID;
+  quantity?: number;
+  unit_price: DecimalString;
+  notes?: string;
+};
+
+export type OrderStatusHistory = {
+  id: UUID;
+  order: UUID;
+  from_status: string;
+  to_status: string;
+  changed_by: UUID;
+  note?: string;
+  created_at: ISODateTime;
 };
 
 export type Payment = {
@@ -192,6 +265,23 @@ export type Notification = {
   payload?: unknown;
   is_read?: boolean;
   read_at: ISODateTime | null;
+  created_at: ISODateTime;
+  updated_at: ISODateTime;
+};
+
+export type AuditLog = {
+  id: UUID;
+  action: string;
+  model_name: string;
+  object_id: string;
+  before?: unknown;
+  after?: unknown;
+  payload?: unknown;
+  path?: string;
+  ip_address?: string | null;
+  user_agent?: string;
+  hotel: UUID | null;
+  actor: UUID | null;
   created_at: ISODateTime;
   updated_at: ISODateTime;
 };

@@ -39,14 +39,14 @@ export function HotelEditPageClient({ hotelId }: { hotelId: UUID }) {
 
   return (
     <div className="space-y-6">
-      <Link className="inline-flex items-center gap-2 text-sm text-[#91a4bc] hover:text-white" href={`/hotels/${hotelId}`}>
+      <Link className="inline-flex items-center gap-2 text-sm text-[var(--muted)] hover:text-[var(--foreground)]" href={`/hotels/${hotelId}`}>
         <ArrowLeft aria-hidden size={16} />
         Hotel details
       </Link>
 
       <div>
-        <h1 className="text-3xl font-bold text-white">Edit hotel</h1>
-        <p className="mt-2 max-w-2xl text-sm text-[#91a4bc]">
+        <h1 className="text-3xl font-bold text-[var(--foreground)]">Edit hotel</h1>
+        <p className="mt-2 max-w-2xl text-sm text-[var(--muted)]">
           Update the hotel profile and operational defaults.
         </p>
       </div>
@@ -58,7 +58,7 @@ export function HotelEditPageClient({ hotelId }: { hotelId: UUID }) {
       ) : null}
 
       {loading ? (
-        <div className="h-96 max-w-4xl animate-pulse rounded-lg border border-[#1e3350] bg-[#0b1f3a]/70" />
+        <div className="h-96 max-w-4xl animate-pulse rounded-lg border border-[var(--border)] bg-[var(--surface-2)]/70" />
       ) : hotel ? (
         <HotelForm hotel={hotel} mode="edit" />
       ) : null}

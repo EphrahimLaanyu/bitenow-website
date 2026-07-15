@@ -1,5 +1,5 @@
-import { FeaturePlaceholder } from "@/components/layout/feature-placeholder";
+import { AuditLogsPageClient } from "@/features/audit-logs/components/audit-logs-page-client";
 
 export default function AuditLogsPage() {
-  return <FeaturePlaceholder title="Audit logs" description="Traceable system activity and changes." />;
+  return <AuditLogsPageClient />;
 }

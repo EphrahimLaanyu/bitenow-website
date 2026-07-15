@@ -1,5 +1,5 @@
-import { FeaturePlaceholder } from "@/components/layout/feature-placeholder";
+import { NotificationsPageClient } from "@/features/notifications/components/notifications-page-client";
 
 export default function NotificationsPage() {
-  return <FeaturePlaceholder title="Notifications" description="Operational alerts and read states." />;
+  return <NotificationsPageClient />;
 }

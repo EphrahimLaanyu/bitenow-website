@@ -295,8 +295,8 @@ export function MenuCategoriesPageClient() {
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <Badge>Menu categories</Badge>
-          <h1 className="mt-3 text-3xl font-bold text-white">Categories</h1>
-          <p className="mt-2 max-w-2xl text-sm text-[#91a4bc]">
+          <h1 className="mt-3 text-3xl font-bold text-[var(--foreground)]">Categories</h1>
+          <p className="mt-2 max-w-2xl text-sm text-[var(--muted)]">
             Create the groups that menu items will live under: breakfast, lunch, dinner, drinks,
             desserts, and any custom hotel sections.
           </p>
@@ -332,8 +332,8 @@ export function MenuCategoriesPageClient() {
         </div>
 
         <div className="mb-5 flex items-center gap-2">
-          <Plus aria-hidden className="text-[#f97316]" size={20} />
-          <h2 className="text-lg font-semibold text-white">Create category</h2>
+          <Plus aria-hidden className="text-[var(--accent)]" size={20} />
+          <h2 className="text-lg font-semibold text-[var(--foreground)]">Create category</h2>
         </div>
 
         <form className="grid gap-4 lg:grid-cols-[1fr_1fr_1fr_0.6fr_0.7fr_auto]" onSubmit={handleCreate}>
@@ -379,15 +379,15 @@ export function MenuCategoriesPageClient() {
 
       <section className="space-y-4">
         <div className="flex items-center gap-2">
-          <Layers3 aria-hidden className="text-[#f97316]" size={20} />
-          <h2 className="text-lg font-semibold text-white">Category list</h2>
+          <Layers3 aria-hidden className="text-[var(--accent)]" size={20} />
+          <h2 className="text-lg font-semibold text-[var(--foreground)]">Category list</h2>
           <Badge>{categories.length}</Badge>
         </div>
 
         {loading ? (
           <div className="grid gap-3">
             {Array.from({ length: 5 }).map((_, index) => (
-              <div className="h-24 animate-pulse rounded-lg border border-[#1e3350] bg-[#0b1f3a]/70" key={index} />
+              <div className="h-24 animate-pulse rounded-lg border border-[var(--border)] bg-[var(--surface-2)]/70" key={index} />
             ))}
           </div>
         ) : categories.length > 0 ? (
@@ -416,15 +416,15 @@ export function MenuCategoriesPageClient() {
           </div>
         ) : (
           <Card>
-            <p className="text-sm text-[#91a4bc]">No menu categories were returned by the API.</p>
+            <p className="text-sm text-[var(--muted)]">No menu categories were returned by the API.</p>
           </Card>
         )}
       </section>
 
       <Card>
         <div className="mb-5 flex items-center gap-2">
-          <Utensils aria-hidden className="text-[#f97316]" size={20} />
-          <h2 className="text-lg font-semibold text-white">Create menu item</h2>
+          <Utensils aria-hidden className="text-[var(--accent)]" size={20} />
+          <h2 className="text-lg font-semibold text-[var(--foreground)]">Create menu item</h2>
         </div>
 
         <form className="grid gap-4 xl:grid-cols-[1fr_1fr_0.8fr_0.8fr_0.8fr]" onSubmit={handleCreateItem}>
@@ -468,15 +468,15 @@ export function MenuCategoriesPageClient() {
 
       <section className="space-y-4">
         <div className="flex items-center gap-2">
-          <Utensils aria-hidden className="text-[#f97316]" size={20} />
-          <h2 className="text-lg font-semibold text-white">Restaurant catalogue</h2>
+          <Utensils aria-hidden className="text-[var(--accent)]" size={20} />
+          <h2 className="text-lg font-semibold text-[var(--foreground)]">Restaurant catalogue</h2>
           <Badge>{items.length}</Badge>
         </div>
 
         {loading ? (
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {Array.from({ length: 6 }).map((_, index) => (
-              <div className="h-72 animate-pulse rounded-lg border border-[#1e3350] bg-[#0b1f3a]/70" key={index} />
+              <div className="h-72 animate-pulse rounded-lg border border-[var(--border)] bg-[var(--surface-2)]/70" key={index} />
             ))}
           </div>
         ) : items.length > 0 ? (
@@ -506,7 +506,7 @@ export function MenuCategoriesPageClient() {
           </div>
         ) : (
           <Card>
-            <p className="text-sm text-[#91a4bc]">No menu items were returned by the API.</p>
+            <p className="text-sm text-[var(--muted)]">No menu items were returned by the API.</p>
           </Card>
         )}
       </section>
@@ -530,20 +530,20 @@ function CategoryDisplayRow({
   return (
     <Card className="grid gap-4 lg:grid-cols-[1fr_1fr_0.7fr_0.7fr_auto] lg:items-center">
       <div>
-        <p className="text-xs uppercase tracking-[0.14em] text-[#60758f]">Category</p>
-        <p className="mt-2 text-sm font-semibold text-white">{category.name}</p>
+        <p className="text-xs uppercase tracking-[0.14em] text-[var(--muted)]">Category</p>
+        <p className="mt-2 text-sm font-semibold text-[var(--foreground)]">{category.name}</p>
       </div>
       <div>
-        <p className="text-xs uppercase tracking-[0.14em] text-[#60758f]">Hotel</p>
-        <p className="mt-2 truncate text-sm text-white">{hotel?.name ?? category.hotel}</p>
+        <p className="text-xs uppercase tracking-[0.14em] text-[var(--muted)]">Hotel</p>
+        <p className="mt-2 truncate text-sm text-[var(--foreground)]">{hotel?.name ?? category.hotel}</p>
       </div>
       <div>
-        <p className="text-xs uppercase tracking-[0.14em] text-[#60758f]">Slug</p>
-        <p className="mt-2 truncate text-sm text-white">{category.slug}</p>
+        <p className="text-xs uppercase tracking-[0.14em] text-[var(--muted)]">Slug</p>
+        <p className="mt-2 truncate text-sm text-[var(--foreground)]">{category.slug}</p>
       </div>
       <div className="flex items-center gap-2">
         <Badge>{category.is_active === false ? "Inactive" : "Active"}</Badge>
-        <span className="text-sm text-[#91a4bc]">Sort {category.sort_order ?? 0}</span>
+        <span className="text-sm text-[var(--muted)]">Sort {category.sort_order ?? 0}</span>
       </div>
       <div className="flex flex-wrap gap-2">
         <Button disabled={busy} onClick={onEdit} type="button" variant="secondary">
@@ -618,13 +618,13 @@ function MenuItemCard({
     <Card className="space-y-5">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#f97316]">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--accent)]">
             {category?.name ?? "Uncategorised"}
           </p>
-          <h3 className="mt-2 truncate text-xl font-bold text-white">{item.name}</h3>
-          <p className="mt-1 text-sm text-[#91a4bc]">{item.sku}</p>
+          <h3 className="mt-2 truncate text-xl font-bold text-[var(--foreground)]">{item.name}</h3>
+          <p className="mt-1 text-sm text-[var(--muted)]">{item.sku}</p>
         </div>
-        <Badge className={item.is_available === false ? "border-[#60758f] bg-[#60758f]/10 text-[#91a4bc]" : undefined}>
+        <Badge className={item.is_available === false ? "border-[var(--border)] bg-[var(--surface-3)] text-[var(--muted)]" : undefined}>
           {item.is_available === false ? "Unavailable" : "Available"}
         </Badge>
       </div>
@@ -632,24 +632,24 @@ function MenuItemCard({
       {item.image_url ? (
         <div
           aria-label={item.name}
-          className="h-36 rounded-md border border-[#1e3350] bg-[#07111f] bg-cover bg-center"
+          className="h-36 rounded-md border border-[var(--border)] bg-[var(--surface)] bg-cover bg-center"
           role="img"
           style={{ backgroundImage: `url("${item.image_url}")` }}
         />
       ) : (
-        <div className="flex h-36 items-center justify-center rounded-md border border-[#1e3350] bg-[#07111f] text-[#60758f]">
+        <div className="flex h-36 items-center justify-center rounded-md border border-[var(--border)] bg-[var(--surface)] text-[var(--muted)]">
           <ImageIcon aria-hidden size={28} />
         </div>
       )}
 
-      <p className="min-h-10 text-sm text-[#91a4bc]">{item.description || "No description set."}</p>
+      <p className="min-h-10 text-sm text-[var(--muted)]">{item.description || "No description set."}</p>
 
       <div className="grid grid-cols-2 gap-3 text-sm">
         <ItemMetric label="Price" value={item.price ? formatMoney(item.price) : "Not set"} />
         <ItemMetric label="Prep" value={`${item.prep_time_minutes ?? 0} min`} />
       </div>
 
-      <div className="flex flex-wrap gap-2 border-t border-[#1e3350] pt-4">
+      <div className="flex flex-wrap gap-2 border-t border-[var(--border)] pt-4">
         <Button disabled={busy} onClick={onEdit} type="button" variant="secondary">
           <Pencil aria-hidden size={18} />
           Edit
@@ -721,9 +721,9 @@ function MenuItemEditCard({
 
 function ItemMetric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-md border border-[#1e3350] bg-[#07111f] p-3">
-      <p className="text-xs uppercase tracking-[0.14em] text-[#60758f]">{label}</p>
-      <p className="mt-2 truncate font-semibold text-white">{value}</p>
+    <div className="rounded-md border border-[var(--border)] bg-[var(--surface)] p-3">
+      <p className="text-xs uppercase tracking-[0.14em] text-[var(--muted)]">{label}</p>
+      <p className="mt-2 truncate font-semibold text-[var(--foreground)]">{value}</p>
     </div>
   );
 }

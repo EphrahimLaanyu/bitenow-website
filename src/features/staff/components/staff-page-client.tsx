@@ -143,9 +143,9 @@ export function StaffPageClient() {
     <div className="space-y-6">
       <div>
         <Badge>Memberships API</Badge>
-        <h1 className="mt-3 text-3xl font-bold text-white">Staff</h1>
+        <h1 className="mt-3 text-3xl font-bold text-[var(--foreground)]">Staff</h1>
         <div className="mt-2 flex flex-wrap items-center justify-between gap-4">
-          <p className="max-w-2xl text-sm text-[#91a4bc]">
+          <p className="max-w-2xl text-sm text-[var(--muted)]">
             Add existing backend users to hotels, change roles, deactivate access, or remove
             memberships entirely.
           </p>
@@ -164,8 +164,8 @@ export function StaffPageClient() {
 
       <Card>
         <div className="mb-5 flex items-center gap-2">
-          <UserPlus aria-hidden className="text-[#f97316]" size={20} />
-          <h2 className="text-lg font-semibold text-white">Add employee to hotel</h2>
+          <UserPlus aria-hidden className="text-[var(--accent)]" size={20} />
+          <h2 className="text-lg font-semibold text-[var(--foreground)]">Add employee to hotel</h2>
         </div>
 
         <form className="grid gap-4 lg:grid-cols-[1.4fr_1fr_0.8fr_0.7fr_auto]" onSubmit={handleAddEmployee}>
@@ -202,8 +202,8 @@ export function StaffPageClient() {
 
       <section className="space-y-4">
         <div className="flex items-center gap-2">
-          <Users aria-hidden className="text-[#f97316]" size={20} />
-          <h2 className="text-lg font-semibold text-white">Staff memberships</h2>
+          <Users aria-hidden className="text-[var(--accent)]" size={20} />
+          <h2 className="text-lg font-semibold text-[var(--foreground)]">Staff memberships</h2>
           <Badge>{memberships.length}</Badge>
         </div>
 
@@ -211,7 +211,7 @@ export function StaffPageClient() {
           <div className="space-y-3">
             {Array.from({ length: 4 }).map((_, index) => (
               <div
-                className="h-24 animate-pulse rounded-lg border border-[#1e3350] bg-[#0b1f3a]/70"
+                className="h-24 animate-pulse rounded-lg border border-[var(--border)] bg-[var(--surface-2)]/70"
                 key={index}
               />
             ))}
@@ -232,7 +232,7 @@ export function StaffPageClient() {
           </div>
         ) : (
           <Card>
-            <p className="text-sm text-[#91a4bc]">No staff memberships were returned by the API.</p>
+            <p className="text-sm text-[var(--muted)]">No staff memberships were returned by the API.</p>
           </Card>
         )}
       </section>
@@ -258,13 +258,13 @@ function StaffMembershipRow({
   return (
     <Card className="grid gap-4 lg:grid-cols-[1.2fr_1fr_0.8fr_0.7fr_auto] lg:items-end">
       <div className="min-w-0">
-        <p className="text-xs uppercase tracking-[0.14em] text-[#60758f]">Employee user ID</p>
-        <p className="mt-2 truncate text-sm font-semibold text-white">{membership.user}</p>
+        <p className="text-xs uppercase tracking-[0.14em] text-[var(--muted)]">Employee user ID</p>
+        <p className="mt-2 truncate text-sm font-semibold text-[var(--foreground)]">{membership.user}</p>
       </div>
 
       <div className="min-w-0">
-        <p className="text-xs uppercase tracking-[0.14em] text-[#60758f]">Hotel</p>
-        <p className="mt-2 truncate text-sm font-semibold text-white">
+        <p className="text-xs uppercase tracking-[0.14em] text-[var(--muted)]">Hotel</p>
+        <p className="mt-2 truncate text-sm font-semibold text-[var(--foreground)]">
           {hotel?.name ?? membership.hotel}
         </p>
       </div>
