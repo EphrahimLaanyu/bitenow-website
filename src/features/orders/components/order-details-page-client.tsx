@@ -13,12 +13,8 @@ import { getApiErrorMessage } from "@/lib/api/error-message";
 import type { MenuItem, Order, OrderItem, OrderStatus, OrderType } from "@/lib/api/types";
 import { listMenuItems } from "@/features/menu/api";
 import {
-  createOrderItem,
-  deleteOrderItem,
   getOrder,
-  listOrderItems,
   updateOrder,
-  updateOrderItem,
   updateOrderStatus
 } from "@/features/orders/api";
 import {
@@ -61,17 +57,11 @@ export function OrderDetailsPageClient({ orderId }: { orderId: string }) {
     setItemError(null);
 
     try {
-      const [menuResponse, itemResponse] = await Promise.all([
-        listMenuItems({ hotel: currentOrder.hotel, page_size: 100 }),
-        listOrderItems({ order: currentOrder.id, page_size: 100 }, currentOrder.hotel)
-      ]);
+      const menuResponse = await listMenuItems({ hotel: currentOrder.hotel, page_size: 100 });
       setMenuItems(menuResponse.results);
-      setOrderItems(itemResponse.results);
     } catch (itemsError) {
       setMenuItems([]);
-      setItemError(
-        `${getApiErrorMessage(itemsError)}. The uploaded API spec does not document /api/v1/order-items/, so the backend may still need that route enabled.`
-      );
+      setItemError(getApiErrorMessage(itemsError));
     }
   }
 
@@ -141,16 +131,19 @@ export function OrderDetailsPageClient({ orderId }: { orderId: string }) {
     }
 
     try {
-      await createOrderItem(
-        {
-          menu_item: menuItem.id,
-          notes: getOptionalString(formData.get("notes")),
-          order: order.id,
-          quantity,
-          unit_price: menuItem.price
-        },
-        order.hotel
-      );
+      const newItems = orderItems.map((item) => ({
+        menu_item: item.menu_item,
+        quantity: item.quantity,
+        unit_price: item.unit_price,
+        notes: item.notes
+      }));
+      newItems.push({
+        menu_item: menuItem.id,
+        quantity,
+        unit_price: menuItem.price,
+        notes: getOptionalString(formData.get("notes"))
+      });
+      await updateOrder(order.id, { hotel: order.hotel, items: newItems });
       event.currentTarget.reset();
       await loadOrder();
     } catch (addError) {
@@ -168,16 +161,13 @@ export function OrderDetailsPageClient({ orderId }: { orderId: string }) {
     setBusyItemId(item.id);
 
     try {
-      await updateOrderItem(
-        item.id,
-        {
-          menu_item: item.menu_item,
-          order: order.id,
-          quantity: nextQuantity,
-          unit_price: item.unit_price
-        },
-        order.hotel
-      );
+      const newItems = orderItems.map((orderItem) => ({
+        menu_item: orderItem.menu_item,
+        quantity: orderItem.id === item.id ? nextQuantity : orderItem.quantity,
+        unit_price: orderItem.unit_price,
+        notes: orderItem.notes
+      }));
+      await updateOrder(order.id, { hotel: order.hotel, items: newItems });
       await loadOrder();
     } catch (quantityError) {
       setItemError(getApiErrorMessage(quantityError));
@@ -195,7 +185,15 @@ export function OrderDetailsPageClient({ orderId }: { orderId: string }) {
     setBusyItemId(item.id);
 
     try {
-      await deleteOrderItem(item.id, order.hotel);
+      const newItems = orderItems
+        .filter((orderItem) => orderItem.id !== item.id)
+        .map((orderItem) => ({
+          menu_item: orderItem.menu_item,
+          quantity: orderItem.quantity,
+          unit_price: orderItem.unit_price,
+          notes: orderItem.notes
+        }));
+      await updateOrder(order.id, { hotel: order.hotel, items: newItems });
       await loadOrder();
     } catch (removeError) {
       setItemError(getApiErrorMessage(removeError));
