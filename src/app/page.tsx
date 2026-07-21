@@ -290,7 +290,7 @@ function FeatureCard({
   title
 }: {
   copy: string;
-  icon: React.ComponentType<{ className?: string; size?: number; "aria-hidden"?: boolean }>;
+  icon: React.ComponentType<{ className?: string; size?: number; "aria-hidden"?: boolean; strokeWidth?: number }>;
   title: string;
 }) {
   return (
@@ -309,7 +309,7 @@ function HeroMeal({
   price,
   title
 }: {
-  icon: React.ComponentType<{ className?: string; size?: number; "aria-hidden"?: boolean }>;
+  icon: React.ComponentType<{ className?: string; size?: number; "aria-hidden"?: boolean; strokeWidth?: number }>;
   price: string;
   title: string;
 }) {
@@ -346,7 +346,7 @@ function MiniMetric({
   label,
   value
 }: {
-  icon: React.ComponentType<{ className?: string; size?: number; "aria-hidden"?: boolean }>;
+  icon: React.ComponentType<{ className?: string; size?: number; "aria-hidden"?: boolean; strokeWidth?: number }>;
   label: string;
   value: string;
 }) {

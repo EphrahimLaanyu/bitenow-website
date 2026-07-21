@@ -161,7 +161,7 @@ export function ClientHotelsPageClient() {
           disabled={loading}
           onClick={() => loadHotels()}
           type="button"
-          variant="outline"
+          variant="secondary"
         >
           <RefreshCw aria-hidden size={16} className={cn("mr-2", loading && "animate-spin")} />
           Refresh
