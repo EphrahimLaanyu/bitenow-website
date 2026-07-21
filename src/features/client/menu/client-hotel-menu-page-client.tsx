@@ -103,11 +103,11 @@ export function ClientHotelMenuPageClient({ hotelId }: { hotelId: string }) {
 
   if (loading) {
     return (
-      <div className="space-y-4">
-        <div className="h-40 animate-pulse rounded-lg border border-[var(--border)] bg-[var(--surface-2)]/70" />
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div className="space-y-6 md:space-y-8">
+        <div className="h-40 animate-pulse rounded-xl border border-slate-200 bg-slate-50/50 shadow-sm" />
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {Array.from({ length: 6 }).map((_, index) => (
-            <div className="h-80 animate-pulse rounded-lg border border-[var(--border)] bg-[var(--surface-2)]/70" key={index} />
+            <div className="h-[420px] animate-pulse rounded-xl border border-slate-200 bg-slate-50/50 shadow-sm" key={index} />
           ))}
         </div>
       </div>
@@ -116,11 +116,11 @@ export function ClientHotelMenuPageClient({ hotelId }: { hotelId: string }) {
 
   if (error) {
     return (
-      <Card>
-        <p className="text-sm text-red-100">{error}</p>
+      <Card className="rounded-xl border border-red-200 bg-red-50 p-6 shadow-sm">
+        <p className="text-sm font-medium text-red-800">{error}</p>
         {error.includes("requires sign-in") ? (
           <Link
-            className="mt-4 inline-flex h-10 items-center justify-center rounded-md bg-[var(--accent)] px-3 text-sm font-semibold text-[var(--accent-foreground)] transition-colors hover:bg-[var(--accent-hover)]"
+            className="mt-4 inline-flex h-10 items-center justify-center rounded-lg bg-red-600 px-5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-red-700"
             href={`/login?next=${encodeURIComponent(`/client/hotels/${hotelId}/menu`)}`}
           >
             Sign in to browse menu
@@ -131,38 +131,44 @@ export function ClientHotelMenuPageClient({ hotelId }: { hotelId: string }) {
   }
 
   return (
-    <div className="space-y-6">
-      <Link className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--muted)] hover:text-[var(--foreground)]" href={`/client/hotels/${hotelId}`}>
+    <div className="space-y-6 md:space-y-8">
+      <Link 
+        className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition-colors hover:text-slate-900" 
+        href={`/client/hotels/${hotelId}`}
+      >
         <ArrowLeft aria-hidden size={16} />
         Back to hotel
       </Link>
 
       <section className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
         <div>
-          <Badge>Hotel menu</Badge>
-          <h1 className="mt-3 text-3xl font-bold text-[var(--foreground)] md:text-4xl">
+          <Badge variant="outline" className="font-medium text-slate-600 border-slate-200">
+            Hotel menu
+          </Badge>
+          <h1 className="mt-4 text-2xl font-bold tracking-tight text-slate-900 md:text-3xl lg:text-4xl">
             {hotel?.name ? `${hotel.name} Menu` : "Menu"}
           </h1>
-          <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--muted)]">
+          <p className="mt-2 max-w-2xl text-base text-slate-500">
             Browse available meals by category, price, preparation time, and availability.
           </p>
         </div>
 
-        <form className="grid gap-3 sm:grid-cols-[1fr_auto]" onSubmit={handleSearch}>
+        <form className="grid gap-3 sm:gap-4 sm:grid-cols-[1fr_auto]" onSubmit={handleSearch}>
           <Input
+            className="h-10 border-slate-200 bg-white placeholder:text-slate-400 focus:border-[var(--accent)] shadow-sm"
             label="Search menu"
             onChange={(event) => setSearch(event.target.value)}
             placeholder="Burger, fries, drinks..."
             value={search}
           />
-          <Button className="self-end" type="submit" variant="secondary">
-            <Search aria-hidden size={18} />
+          <Button className="h-10 self-end font-medium shadow-sm" type="submit" variant="secondary">
+            <Search aria-hidden size={16} className="mr-2 text-slate-500" />
             Search
           </Button>
         </form>
       </section>
 
-      <div className="flex gap-2 overflow-x-auto pb-1">
+      <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
         <CategoryTab
           active={activeCategoryId === "all"}
           count={items.length}
@@ -180,14 +186,18 @@ export function ClientHotelMenuPageClient({ hotelId }: { hotelId: string }) {
         ))}
       </div>
 
-      <div className="flex items-center gap-2">
-        <Utensils aria-hidden className="text-[var(--accent)]" size={20} />
-        <h2 className="text-lg font-semibold text-[var(--foreground)]">Menu items</h2>
-        <Badge>{filteredItems.length}</Badge>
+      <div className="flex items-center gap-2.5 border-t border-slate-200 pt-6 mt-2">
+        <div className="flex h-8 w-8 items-center justify-center rounded-md bg-slate-50 text-slate-500 border border-slate-100">
+          <Utensils aria-hidden size={16} />
+        </div>
+        <h2 className="text-lg font-semibold tracking-tight text-slate-900">Menu items</h2>
+        <Badge variant="secondary" className="ml-1 bg-slate-100 text-slate-700 hover:bg-slate-100 font-medium">
+          {filteredItems.length}
+        </Badge>
       </div>
 
       {filteredItems.length > 0 ? (
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {filteredItems.map((item) => (
             <MenuItemCard
               added={addedItemId === item.id}
@@ -200,8 +210,9 @@ export function ClientHotelMenuPageClient({ hotelId }: { hotelId: string }) {
           ))}
         </div>
       ) : (
-        <Card>
-          <p className="text-sm text-[var(--muted)]">No menu items matched this filter.</p>
+        <Card className="flex flex-col items-center justify-center rounded-xl border border-slate-200 bg-white py-16 text-center shadow-sm">
+          <Search className="mb-3 text-slate-300" size={32} />
+          <p className="text-sm font-medium text-slate-500">No menu items matched this filter.</p>
         </Card>
       )}
     </div>
@@ -221,16 +232,20 @@ function CategoryTab({
 }) {
   return (
     <button
-      className={`inline-flex h-10 shrink-0 items-center gap-2 rounded-md border px-3 text-sm font-semibold transition-colors ${
+      className={`inline-flex h-10 shrink-0 items-center gap-2 rounded-lg border px-4 text-sm font-medium transition-all ${
         active
-          ? "border-[var(--accent)]/50 bg-[var(--accent)] text-[var(--accent-foreground)]"
-          : "border-[var(--border)] bg-[var(--surface-2)] text-[var(--foreground)] hover:bg-[var(--surface-2)]"
+          ? "border-slate-900 bg-slate-900 text-white shadow-sm"
+          : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900"
       }`}
       onClick={onClick}
       type="button"
     >
       {label}
-      <span className={active ? "text-[var(--accent-foreground)]/70" : "text-[var(--muted)]"}>{count}</span>
+      <span className={`px-1.5 py-0.5 rounded-md text-[11px] font-semibold ${
+        active ? "bg-slate-800 text-slate-300" : "bg-slate-100 text-slate-500"
+      }`}>
+        {count}
+      </span>
     </button>
   );
 }
@@ -249,54 +264,59 @@ function MenuItemCard({
   onAdd: (item: MenuItem) => void;
 }) {
   return (
-    <Card className="overflow-hidden p-0">
+    <Card className="flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white p-0 shadow-sm transition-shadow hover:shadow-md">
       {item.image_url ? (
         <div
           aria-label={item.name}
-          className="h-44 bg-[var(--surface-2)] bg-cover bg-center"
+          className="h-48 bg-slate-100 bg-cover bg-center border-b border-slate-100"
           role="img"
           style={{ backgroundImage: `url("${item.image_url}")` }}
         />
       ) : (
-        <div className="flex h-44 items-center justify-center bg-[var(--surface-2)] text-[var(--muted)]">
-          <ImageIcon aria-hidden size={36} />
+        <div className="flex h-48 items-center justify-center bg-slate-50 text-slate-300 border-b border-slate-100">
+          <ImageIcon aria-hidden size={40} />
         </div>
       )}
 
-      <div className="space-y-4 p-5">
+      <div className="flex flex-1 flex-col p-5">
         <div className="flex flex-wrap items-start justify-between gap-3">
-          <div className="min-w-0">
-            <h3 className="text-lg font-bold text-[var(--foreground)]">{item.name}</h3>
-            <p className="mt-1 text-xs uppercase tracking-[0.14em] text-[var(--muted)]">
+          <div className="min-w-0 flex-1">
+            <h3 className="text-lg font-semibold tracking-tight text-slate-900 line-clamp-1">{item.name}</h3>
+            <p className="mt-1 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
               {category?.name ?? "Uncategorized"}
             </p>
           </div>
-          <Badge className={item.is_available === false ? "border-red-500/30 bg-red-500/10 text-red-100" : undefined}>
+          <Badge 
+            variant={item.is_available === false ? "destructive" : "secondary"}
+            className={item.is_available === false ? "bg-red-50 text-red-700 border-red-200" : "bg-emerald-50 text-emerald-700 border-emerald-200"}
+          >
             {item.is_available === false ? "Unavailable" : "Available"}
           </Badge>
         </div>
 
-        <p className="line-clamp-3 min-h-16 text-sm leading-6 text-[var(--muted)]">
+        <p className="mt-4 line-clamp-3 min-h-[4rem] text-sm leading-relaxed text-slate-600">
           {item.description || "No description listed yet."}
         </p>
 
-        <div className="flex items-center justify-between gap-3">
-          <p className="text-xl font-bold text-[var(--foreground)]">{formatMoney(item.price, currency)}</p>
-          <p className="inline-flex items-center gap-1 text-sm text-[var(--muted)]">
-            <Clock aria-hidden size={16} />
+        <div className="mt-6 flex items-center justify-between gap-3 border-t border-slate-100 pt-5">
+          <p className="text-xl font-bold tracking-tight text-slate-900">{formatMoney(item.price, currency)}</p>
+          <p className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-500">
+            <Clock aria-hidden size={16} className="text-slate-400" />
             {item.prep_time_minutes ?? 0} min
           </p>
         </div>
 
         <Button
-          className="w-full"
+          className={`mt-5 w-full h-11 rounded-lg font-medium shadow-sm transition-all ${
+            added ? "bg-emerald-600 hover:bg-emerald-700 text-white" : ""
+          }`}
           disabled={item.is_available === false}
           onClick={() => onAdd(item)}
           type="button"
-          variant={added ? "secondary" : "primary"}
+          variant={added ? "default" : "secondary"} 
         >
-          {added ? <Check aria-hidden size={17} /> : <ShoppingCart aria-hidden size={17} />}
-          {added ? "Added" : "Add item"}
+          {added ? <Check aria-hidden size={18} className="mr-2" /> : <ShoppingCart aria-hidden size={18} className="mr-2 text-slate-500" />}
+          {added ? "Added to cart" : "Add to cart"}
         </Button>
       </div>
     </Card>
