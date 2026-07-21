@@ -177,7 +177,7 @@ export function DashboardPageClient() {
           Good morning.
         </h1>
         <p className="animate-fade-in-up delay-100 text-[15px] font-semibold text-[var(--muted)]">
-          Here is what's happening at {data.activeHotel?.name ?? "your hotel"} today.
+          Here is what&apos;s happening at {data.activeHotel?.name ?? "your hotel"} today.
         </p>
       </div>
 

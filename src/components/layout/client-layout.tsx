@@ -16,8 +16,7 @@ import {
   Utensils,
   User
 } from "lucide-react";
-import { getCartItems, getCartItemsForHotel } from "@/features/client/cart/cart-storage";
-import { getActiveHotelId } from "@/lib/hotels/active-hotel-storage";
+import { getCartItems } from "@/features/client/cart/cart-storage";
 import { cn } from "@/lib/utils";
 
 const primaryNavItems = [
@@ -206,8 +205,7 @@ function useCartCount() {
 
   const syncCart = useMemo(
     () => () => {
-      const activeHotelId = getActiveHotelId();
-      const items = activeHotelId ? getCartItemsForHotel(activeHotelId) : getCartItems();
+      const items = getCartItems();
       setCount(items.reduce((sum, item) => sum + item.quantity, 0));
     },
     []

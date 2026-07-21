@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { FormEvent, useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft, ArrowRight, ClipboardList } from "lucide-react";
 import { ApiError } from "@/lib/api/client";
 import { getApiErrorMessage } from "@/lib/api/error-message";
@@ -34,6 +34,7 @@ const orderTypes: Array<{ label: string; value: OrderType }> = [
 
 export function ClientCheckoutPageClient() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { bootstrapSession, status, user } = useAuth();
   const [activeHotelId, setActiveHotelId] = useState<string | null>(null);
   const [items, setItems] = useState<CartItem[]>([]);
@@ -52,7 +53,8 @@ export function ClientCheckoutPageClient() {
       setError(null);
       setLoading(true);
 
-      const hotelId = getActiveHotelId();
+      const urlHotelId = searchParams.get("hotelId");
+      const hotelId = urlHotelId || getActiveHotelId();
       setActiveHotelId(hotelId);
       setItems(getCartItemsForHotel(hotelId));
 
@@ -77,7 +79,7 @@ export function ClientCheckoutPageClient() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [searchParams]);
 
   useEffect(() => {
     if (status === "unauthenticated" && getAccessToken()) {
