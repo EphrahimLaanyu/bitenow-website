@@ -41,17 +41,17 @@ export function Sidebar() {
     "BiteNow Admin";
 
   return (
-    <aside className="hidden min-h-screen w-[248px] shrink-0 bg-[#101f3f] px-4 py-6 text-white lg:flex lg:flex-col">
+    <aside className="hidden min-h-screen w-[248px] shrink-0 border-r border-slate-200 bg-slate-50/50 px-4 py-6 lg:flex lg:flex-col">
       <Link className="mb-8 flex items-center gap-3 px-2" href="/dashboard">
-        <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/25 bg-white/10 text-white">
-          <Utensils aria-hidden size={18} />
+        <span className="flex h-8 w-8 items-center justify-center rounded-md bg-[var(--accent)] text-white shadow-sm">
+          <Utensils aria-hidden size={16} />
         </span>
-        <p className="brand-logo text-2xl text-white">
+        <p className="text-xl font-bold tracking-tight text-slate-900">
           Bite<span className="text-[var(--accent)]">Now</span>
         </p>
       </Link>
 
-      <nav className="space-y-2">
+      <nav className="space-y-1">
         {navItems.map((item) => {
           const Icon = item.icon;
           const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
@@ -59,13 +59,19 @@ export function Sidebar() {
           return (
             <Link
               className={cn(
-                "flex h-11 items-center gap-3 rounded-lg px-3 text-sm font-semibold text-[#b8c5dc] transition-all hover:bg-white/10 hover:text-white",
-                active && "bg-[var(--accent)] text-white shadow-[0_14px_30px_rgba(255,98,8,0.24)]"
+                "flex h-9 items-center gap-3 rounded-md px-3 text-sm font-medium transition-colors",
+                active
+                  ? "bg-white text-[var(--accent)] shadow-sm ring-1 ring-inset ring-slate-200"
+                  : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
               )}
               href={item.href}
               key={item.href}
             >
-              <Icon size={17} aria-hidden="true" />
+              <Icon
+                size={16}
+                aria-hidden="true"
+                className={cn("shrink-0", active ? "text-[var(--accent)]" : "text-slate-400")}
+              />
               {item.label}
             </Link>
           );
@@ -74,29 +80,29 @@ export function Sidebar() {
 
       <div className="mt-auto space-y-4">
         <Link
-          className="flex h-11 items-center gap-3 rounded-lg px-3 text-sm font-semibold text-[#b8c5dc] transition-all hover:bg-white/10 hover:text-white"
+          className="flex h-9 items-center gap-3 rounded-md px-3 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900"
           href="/dashboard"
         >
-          <Settings aria-hidden size={17} />
+          <Settings aria-hidden size={16} className="shrink-0 text-slate-400" />
           Settings
         </Link>
 
-        <div className="border-t border-white/15 pt-4">
-          <div className="flex items-center gap-3 rounded-2xl bg-white/5 p-3">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--accent)] bg-[#2a1c16] text-sm font-black text-white">
+        <div className="border-t border-slate-200 pt-4">
+          <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-50 text-sm font-bold text-[var(--accent)] ring-1 ring-inset ring-slate-200">
               {getInitial(displayName)}
             </span>
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-black text-white">{displayName}</p>
-              <p className="truncate text-xs font-semibold text-[#b8c5dc]">Restaurant manager</p>
+              <p className="truncate text-sm font-semibold text-slate-900">{displayName}</p>
+              <p className="truncate text-xs font-medium text-slate-500">Restaurant manager</p>
             </div>
             <button
               aria-label="Sign out"
-              className="text-[#b8c5dc] transition-colors hover:text-white"
+              className="text-slate-400 transition-colors hover:text-slate-700"
               onClick={logout}
               type="button"
             >
-              <LogOut aria-hidden size={17} />
+              <LogOut aria-hidden size={16} />
             </button>
           </div>
         </div>

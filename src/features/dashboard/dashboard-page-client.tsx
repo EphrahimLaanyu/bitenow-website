@@ -169,13 +169,13 @@ export function DashboardPageClient() {
   if (loading) return <DashboardSkeleton />;
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       {error ? <AlertMessage tone="danger">{error}</AlertMessage> : null}
       {data.statErrors.length > 0 ? (
         <AlertMessage tone="warning">Some counts could not be loaded: {data.statErrors.join(" ")}</AlertMessage>
       ) : null}
 
-      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <section className="grid gap-4 md:gap-6 md:grid-cols-2 xl:grid-cols-4">
         <MetricCard
           icon={ReceiptText}
           label="Total revenue"
@@ -197,31 +197,31 @@ export function DashboardPageClient() {
         />
       </section>
 
-      <section className="grid gap-4 xl:grid-cols-[1.6fr_1fr]">
-        <Card className="rounded-xl border-[#dbe3f1] bg-white p-5 shadow-none">
+      <section className="grid gap-4 md:gap-6 xl:grid-cols-[1.6fr_1fr]">
+        <Card className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex items-center justify-between">
-            <h2 className="font-display text-2xl font-black text-[#101f3f]">Revenue overview</h2>
-            <button className="text-xs font-bold text-[var(--accent)]" type="button">
+            <h2 className="text-lg font-semibold tracking-tight text-slate-900">Revenue overview</h2>
+            <button className="text-sm font-medium text-[var(--accent)] hover:text-slate-700 transition-colors" type="button">
               Last 7 days
             </button>
           </div>
-          <div className="mt-10 flex h-56 items-end gap-3 border-b border-[#dbe3f1] px-2">
+          <div className="mt-8 flex h-56 items-end gap-3 border-b border-slate-100 px-2 pb-2">
             {barValues.map((value, index) => (
               <div className="flex flex-1 flex-col items-center gap-3" key={barLabels[index]}>
                 <div
-                  className={`w-full max-w-20 rounded-t-md ${index === 5 ? "bg-[var(--accent)]" : "bg-[#c6d2e5]"}`}
+                  className={`w-full max-w-[3rem] rounded-t-md transition-colors ${index === 5 ? "bg-[var(--accent)]" : "bg-slate-200 hover:bg-slate-300"}`}
                   style={{ height: `${value}%` }}
                 />
-                <span className="text-xs font-semibold text-[var(--muted)]">{barLabels[index]}</span>
+                <span className="text-xs font-medium text-slate-500">{barLabels[index]}</span>
               </div>
             ))}
           </div>
         </Card>
 
-        <Card className="rounded-xl border-[#dbe3f1] bg-white p-5 shadow-none">
+        <Card className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex items-center justify-between">
-            <h2 className="font-display text-2xl font-black text-[#101f3f]">Order status</h2>
-            <Link className="text-xs font-bold text-[var(--accent)]" href="/orders">
+            <h2 className="text-lg font-semibold tracking-tight text-slate-900">Order status</h2>
+            <Link className="text-sm font-medium text-[var(--accent)] hover:text-slate-700 transition-colors" href="/orders">
               View report
             </Link>
           </div>
@@ -229,43 +229,43 @@ export function DashboardPageClient() {
         </Card>
       </section>
 
-      <section className="grid gap-4 xl:grid-cols-[1.3fr_0.7fr]">
-        <Card className="rounded-xl border-[#dbe3f1] bg-white p-5 shadow-none">
-          <div className="flex items-center justify-between">
-            <h2 className="font-display text-2xl font-black text-[#101f3f]">Recent orders</h2>
-            <Link className="text-xs font-bold text-[var(--accent)]" href="/orders">
-              View all orders →
+      <section className="grid gap-4 md:gap-6 xl:grid-cols-[1.3fr_0.7fr]">
+        <Card className="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden flex flex-col">
+          <div className="flex items-center justify-between p-6 border-b border-slate-100">
+            <h2 className="text-lg font-semibold tracking-tight text-slate-900">Recent orders</h2>
+            <Link className="text-sm font-medium text-[var(--accent)] hover:text-slate-700 transition-colors" href="/orders">
+              View all orders &rarr;
             </Link>
           </div>
-          <div className="mt-6 overflow-x-auto">
-            <table className="min-w-full text-left text-sm">
-              <thead className="border-b border-[#dbe3f1] text-xs font-bold text-[var(--muted)]">
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-left text-sm whitespace-nowrap">
+              <thead className="bg-slate-50/50 text-xs font-medium uppercase tracking-wider text-slate-500">
                 <tr>
-                  <th className="py-3 pr-4">Order</th>
-                  <th className="px-4 py-3">Guest</th>
-                  <th className="px-4 py-3">Items</th>
-                  <th className="px-4 py-3">Total</th>
-                  <th className="px-4 py-3">Status</th>
-                  <th className="py-3 pl-4">Time</th>
+                  <th className="py-4 pl-6 pr-4 font-semibold">Order</th>
+                  <th className="px-4 py-4 font-semibold">Guest</th>
+                  <th className="px-4 py-4 font-semibold">Items</th>
+                  <th className="px-4 py-4 font-semibold">Total</th>
+                  <th className="px-4 py-4 font-semibold">Status</th>
+                  <th className="py-4 pl-4 pr-6 font-semibold">Time</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#edf1f7]">
+              <tbody className="divide-y divide-slate-100">
                 {recentOrders.length > 0 ? (
                   recentOrders.map((order) => (
-                    <tr key={order.id}>
-                      <td className="py-4 pr-4 font-black text-[#101f3f]">{order.order_number}</td>
-                      <td className="px-4 py-4 text-[var(--muted)]">{order.customer_name || "Walk-in"}</td>
-                      <td className="px-4 py-4 text-[var(--muted)]">{order.items?.length ?? 0}</td>
-                      <td className="px-4 py-4 font-bold text-[#101f3f]">{formatMoney(Number(order.total_amount ?? 0), data.activeHotel?.currency)}</td>
+                    <tr key={order.id} className="hover:bg-slate-50/50 transition-colors">
+                      <td className="py-4 pl-6 pr-4 font-medium text-slate-900">{order.order_number}</td>
+                      <td className="px-4 py-4 text-slate-600">{order.customer_name || "Walk-in"}</td>
+                      <td className="px-4 py-4 text-slate-600">{order.items?.length ?? 0}</td>
+                      <td className="px-4 py-4 font-medium text-slate-900">{formatMoney(Number(order.total_amount ?? 0), data.activeHotel?.currency)}</td>
                       <td className="px-4 py-4">
-                        <Badge>{formatOrderStatus(order.status ?? "draft")}</Badge>
+                        <Badge variant="outline" className="font-medium">{formatOrderStatus(order.status ?? "draft")}</Badge>
                       </td>
-                      <td className="py-4 pl-4 text-[var(--muted)]">{formatTime(order.created_at)}</td>
+                      <td className="py-4 pl-4 pr-6 text-slate-500">{formatTime(order.created_at)}</td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td className="py-6 text-sm text-[var(--muted)]" colSpan={6}>
+                    <td className="py-8 text-center text-sm text-slate-500" colSpan={6}>
                       No recent orders yet.
                     </td>
                   </tr>
@@ -275,44 +275,56 @@ export function DashboardPageClient() {
           </div>
         </Card>
 
-        <div className="grid gap-4">
-          <Card className="rounded-xl border-[#dbe3f1] bg-white p-5 shadow-none">
+        <div className="grid gap-4 md:gap-6">
+          <Card className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
             <div className="flex items-center justify-between">
-              <h2 className="font-display text-2xl font-black text-[#101f3f]">Popular meals</h2>
-              <CookingPot aria-hidden className="text-[var(--accent)]" size={20} />
+              <h2 className="text-lg font-semibold tracking-tight text-slate-900">Popular meals</h2>
+              <div className="flex h-8 w-8 items-center justify-center rounded-md bg-slate-50 text-slate-500">
+                <CookingPot aria-hidden size={18} />
+              </div>
             </div>
-            <div className="mt-5 space-y-3">
+            <div className="mt-6 space-y-3">
               {data.popularMeals.length > 0 ? (
                 data.popularMeals.map((meal, index) => (
-                  <div className="flex items-center justify-between rounded-xl border border-[#dbe3f1] p-3" key={meal.id}>
+                  <div className="flex items-center justify-between rounded-lg border border-slate-100 bg-slate-50/50 p-3" key={meal.id}>
                     <div>
-                      <p className="font-black text-[#101f3f]">{index + 1}. {meal.name}</p>
-                      <p className="text-xs font-semibold text-[var(--muted)]">{meal.quantity} ordered today</p>
+                      <p className="text-sm font-medium text-slate-900">
+                        <span className="text-slate-400 mr-1">{index + 1}.</span> {meal.name}
+                      </p>
+                      <p className="text-xs text-slate-500 mt-0.5">{meal.quantity} ordered today</p>
                     </div>
-                    <Badge>{meal.quantity}</Badge>
+                    <Badge variant="secondary" className="font-medium bg-white border-slate-200">{meal.quantity}</Badge>
                   </div>
                 ))
               ) : (
-                <p className="text-sm text-[var(--muted)]">No meal ranking yet.</p>
+                <p className="text-sm text-slate-500 py-2">No meal ranking yet.</p>
               )}
             </div>
           </Card>
 
-          <Card className="rounded-xl border-[#dbe3f1] bg-white p-5 shadow-none">
+          <Card className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
             <div className="flex items-center justify-between">
-              <h2 className="font-display text-2xl font-black text-[#101f3f]">Active staff</h2>
-              <Users aria-hidden className="text-[var(--accent)]" size={20} />
+              <h2 className="text-lg font-semibold tracking-tight text-slate-900">Active staff</h2>
+              <div className="flex h-8 w-8 items-center justify-center rounded-md bg-slate-50 text-slate-500">
+                <Users aria-hidden size={18} />
+              </div>
             </div>
-            <p className="mt-5 text-4xl font-black text-[#101f3f]">{data.stats.activeStaff}</p>
-            <p className="mt-2 text-sm font-semibold text-[var(--muted)]">
-              {formatRole(data.activeMembership?.role ?? "Staff")} access at {data.activeHotel?.name ?? "active hotel"}.
-            </p>
+            <div className="mt-4">
+              <p className="text-4xl font-bold tracking-tight text-slate-900">{data.stats.activeStaff}</p>
+              <p className="mt-2 text-sm text-slate-500 leading-snug">
+                <span className="font-medium text-slate-700">{formatRole(data.activeMembership?.role ?? "Staff")}</span> access at <br/> {data.activeHotel?.name ?? "active hotel"}.
+              </p>
+            </div>
           </Card>
 
-          <Card className="rounded-xl border-[#dbe3f1] bg-white p-5 shadow-none">
-            <div className="flex items-center gap-3">
-              <AlertTriangle aria-hidden className="text-[var(--accent)]" size={20} />
-              <p className="text-sm font-bold text-[var(--muted)]">Low stock is ready when inventory endpoints are added.</p>
+          <Card className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div className="flex items-start gap-3">
+              <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-slate-50 text-[var(--accent)]">
+                <AlertTriangle aria-hidden size={16} />
+              </div>
+              <p className="text-sm font-medium text-slate-600 leading-snug">
+                Low stock is ready when inventory endpoints are added.
+              </p>
             </div>
           </Card>
         </div>
@@ -333,15 +345,17 @@ function MetricCard({
   value: number | string;
 }) {
   return (
-    <Card className="rounded-xl border-[#dbe3f1] bg-white p-5 shadow-none">
+    <Card className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm flex flex-col">
       <div className="flex items-start justify-between gap-3">
-        <p className="text-sm font-semibold text-[var(--muted)]">{label}</p>
-        <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#fff0e7] text-[var(--accent)]">
-          <Icon aria-hidden size={18} />
+        <p className="text-sm font-medium text-slate-500">{label}</p>
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-slate-50 text-[var(--accent)] ring-1 ring-inset ring-slate-100">
+          <Icon aria-hidden size={20} />
         </span>
       </div>
-      <p className="mt-7 text-3xl font-black text-[#101f3f]">{value}</p>
-      <p className="mt-4 text-xs font-semibold text-[var(--accent)]">{sublabel}</p>
+      <div className="mt-4">
+        <p className="text-3xl font-bold tracking-tight text-slate-900">{value}</p>
+        <p className="mt-2 text-sm font-medium text-[var(--accent)]">{sublabel}</p>
+      </div>
     </Card>
   );
 }
@@ -350,24 +364,24 @@ function StatusDonut({ total }: { total: number }) {
   return (
     <div className="mt-8 flex flex-col items-center">
       <div
-        className="grid h-44 w-44 place-items-center rounded-full"
+        className="grid h-44 w-44 place-items-center rounded-full shadow-inner"
         style={{
           background:
-            "conic-gradient(#101f3f 0 55%, #ff6208 55% 76%, #9baac3 76% 90%, #e6edf8 90% 100%)"
+            "conic-gradient(#10b981 0 55%, #f59e0b 55% 76%, #3b82f6 76% 90%, #e2e8f0 90% 100%)"
         }}
       >
-        <div className="grid h-24 w-24 place-items-center rounded-full bg-white text-center">
+        <div className="grid h-[6.5rem] w-[6.5rem] place-items-center rounded-full bg-white text-center shadow-sm">
           <div>
-            <p className="text-xl font-black text-[#101f3f]">{total}</p>
-            <p className="text-sm font-black text-[#101f3f]">orders</p>
+            <p className="text-2xl font-bold tracking-tight text-slate-900">{total}</p>
+            <p className="text-xs font-medium uppercase tracking-widest text-slate-500 mt-0.5">Orders</p>
           </div>
         </div>
       </div>
-      <div className="mt-6 grid w-full grid-cols-2 gap-3 text-xs font-semibold text-[var(--muted)]">
-        <Legend color="#101f3f" label="Completed 55%" />
-        <Legend color="#ff6208" label="Preparing 21%" />
-        <Legend color="#9baac3" label="Ready 14%" />
-        <Legend color="#e6edf8" label="Pending 10%" />
+      <div className="mt-8 grid w-full grid-cols-2 gap-y-3 gap-x-2 text-xs font-medium text-slate-600">
+        <Legend color="#10b981" label="Completed 55%" />
+        <Legend color="#f59e0b" label="Preparing 21%" />
+        <Legend color="#3b82f6" label="Ready 14%" />
+        <Legend color="#e2e8f0" label="Pending 10%" />
       </div>
     </div>
   );
@@ -375,8 +389,8 @@ function StatusDonut({ total }: { total: number }) {
 
 function Legend({ color, label }: { color: string; label: string }) {
   return (
-    <span className="flex items-center gap-2">
-      <span className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} />
+    <span className="flex items-center gap-2.5">
+      <span className="h-2.5 w-2.5 rounded-full shadow-sm" style={{ backgroundColor: color }} />
       {label}
     </span>
   );
@@ -385,12 +399,13 @@ function Legend({ color, label }: { color: string; label: string }) {
 function AlertMessage({ children, tone }: { children: React.ReactNode; tone: "danger" | "warning" }) {
   return (
     <div
-      className={`rounded-xl border px-4 py-3 text-sm font-semibold ${
+      className={`rounded-lg border p-4 text-sm font-medium flex items-center gap-3 ${
         tone === "danger"
-          ? "border-red-500/30 bg-red-50 text-red-700"
-          : "border-[var(--accent)]/30 bg-[#fff0e7] text-[var(--accent)]"
+          ? "border-red-200 bg-red-50 text-red-800"
+          : "border-amber-200 bg-amber-50 text-amber-800"
       }`}
     >
+      {tone === "danger" ? <AlertTriangle size={18} className="text-red-600" /> : <AlertTriangle size={18} className="text-amber-600" />}
       {children}
     </div>
   );
@@ -398,15 +413,15 @@ function AlertMessage({ children, tone }: { children: React.ReactNode; tone: "da
 
 function DashboardSkeleton() {
   return (
-    <div className="space-y-5">
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <div className="space-y-6">
+      <div className="grid gap-4 md:gap-6 md:grid-cols-2 xl:grid-cols-4">
         {Array.from({ length: 4 }).map((_, index) => (
-          <div className="h-40 animate-pulse rounded-xl border border-[#dbe3f1] bg-white" key={index} />
+          <div className="h-[140px] animate-pulse rounded-xl border border-slate-200 bg-slate-50/50" key={index} />
         ))}
       </div>
-      <div className="grid gap-4 xl:grid-cols-[1.6fr_1fr]">
-        <div className="h-80 animate-pulse rounded-xl border border-[#dbe3f1] bg-white" />
-        <div className="h-80 animate-pulse rounded-xl border border-[#dbe3f1] bg-white" />
+      <div className="grid gap-4 md:gap-6 xl:grid-cols-[1.6fr_1fr]">
+        <div className="h-[360px] animate-pulse rounded-xl border border-slate-200 bg-slate-50/50" />
+        <div className="h-[360px] animate-pulse rounded-xl border border-slate-200 bg-slate-50/50" />
       </div>
     </div>
   );

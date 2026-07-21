@@ -13,13 +13,13 @@ export function Topbar() {
     "Admin";
 
   return (
-    <header className="sticky top-0 z-20 bg-[#eef3fb]/95 px-4 py-6 backdrop-blur md:px-8 lg:px-9">
-      <div className="flex flex-wrap items-start justify-between gap-4">
+    <header className="sticky top-0 z-20 bg-slate-50/95 border-b border-slate-200 px-4 py-5 backdrop-blur md:px-6 lg:px-8">
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="font-display text-4xl font-black leading-none text-[#101f3f]">
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">
             Good morning, {displayName}
           </h1>
-          <p className="mt-2 text-sm font-semibold text-[var(--muted)]">
+          <p className="mt-1 text-sm text-slate-500">
             Here&apos;s what&apos;s happening at BiteNow today.
           </p>
         </div>
@@ -28,11 +28,11 @@ export function Topbar() {
           <div className="relative hidden md:block">
             <Search
               aria-hidden
-              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)]"
-              size={17}
+              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+              size={16}
             />
             <input
-              className="h-10 w-64 rounded-xl border border-[var(--border)] bg-white pl-10 pr-3 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--muted)] focus:border-[var(--accent)] focus:shadow-[0_0_0_4px_var(--ring)]"
+              className="h-10 w-64 rounded-lg border border-slate-200 bg-white pl-9 pr-3 text-sm text-slate-900 outline-none placeholder:text-slate-400 focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] shadow-sm transition-all"
               placeholder="Search..."
               type="search"
             />
@@ -40,17 +40,17 @@ export function Topbar() {
 
           <Link
             aria-label="Notifications"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-[var(--border)] bg-white text-[#101f3f] shadow-sm transition-colors hover:border-[var(--accent)]"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 shadow-sm transition-colors hover:bg-slate-50 hover:text-slate-900"
             href="/notifications"
           >
             <Bell aria-hidden size={18} />
           </Link>
 
           <Link
-            className="inline-flex h-10 items-center gap-2 rounded-lg bg-[var(--accent)] px-4 text-sm font-black text-white shadow-[0_14px_30px_rgba(255,98,8,0.24)] transition-all hover:-translate-y-0.5 hover:bg-[var(--accent-hover)]"
+            className="inline-flex h-10 items-center gap-2 rounded-lg bg-[var(--accent)] px-4 text-sm font-medium text-white shadow-sm transition-colors hover:opacity-90"
             href="/orders/new"
           >
-            <Plus aria-hidden size={17} />
+            <Plus aria-hidden size={18} />
             New order
           </Link>
         </div>

@@ -140,35 +140,45 @@ export function StaffPageClient() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 md:space-y-8">
       <div>
-        <Badge>Memberships API</Badge>
-        <h1 className="mt-3 text-3xl font-bold text-[var(--foreground)]">Staff</h1>
+        <Badge variant="outline" className="font-medium text-slate-600 border-slate-200">
+          Memberships API
+        </Badge>
+        <h1 className="mt-3 text-2xl md:text-3xl font-bold tracking-tight text-slate-900">Staff</h1>
         <div className="mt-2 flex flex-wrap items-center justify-between gap-4">
-          <p className="max-w-2xl text-sm text-[var(--muted)]">
+          <p className="max-w-2xl text-base text-slate-500">
             Add existing backend users to hotels, change roles, deactivate access, or remove
             memberships entirely.
           </p>
-          <Button disabled={loading} onClick={loadStaff} type="button" variant="secondary">
-            <RefreshCw aria-hidden size={18} />
+          <Button 
+            className="h-10 rounded-lg font-medium shadow-sm" 
+            disabled={loading} 
+            onClick={loadStaff} 
+            type="button" 
+            variant="secondary"
+          >
+            <RefreshCw aria-hidden size={16} className="mr-2 text-slate-500" />
             Refresh
           </Button>
         </div>
       </div>
 
       {error ? (
-        <div className="rounded-md border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-100">
+        <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-800">
           {error}
         </div>
       ) : null}
 
-      <Card>
-        <div className="mb-5 flex items-center gap-2">
-          <UserPlus aria-hidden className="text-[var(--accent)]" size={20} />
-          <h2 className="text-lg font-semibold text-[var(--foreground)]">Add employee to hotel</h2>
+      <Card className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div className="mb-6 flex items-center gap-2.5">
+          <div className="flex h-8 w-8 items-center justify-center rounded-md bg-slate-50 text-slate-500">
+            <UserPlus aria-hidden size={18} />
+          </div>
+          <h2 className="text-lg font-semibold tracking-tight text-slate-900">Add employee to hotel</h2>
         </div>
 
-        <form className="grid gap-4 lg:grid-cols-[1.4fr_1fr_0.8fr_0.7fr_auto]" onSubmit={handleAddEmployee}>
+        <form className="grid gap-4 lg:gap-6 lg:grid-cols-[1.4fr_1fr_0.8fr_0.7fr_auto] lg:items-end" onSubmit={handleAddEmployee}>
           <Input
             disabled={saving}
             label="User ID"
@@ -191,27 +201,31 @@ export function StaffPageClient() {
               </option>
             ))}
           </Select>
-          <div className="self-end">
+          <div className="self-end pb-2 lg:pb-3">
             <Checkbox defaultChecked disabled={saving} key={saving ? "saving" : "ready"} label="Active" name="is_active" />
           </div>
-          <Button className="self-end" disabled={saving || hotels.length === 0} type="submit">
+          <Button className="h-10 w-full rounded-lg font-medium shadow-sm lg:w-auto" disabled={saving || hotels.length === 0} type="submit">
             {saving ? "Adding..." : "Add"}
           </Button>
         </form>
       </Card>
 
       <section className="space-y-4">
-        <div className="flex items-center gap-2">
-          <Users aria-hidden className="text-[var(--accent)]" size={20} />
-          <h2 className="text-lg font-semibold text-[var(--foreground)]">Staff memberships</h2>
-          <Badge>{memberships.length}</Badge>
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-8 w-8 items-center justify-center rounded-md bg-slate-50 text-slate-500">
+            <Users aria-hidden size={18} />
+          </div>
+          <h2 className="text-lg font-semibold tracking-tight text-slate-900">Staff memberships</h2>
+          <Badge variant="secondary" className="ml-1 bg-slate-100 text-slate-700 hover:bg-slate-100 font-medium">
+            {memberships.length}
+          </Badge>
         </div>
 
         {loading ? (
           <div className="space-y-3">
             {Array.from({ length: 4 }).map((_, index) => (
               <div
-                className="h-24 animate-pulse rounded-lg border border-[var(--border)] bg-[var(--surface-2)]/70"
+                className="h-[104px] animate-pulse rounded-xl border border-slate-200 bg-slate-50/50"
                 key={index}
               />
             ))}
@@ -231,8 +245,8 @@ export function StaffPageClient() {
             ))}
           </div>
         ) : (
-          <Card>
-            <p className="text-sm text-[var(--muted)]">No staff memberships were returned by the API.</p>
+          <Card className="rounded-xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+            <p className="text-sm font-medium text-slate-500">No staff memberships were returned by the API.</p>
           </Card>
         )}
       </section>
@@ -256,15 +270,15 @@ function StaffMembershipRow({
   onRoleChange: (membership: HotelMembership, role: Role) => void;
 }) {
   return (
-    <Card className="grid gap-4 lg:grid-cols-[1.2fr_1fr_0.8fr_0.7fr_auto] lg:items-end">
-      <div className="min-w-0">
-        <p className="text-xs uppercase tracking-[0.14em] text-[var(--muted)]">Employee user ID</p>
-        <p className="mt-2 truncate text-sm font-semibold text-[var(--foreground)]">{membership.user}</p>
+    <Card className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md grid gap-4 lg:gap-6 lg:grid-cols-[1.2fr_1fr_0.8fr_0.7fr_auto] lg:items-end">
+      <div className="min-w-0 pb-1 lg:pb-2">
+        <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Employee user ID</p>
+        <p className="mt-1.5 truncate text-sm font-medium text-slate-900">{membership.user}</p>
       </div>
 
-      <div className="min-w-0">
-        <p className="text-xs uppercase tracking-[0.14em] text-[var(--muted)]">Hotel</p>
-        <p className="mt-2 truncate text-sm font-semibold text-[var(--foreground)]">
+      <div className="min-w-0 pb-1 lg:pb-2">
+        <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Hotel</p>
+        <p className="mt-1.5 truncate text-sm font-medium text-slate-900">
           {hotel?.name ?? membership.hotel}
         </p>
       </div>
@@ -282,7 +296,7 @@ function StaffMembershipRow({
         ))}
       </Select>
 
-      <div>
+      <div className="pb-2 lg:pb-3">
         <Checkbox
           checked={membership.is_active !== false}
           disabled={busy}
@@ -291,13 +305,19 @@ function StaffMembershipRow({
         />
       </div>
 
-      <div className="flex items-center gap-2">
-        <Badge>
-          <ShieldCheck aria-hidden size={14} />
+      <div className="flex items-center gap-3 pb-1 lg:pb-2">
+        <Badge variant="secondary" className="font-medium bg-slate-100 text-slate-700 border border-slate-200">
+          <ShieldCheck aria-hidden size={14} className="mr-1.5 text-slate-500" />
           {formatRole(membership.role ?? "staff")}
         </Badge>
-        <Button disabled={busy} onClick={() => onRemove(membership)} type="button" variant="ghost">
-          <Trash2 aria-hidden size={18} />
+        <Button 
+          disabled={busy} 
+          onClick={() => onRemove(membership)} 
+          type="button" 
+          variant="ghost"
+          className="h-9 text-slate-600 hover:bg-red-50 hover:text-red-700 transition-colors"
+        >
+          <Trash2 aria-hidden size={16} className="mr-2" />
           Remove
         </Button>
       </div>

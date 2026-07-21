@@ -15,6 +15,7 @@ import { listAuditLogs } from "@/features/audit-logs/api";
 import { listHotels } from "@/features/hotels/api";
 import { listStaffMemberships } from "@/features/staff/api";
 
+
 const privilegedRoles = new Set(["owner", "admin"]);
 
 export function AuditLogsPageClient() {
@@ -109,29 +110,37 @@ export function AuditLogsPageClient() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 md:space-y-8">
       <div>
-        <Badge>Audit Logs API</Badge>
-        <h1 className="mt-3 text-3xl font-bold text-[var(--foreground)]">Audit logs</h1>
+        <Badge variant="outline" className="font-medium text-slate-600 border-slate-200">
+          Audit Logs API
+        </Badge>
+        <h1 className="mt-3 text-2xl md:text-3xl font-bold tracking-tight text-slate-900">Audit logs</h1>
         <div className="mt-2 flex flex-wrap items-center justify-between gap-4">
-          <p className="max-w-2xl text-sm text-[var(--muted)]">
+          <p className="max-w-2xl text-base text-slate-500">
             Owner/Admin read-only activity history for traceable operational changes.
           </p>
-          <Button disabled={loading} onClick={() => loadAuditLogs()} type="button" variant="secondary">
-            <RefreshCw aria-hidden size={18} />
+          <Button 
+            className="h-10 rounded-lg font-medium shadow-sm" 
+            disabled={loading} 
+            onClick={() => loadAuditLogs()} 
+            type="button" 
+            variant="secondary"
+          >
+            <RefreshCw aria-hidden size={16} className="mr-2 text-slate-500" />
             Refresh
           </Button>
         </div>
       </div>
 
       {error ? (
-        <div className="rounded-md border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-100">
+        <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-800">
           {error}
         </div>
       ) : null}
 
-      <Card>
-        <div className="grid gap-4 lg:grid-cols-[1fr_1fr_auto] lg:items-end">
+      <Card className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div className="grid gap-4 lg:gap-6 lg:grid-cols-[1fr_1fr_auto] lg:items-end">
           <Select
             disabled={loading || hotels.length === 0}
             label="Active hotel"
@@ -146,7 +155,7 @@ export function AuditLogsPageClient() {
             ))}
           </Select>
 
-          <form className="grid gap-3 sm:grid-cols-[1fr_auto]" onSubmit={handleSearch}>
+          <form className="grid gap-3 sm:gap-4 sm:grid-cols-[1fr_auto]" onSubmit={handleSearch}>
             <Input
               disabled={loading || !canViewAuditLogs}
               label="Search"
@@ -154,15 +163,15 @@ export function AuditLogsPageClient() {
               placeholder="Action, model, object ID, path..."
               value={search}
             />
-            <Button className="self-end" disabled={loading || !canViewAuditLogs} type="submit" variant="secondary">
-              <Search aria-hidden size={18} />
+            <Button className="h-10 self-end font-medium shadow-sm" disabled={loading || !canViewAuditLogs} type="submit" variant="secondary">
+              <Search aria-hidden size={16} className="mr-2 text-slate-500" />
               Search
             </Button>
           </form>
 
-          <div className="rounded-md border border-[var(--border)] bg-[var(--surface)] px-4 py-3">
-            <p className="text-xs uppercase tracking-[0.14em] text-[var(--muted)]">Role</p>
-            <p className="mt-1 text-sm font-bold text-[var(--foreground)]">
+          <div className="rounded-lg border border-slate-200 bg-slate-50 px-5 py-2.5">
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Role</p>
+            <p className="mt-0.5 text-sm font-semibold text-slate-900">
               {selectedMembership?.role ? formatLabel(selectedMembership.role) : "No membership"}
             </p>
           </div>
@@ -170,12 +179,12 @@ export function AuditLogsPageClient() {
       </Card>
 
       {!loading && !canViewAuditLogs ? (
-        <Card className="border-red-500/30 bg-red-500/10">
-          <div className="flex gap-3">
-            <ShieldAlert aria-hidden className="mt-1 shrink-0 text-red-100" size={22} />
+        <Card className="rounded-xl border border-red-200 bg-red-50 p-6 shadow-sm">
+          <div className="flex gap-4">
+            <ShieldAlert aria-hidden className="mt-0.5 shrink-0 text-red-600" size={24} />
             <div>
-              <h2 className="text-lg font-semibold text-red-50">Owner/Admin only</h2>
-              <p className="mt-2 text-sm leading-6 text-red-100">
+              <h2 className="text-lg font-semibold text-red-900">Owner/Admin only</h2>
+              <p className="mt-1.5 text-sm leading-relaxed text-red-700">
                 Audit logs are restricted to hotel owners and admins. Your current active hotel
                 role does not have permission to view this table.
               </p>
@@ -184,17 +193,21 @@ export function AuditLogsPageClient() {
         </Card>
       ) : (
         <section className="space-y-4">
-          <div className="flex items-center gap-2">
-            <FileClock aria-hidden className="text-[var(--accent)]" size={20} />
-            <h2 className="text-lg font-semibold text-[var(--foreground)]">Read-only audit table</h2>
-            <Badge>{logs.length}</Badge>
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-8 w-8 items-center justify-center rounded-md bg-slate-50 text-slate-500">
+              <FileClock aria-hidden size={18} />
+            </div>
+            <h2 className="text-lg font-semibold tracking-tight text-slate-900">Read-only audit table</h2>
+            <Badge variant="secondary" className="ml-1 bg-slate-100 text-slate-700 hover:bg-slate-100 font-medium">
+              {logs.length}
+            </Badge>
           </div>
 
           {loading ? (
             <div className="space-y-3">
               {Array.from({ length: 5 }).map((_, index) => (
                 <div
-                  className="h-20 animate-pulse rounded-lg border border-[var(--border)] bg-[var(--surface-2)]/70"
+                  className="h-[88px] animate-pulse rounded-xl border border-slate-200 bg-slate-50/50"
                   key={index}
                 />
               ))}
@@ -202,8 +215,8 @@ export function AuditLogsPageClient() {
           ) : logs.length > 0 ? (
             <AuditLogsTable logs={logs} />
           ) : (
-            <Card>
-              <p className="text-sm text-[var(--muted)]">No audit logs were returned for this hotel.</p>
+            <Card className="rounded-xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+              <p className="text-sm font-medium text-slate-500">No audit logs were returned for this hotel.</p>
             </Card>
           )}
         </section>
@@ -214,43 +227,45 @@ export function AuditLogsPageClient() {
 
 function AuditLogsTable({ logs }: { logs: AuditLog[] }) {
   return (
-    <div className="overflow-hidden rounded-lg border border-[var(--border)]">
+    <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-[var(--border)] bg-[var(--surface-2)]/82 text-left text-sm">
-          <thead className="bg-[var(--surface)] text-xs uppercase tracking-[0.14em] text-[var(--muted)]">
+        <table className="min-w-full divide-y divide-slate-200 text-left text-sm">
+          <thead className="bg-slate-50/50 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
             <tr>
-              <th className="px-4 py-3 font-semibold">Time</th>
-              <th className="px-4 py-3 font-semibold">Action</th>
-              <th className="px-4 py-3 font-semibold">Model</th>
-              <th className="px-4 py-3 font-semibold">Object</th>
-              <th className="px-4 py-3 font-semibold">Actor</th>
-              <th className="px-4 py-3 font-semibold">Path</th>
-              <th className="px-4 py-3 font-semibold">IP</th>
-              <th className="px-4 py-3 font-semibold">Payload</th>
+              <th className="px-5 py-3.5 whitespace-nowrap">Time</th>
+              <th className="px-5 py-3.5 whitespace-nowrap">Action</th>
+              <th className="px-5 py-3.5 whitespace-nowrap">Model</th>
+              <th className="px-5 py-3.5 whitespace-nowrap">Object</th>
+              <th className="px-5 py-3.5 whitespace-nowrap">Actor</th>
+              <th className="px-5 py-3.5 whitespace-nowrap">Path</th>
+              <th className="px-5 py-3.5 whitespace-nowrap">IP</th>
+              <th className="px-5 py-3.5">Payload</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[var(--border)]">
+          <tbody className="divide-y divide-slate-100">
             {logs.map((log) => (
-              <tr className="align-top text-[var(--foreground)]" key={log.id}>
-                <td className="whitespace-nowrap px-4 py-3 text-[var(--muted)]">
+              <tr className="align-top hover:bg-slate-50/50 transition-colors" key={log.id}>
+                <td className="whitespace-nowrap px-5 py-4 text-slate-500">
                   {new Date(log.created_at).toLocaleString()}
                 </td>
-                <td className="px-4 py-3">
-                  <Badge>{formatLabel(log.action)}</Badge>
+                <td className="px-5 py-4">
+                  <Badge variant="secondary" className="font-medium bg-slate-100 text-slate-700 border border-slate-200">
+                    {formatLabel(log.action)}
+                  </Badge>
                 </td>
-                <td className="px-4 py-3 font-semibold text-[var(--foreground)]">{log.model_name}</td>
-                <td className="max-w-48 truncate px-4 py-3 font-mono text-xs text-[var(--muted)]">
+                <td className="px-5 py-4 font-medium text-slate-900">{log.model_name}</td>
+                <td className="max-w-48 truncate px-5 py-4 font-mono text-[11px] text-slate-500">
                   {log.object_id}
                 </td>
-                <td className="max-w-48 truncate px-4 py-3 font-mono text-xs text-[var(--muted)]">
+                <td className="max-w-48 truncate px-5 py-4 font-mono text-[11px] text-slate-500">
                   {log.actor ?? "System"}
                 </td>
-                <td className="max-w-64 truncate px-4 py-3 text-[var(--muted)]">{log.path ?? "Not set"}</td>
-                <td className="whitespace-nowrap px-4 py-3 text-[var(--muted)]">
+                <td className="max-w-64 truncate px-5 py-4 text-slate-500">{log.path ?? "Not set"}</td>
+                <td className="whitespace-nowrap px-5 py-4 text-slate-500">
                   {log.ip_address ?? "Not set"}
                 </td>
-                <td className="max-w-80 px-4 py-3">
-                  <code className="line-clamp-3 block whitespace-pre-wrap rounded-md border border-[var(--border)] bg-[var(--surface)] p-2 text-xs text-[var(--muted)]">
+                <td className="max-w-80 px-5 py-4">
+                  <code className="line-clamp-3 block whitespace-pre-wrap rounded-md border border-slate-200 bg-slate-50 p-2.5 text-[11px] font-mono text-slate-600">
                     {formatJson(log.payload ?? log.after ?? log.before)}
                   </code>
                 </td>

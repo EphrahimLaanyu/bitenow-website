@@ -291,30 +291,38 @@ export function MenuCategoriesPageClient() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 md:space-y-8">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <Badge>Menu categories</Badge>
-          <h1 className="mt-3 text-3xl font-bold text-[var(--foreground)]">Categories</h1>
-          <p className="mt-2 max-w-2xl text-sm text-[var(--muted)]">
+          <Badge variant="outline" className="font-medium text-slate-600 border-slate-200">
+            Menu categories
+          </Badge>
+          <h1 className="mt-3 text-2xl md:text-3xl font-bold tracking-tight text-slate-900">Categories</h1>
+          <p className="mt-2 max-w-2xl text-base text-slate-500">
             Create the groups that menu items will live under: breakfast, lunch, dinner, drinks,
             desserts, and any custom hotel sections.
           </p>
         </div>
-        <Button disabled={loading} onClick={loadCategories} type="button" variant="secondary">
-          <RefreshCw aria-hidden size={18} />
+        <Button 
+          className="h-10 rounded-lg font-medium shadow-sm" 
+          disabled={loading} 
+          onClick={loadCategories} 
+          type="button" 
+          variant="secondary"
+        >
+          <RefreshCw aria-hidden size={16} className="mr-2 text-slate-500" />
           Refresh
         </Button>
       </div>
 
       {error ? (
-        <div className="rounded-md border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-100">
+        <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-800">
           {error}
         </div>
       ) : null}
 
-      <Card>
-        <div className="mb-5 max-w-xl">
+      <Card className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div className="mb-6 max-w-xl">
           <Select
             disabled={loading || hotels.length === 0}
             label="Active hotel context"
@@ -331,12 +339,14 @@ export function MenuCategoriesPageClient() {
           </Select>
         </div>
 
-        <div className="mb-5 flex items-center gap-2">
-          <Plus aria-hidden className="text-[var(--accent)]" size={20} />
-          <h2 className="text-lg font-semibold text-[var(--foreground)]">Create category</h2>
+        <div className="mb-6 flex items-center gap-2.5">
+          <div className="flex h-8 w-8 items-center justify-center rounded-md bg-slate-50 text-slate-500">
+            <Plus aria-hidden size={18} />
+          </div>
+          <h2 className="text-lg font-semibold tracking-tight text-slate-900">Create category</h2>
         </div>
 
-        <form className="grid gap-4 lg:grid-cols-[1fr_1fr_1fr_0.6fr_0.7fr_auto]" onSubmit={handleCreate}>
+        <form className="grid gap-4 lg:gap-6 lg:grid-cols-[1fr_1fr_1fr_0.6fr_0.7fr_auto] lg:items-end" onSubmit={handleCreate}>
           <Select
             defaultValue={selectedHotelId}
             disabled={saving || hotels.length === 0}
@@ -354,23 +364,25 @@ export function MenuCategoriesPageClient() {
           <Input disabled={saving} label="Name" name="name" placeholder="Breakfast" required />
           <Input disabled={saving} label="Slug" name="slug" placeholder="breakfast" />
           <Input defaultValue="0" disabled={saving} label="Sort" min={0} name="sort_order" type="number" />
-          <div className="self-end">
+          <div className="self-end pb-2 lg:pb-3">
             <Checkbox defaultChecked disabled={saving} label="Active" name="is_active" />
           </div>
-          <Button className="self-end" disabled={saving || hotels.length === 0} type="submit">
+          <Button className="h-10 w-full rounded-lg font-medium shadow-sm lg:w-auto" disabled={saving || hotels.length === 0} type="submit">
             Add
           </Button>
         </form>
 
-        <div className="mt-5 flex flex-wrap gap-2">
+        <div className="mt-6 flex flex-wrap gap-2.5 border-t border-slate-100 pt-6">
           {presets.map((preset) => (
             <Button
+              className="h-9 font-medium"
               disabled={saving || !selectedHotelId}
               key={preset}
               onClick={() => handlePreset(preset)}
               type="button"
               variant="secondary"
             >
+              <Plus aria-hidden size={16} className="mr-1.5 text-slate-500" />
               {preset}
             </Button>
           ))}
@@ -378,16 +390,20 @@ export function MenuCategoriesPageClient() {
       </Card>
 
       <section className="space-y-4">
-        <div className="flex items-center gap-2">
-          <Layers3 aria-hidden className="text-[var(--accent)]" size={20} />
-          <h2 className="text-lg font-semibold text-[var(--foreground)]">Category list</h2>
-          <Badge>{categories.length}</Badge>
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-8 w-8 items-center justify-center rounded-md bg-slate-50 text-slate-500">
+            <Layers3 aria-hidden size={18} />
+          </div>
+          <h2 className="text-lg font-semibold tracking-tight text-slate-900">Category list</h2>
+          <Badge variant="secondary" className="ml-1 bg-slate-100 text-slate-700 hover:bg-slate-100 font-medium">
+            {categories.length}
+          </Badge>
         </div>
 
         {loading ? (
           <div className="grid gap-3">
             {Array.from({ length: 5 }).map((_, index) => (
-              <div className="h-24 animate-pulse rounded-lg border border-[var(--border)] bg-[var(--surface-2)]/70" key={index} />
+              <div className="h-[90px] animate-pulse rounded-xl border border-slate-200 bg-slate-50/50" key={index} />
             ))}
           </div>
         ) : categories.length > 0 ? (
@@ -415,19 +431,21 @@ export function MenuCategoriesPageClient() {
             )}
           </div>
         ) : (
-          <Card>
-            <p className="text-sm text-[var(--muted)]">No menu categories were returned by the API.</p>
+          <Card className="rounded-xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+            <p className="text-sm font-medium text-slate-500">No menu categories were returned by the API.</p>
           </Card>
         )}
       </section>
 
-      <Card>
-        <div className="mb-5 flex items-center gap-2">
-          <Utensils aria-hidden className="text-[var(--accent)]" size={20} />
-          <h2 className="text-lg font-semibold text-[var(--foreground)]">Create menu item</h2>
+      <Card className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div className="mb-6 flex items-center gap-2.5">
+          <div className="flex h-8 w-8 items-center justify-center rounded-md bg-slate-50 text-slate-500">
+            <Utensils aria-hidden size={18} />
+          </div>
+          <h2 className="text-lg font-semibold tracking-tight text-slate-900">Create menu item</h2>
         </div>
 
-        <form className="grid gap-4 xl:grid-cols-[1fr_1fr_0.8fr_0.8fr_0.8fr]" onSubmit={handleCreateItem}>
+        <form className="grid gap-4 lg:gap-6 xl:grid-cols-[1fr_1fr_0.8fr_0.8fr_0.8fr] xl:items-end" onSubmit={handleCreateItem}>
           <Select
             defaultValue={selectedHotelId}
             disabled={saving || hotels.length === 0}
@@ -452,31 +470,35 @@ export function MenuCategoriesPageClient() {
           </Select>
           <Input disabled={saving} label="Name" name="name" placeholder="Chicken sandwich" required />
           <Input disabled={saving} label="Price" min="0" name="price" placeholder="450.00" step="0.01" type="number" />
-          <Input disabled={saving} label="Prep time" min="0" name="prep_time_minutes" placeholder="15" type="number" />
+          <Input disabled={saving} label="Prep time (min)" min="0" name="prep_time_minutes" placeholder="15" type="number" />
           <Input disabled={saving} label="SKU" name="sku" placeholder="chicken-sandwich" />
           <Input disabled={saving} label="Slug" name="slug" placeholder="chicken-sandwich" />
           <Input className="xl:col-span-2" disabled={saving} label="Image URL" name="image_url" placeholder="https://..." type="url" />
           <Input className="xl:col-span-4" disabled={saving} label="Description" name="description" placeholder="Short item description" />
-          <div className="self-end">
+          <div className="self-end pb-2 lg:pb-3">
             <Checkbox defaultChecked disabled={saving} label="Available" name="is_available" />
           </div>
-          <Button className="self-end" disabled={saving || !selectedHotelId} type="submit">
+          <Button className="h-10 w-full rounded-lg font-medium shadow-sm lg:w-auto" disabled={saving || !selectedHotelId} type="submit">
             Add item
           </Button>
         </form>
       </Card>
 
       <section className="space-y-4">
-        <div className="flex items-center gap-2">
-          <Utensils aria-hidden className="text-[var(--accent)]" size={20} />
-          <h2 className="text-lg font-semibold text-[var(--foreground)]">Restaurant catalogue</h2>
-          <Badge>{items.length}</Badge>
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-8 w-8 items-center justify-center rounded-md bg-slate-50 text-slate-500">
+            <Utensils aria-hidden size={18} />
+          </div>
+          <h2 className="text-lg font-semibold tracking-tight text-slate-900">Restaurant catalogue</h2>
+          <Badge variant="secondary" className="ml-1 bg-slate-100 text-slate-700 hover:bg-slate-100 font-medium">
+            {items.length}
+          </Badge>
         </div>
 
         {loading ? (
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {Array.from({ length: 6 }).map((_, index) => (
-              <div className="h-72 animate-pulse rounded-lg border border-[var(--border)] bg-[var(--surface-2)]/70" key={index} />
+              <div className="h-[340px] animate-pulse rounded-xl border border-slate-200 bg-slate-50/50" key={index} />
             ))}
           </div>
         ) : items.length > 0 ? (
@@ -505,8 +527,8 @@ export function MenuCategoriesPageClient() {
             )}
           </div>
         ) : (
-          <Card>
-            <p className="text-sm text-[var(--muted)]">No menu items were returned by the API.</p>
+          <Card className="rounded-xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+            <p className="text-sm font-medium text-slate-500">No menu items were returned by the API.</p>
           </Card>
         )}
       </section>
@@ -528,30 +550,38 @@ function CategoryDisplayRow({
   onEdit: () => void;
 }) {
   return (
-    <Card className="grid gap-4 lg:grid-cols-[1fr_1fr_0.7fr_0.7fr_auto] lg:items-center">
-      <div>
-        <p className="text-xs uppercase tracking-[0.14em] text-[var(--muted)]">Category</p>
-        <p className="mt-2 text-sm font-semibold text-[var(--foreground)]">{category.name}</p>
+    <Card className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md grid gap-4 lg:gap-6 lg:grid-cols-[1fr_1fr_0.7fr_0.7fr_auto] lg:items-center">
+      <div className="min-w-0">
+        <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Category</p>
+        <p className="mt-1.5 text-sm font-medium text-slate-900">{category.name}</p>
       </div>
-      <div>
-        <p className="text-xs uppercase tracking-[0.14em] text-[var(--muted)]">Hotel</p>
-        <p className="mt-2 truncate text-sm text-[var(--foreground)]">{hotel?.name ?? category.hotel}</p>
+      <div className="min-w-0">
+        <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Hotel</p>
+        <p className="mt-1.5 truncate text-sm text-slate-700">{hotel?.name ?? category.hotel}</p>
       </div>
-      <div>
-        <p className="text-xs uppercase tracking-[0.14em] text-[var(--muted)]">Slug</p>
-        <p className="mt-2 truncate text-sm text-[var(--foreground)]">{category.slug}</p>
+      <div className="min-w-0">
+        <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Slug</p>
+        <p className="mt-1.5 truncate text-sm text-slate-500">{category.slug}</p>
       </div>
-      <div className="flex items-center gap-2">
-        <Badge>{category.is_active === false ? "Inactive" : "Active"}</Badge>
-        <span className="text-sm text-[var(--muted)]">Sort {category.sort_order ?? 0}</span>
+      <div className="flex items-center gap-3">
+        <Badge variant={category.is_active === false ? "secondary" : "default"} className={category.is_active === false ? "bg-slate-100 text-slate-500 font-medium" : "font-medium"}>
+          {category.is_active === false ? "Inactive" : "Active"}
+        </Badge>
+        <span className="text-xs font-medium text-slate-400">Sort {category.sort_order ?? 0}</span>
       </div>
-      <div className="flex flex-wrap gap-2">
-        <Button disabled={busy} onClick={onEdit} type="button" variant="secondary">
-          <Pencil aria-hidden size={18} />
+      <div className="flex flex-wrap items-center gap-2">
+        <Button className="h-9" disabled={busy} onClick={onEdit} type="button" variant="secondary">
+          <Pencil aria-hidden size={16} className="mr-1.5 text-slate-500" />
           Edit
         </Button>
-        <Button disabled={busy} onClick={() => onDelete(category)} type="button" variant="ghost">
-          <Trash2 aria-hidden size={18} />
+        <Button 
+          className="h-9 text-slate-600 hover:bg-red-50 hover:text-red-700 transition-colors" 
+          disabled={busy} 
+          onClick={() => onDelete(category)} 
+          type="button" 
+          variant="ghost"
+        >
+          <Trash2 aria-hidden size={16} className="mr-1.5" />
           Delete
         </Button>
       </div>
@@ -573,8 +603,8 @@ function CategoryEditRow({
   onSubmit: (event: FormEvent<HTMLFormElement>, category: MenuCategory) => void;
 }) {
   return (
-    <Card>
-      <form className="grid gap-4 lg:grid-cols-[1fr_1fr_1fr_0.6fr_0.7fr_auto]" onSubmit={(event) => onSubmit(event, category)}>
+    <Card className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+      <form className="grid gap-4 lg:gap-6 lg:grid-cols-[1fr_1fr_1fr_0.6fr_0.7fr_auto] lg:items-end" onSubmit={(event) => onSubmit(event, category)}>
         <Select defaultValue={category.hotel} disabled={busy} label="Hotel" name="hotel" required>
           {hotels.map((hotel) => (
             <option key={hotel.id} value={hotel.id}>
@@ -585,14 +615,14 @@ function CategoryEditRow({
         <Input defaultValue={category.name} disabled={busy} label="Name" name="name" required />
         <Input defaultValue={category.slug} disabled={busy} label="Slug" name="slug" required />
         <Input defaultValue={category.sort_order ?? 0} disabled={busy} label="Sort" min={0} name="sort_order" type="number" />
-        <div className="self-end">
+        <div className="self-end pb-2 lg:pb-3">
           <Checkbox defaultChecked={category.is_active !== false} disabled={busy} label="Active" name="is_active" />
         </div>
         <div className="flex gap-2 self-end">
-          <Button disabled={busy} type="submit">
+          <Button className="h-10 font-medium" disabled={busy} type="submit">
             Save
           </Button>
-          <Button disabled={busy} onClick={onCancel} type="button" variant="ghost">
+          <Button className="h-10 font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900" disabled={busy} onClick={onCancel} type="button" variant="ghost">
             Cancel
           </Button>
         </div>
@@ -615,16 +645,16 @@ function MenuItemCard({
   onEdit: () => void;
 }) {
   return (
-    <Card className="space-y-5">
+    <Card className="flex flex-col rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md space-y-5">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--accent)]">
+          <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
             {category?.name ?? "Uncategorised"}
           </p>
-          <h3 className="mt-2 truncate text-xl font-bold text-[var(--foreground)]">{item.name}</h3>
-          <p className="mt-1 text-sm text-[var(--muted)]">{item.sku}</p>
+          <h3 className="mt-1.5 truncate text-lg font-semibold text-slate-900">{item.name}</h3>
+          <p className="mt-0.5 text-sm text-slate-500">{item.sku}</p>
         </div>
-        <Badge className={item.is_available === false ? "border-[var(--border)] bg-[var(--surface-3)] text-[var(--muted)]" : undefined}>
+        <Badge variant={item.is_available === false ? "secondary" : "default"} className={item.is_available === false ? "bg-slate-100 text-slate-500 font-medium" : "font-medium"}>
           {item.is_available === false ? "Unavailable" : "Available"}
         </Badge>
       </div>
@@ -632,30 +662,38 @@ function MenuItemCard({
       {item.image_url ? (
         <div
           aria-label={item.name}
-          className="h-36 rounded-md border border-[var(--border)] bg-[var(--surface)] bg-cover bg-center"
+          className="h-40 shrink-0 rounded-lg border border-slate-100 bg-slate-50 bg-cover bg-center shadow-inner"
           role="img"
           style={{ backgroundImage: `url("${item.image_url}")` }}
         />
       ) : (
-        <div className="flex h-36 items-center justify-center rounded-md border border-[var(--border)] bg-[var(--surface)] text-[var(--muted)]">
-          <ImageIcon aria-hidden size={28} />
+        <div className="flex h-40 shrink-0 items-center justify-center rounded-lg border border-slate-100 bg-slate-50 text-slate-400">
+          <ImageIcon aria-hidden size={32} />
         </div>
       )}
 
-      <p className="min-h-10 text-sm text-[var(--muted)]">{item.description || "No description set."}</p>
+      <p className="min-h-10 text-sm text-slate-600 line-clamp-2 leading-relaxed flex-1">
+        {item.description || <span className="italic text-slate-400">No description set.</span>}
+      </p>
 
-      <div className="grid grid-cols-2 gap-3 text-sm">
+      <div className="grid grid-cols-2 gap-3 text-sm shrink-0">
         <ItemMetric label="Price" value={item.price ? formatMoney(item.price) : "Not set"} />
         <ItemMetric label="Prep" value={`${item.prep_time_minutes ?? 0} min`} />
       </div>
 
-      <div className="flex flex-wrap gap-2 border-t border-[var(--border)] pt-4">
-        <Button disabled={busy} onClick={onEdit} type="button" variant="secondary">
-          <Pencil aria-hidden size={18} />
+      <div className="flex flex-wrap items-center gap-2 border-t border-slate-100 pt-5 shrink-0">
+        <Button className="h-9 font-medium" disabled={busy} onClick={onEdit} type="button" variant="secondary">
+          <Pencil aria-hidden size={16} className="mr-1.5 text-slate-500" />
           Edit
         </Button>
-        <Button disabled={busy} onClick={() => onDelete(item)} type="button" variant="ghost">
-          <Trash2 aria-hidden size={18} />
+        <Button 
+          className="h-9 font-medium text-slate-600 hover:bg-red-50 hover:text-red-700 transition-colors" 
+          disabled={busy} 
+          onClick={() => onDelete(item)} 
+          type="button" 
+          variant="ghost"
+        >
+          <Trash2 aria-hidden size={16} className="mr-1.5" />
           Delete
         </Button>
       </div>
@@ -679,8 +717,8 @@ function MenuItemEditCard({
   onSubmit: (event: FormEvent<HTMLFormElement>, item: MenuItem) => void;
 }) {
   return (
-    <Card className="md:col-span-2 xl:col-span-3">
-      <form className="grid gap-4 xl:grid-cols-[1fr_1fr_0.8fr_0.8fr_0.8fr]" onSubmit={(event) => onSubmit(event, item)}>
+    <Card className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm md:col-span-2 xl:col-span-3">
+      <form className="grid gap-4 lg:gap-6 xl:grid-cols-[1fr_1fr_0.8fr_0.8fr_0.8fr] xl:items-end" onSubmit={(event) => onSubmit(event, item)}>
         <Select defaultValue={item.hotel} disabled={busy} label="Hotel" name="hotel" required>
           {hotels.map((hotel) => (
             <option key={hotel.id} value={hotel.id}>
@@ -698,19 +736,19 @@ function MenuItemEditCard({
         </Select>
         <Input defaultValue={item.name} disabled={busy} label="Name" name="name" required />
         <Input defaultValue={item.price ?? ""} disabled={busy} label="Price" min="0" name="price" step="0.01" type="number" />
-        <Input defaultValue={item.prep_time_minutes ?? 0} disabled={busy} label="Prep time" min="0" name="prep_time_minutes" type="number" />
+        <Input defaultValue={item.prep_time_minutes ?? 0} disabled={busy} label="Prep time (min)" min="0" name="prep_time_minutes" type="number" />
         <Input defaultValue={item.sku ?? ""} disabled={busy} label="SKU" name="sku" required />
         <Input defaultValue={item.slug} disabled={busy} label="Slug" name="slug" required />
         <Input className="xl:col-span-2" defaultValue={item.image_url ?? ""} disabled={busy} label="Image URL" name="image_url" type="url" />
         <Input className="xl:col-span-4" defaultValue={item.description ?? ""} disabled={busy} label="Description" name="description" />
-        <div className="self-end">
+        <div className="self-end pb-2 lg:pb-3">
           <Checkbox defaultChecked={item.is_available !== false} disabled={busy} label="Available" name="is_available" />
         </div>
         <div className="flex gap-2 self-end">
-          <Button disabled={busy} type="submit">
+          <Button className="h-10 font-medium" disabled={busy} type="submit">
             Save
           </Button>
-          <Button disabled={busy} onClick={onCancel} type="button" variant="ghost">
+          <Button className="h-10 font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900" disabled={busy} onClick={onCancel} type="button" variant="ghost">
             Cancel
           </Button>
         </div>
@@ -721,9 +759,9 @@ function MenuItemEditCard({
 
 function ItemMetric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-md border border-[var(--border)] bg-[var(--surface)] p-3">
-      <p className="text-xs uppercase tracking-[0.14em] text-[var(--muted)]">{label}</p>
-      <p className="mt-2 truncate font-semibold text-[var(--foreground)]">{value}</p>
+    <div className="rounded-lg border border-slate-100 bg-slate-50/80 p-3">
+      <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">{label}</p>
+      <p className="mt-1 truncate font-medium text-slate-900">{value}</p>
     </div>
   );
 }

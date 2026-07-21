@@ -109,25 +109,39 @@ export function OrdersPageClient() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 md:space-y-8">
       <div>
-        <Badge>Orders API</Badge>
-        <h1 className="mt-3 text-3xl font-bold text-[var(--foreground)]">Orders</h1>
+        <Badge variant="outline" className="font-medium text-slate-600 border-slate-200">
+          Orders API
+        </Badge>
+        <h1 className="mt-3 text-2xl md:text-3xl font-bold tracking-tight text-slate-900">Orders</h1>
         <div className="mt-2 flex flex-wrap items-center justify-between gap-4">
-          <p className="max-w-2xl text-sm text-[var(--muted)]">
+          <p className="max-w-2xl text-base text-slate-500">
             Create orders, track status from draft to completed, and keep kitchen work moving.
           </p>
-          <div className="flex flex-wrap gap-2">
-            <Link className="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-[var(--accent)] px-4 text-sm font-semibold text-[var(--accent-foreground)] transition-colors hover:bg-[var(--accent-hover)]" href="/orders/new">
+          <div className="flex flex-wrap gap-2.5">
+            <Link
+              className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-[var(--accent)] px-4 text-sm font-medium text-white transition-colors hover:opacity-90 shadow-sm"
+              href="/orders/new"
+            >
               <Plus aria-hidden size={18} />
               New order
             </Link>
-            <Link className="inline-flex h-11 items-center justify-center gap-2 rounded-md border border-[var(--border)] bg-[var(--surface-2)] px-4 text-sm font-semibold text-[var(--foreground)] transition-colors hover:bg-[var(--surface-2)]" href="/orders/kitchen">
-              <ChefHat aria-hidden size={18} />
+            <Link
+              className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 shadow-sm"
+              href="/orders/kitchen"
+            >
+              <ChefHat aria-hidden size={18} className="text-slate-500" />
               Kitchen
             </Link>
-            <Button disabled={loading} onClick={() => loadOrders()} type="button" variant="secondary">
-              <RefreshCw aria-hidden size={18} />
+            <Button
+              className="h-10 rounded-lg font-medium shadow-sm"
+              disabled={loading}
+              onClick={() => loadOrders()}
+              type="button"
+              variant="secondary"
+            >
+              <RefreshCw aria-hidden size={16} className="mr-2 text-slate-500" />
               Refresh
             </Button>
           </div>
@@ -135,12 +149,12 @@ export function OrdersPageClient() {
       </div>
 
       {error ? (
-        <div className="rounded-md border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-100">
+        <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-800">
           {error}
         </div>
       ) : null}
 
-      <Card>
+      <Card className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
         <Select
           disabled={loading || hotels.length === 0}
           label="Active hotel"
@@ -156,27 +170,31 @@ export function OrdersPageClient() {
         </Select>
       </Card>
 
-      <div className="grid gap-3 md:grid-cols-4 xl:grid-cols-7">
+      <div className="grid gap-4 grid-cols-2 md:grid-cols-4 xl:grid-cols-7">
         {statusCounts.map((status) => (
-          <Card key={status.value}>
-            <p className="text-xs uppercase tracking-[0.14em] text-[var(--muted)]">{status.label}</p>
-            <p className="mt-2 text-2xl font-bold text-[var(--foreground)]">{status.count}</p>
+          <Card key={status.value} className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm flex flex-col justify-center">
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">{status.label}</p>
+            <p className="mt-2 text-2xl font-bold tracking-tight text-slate-900">{status.count}</p>
           </Card>
         ))}
       </div>
 
       <section className="space-y-4">
-        <div className="flex items-center gap-2">
-          <ClipboardList aria-hidden className="text-[var(--accent)]" size={20} />
-          <h2 className="text-lg font-semibold text-[var(--foreground)]">Orders list</h2>
-          <Badge>{orders.length}</Badge>
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-8 w-8 items-center justify-center rounded-md bg-slate-50 text-slate-500">
+            <ClipboardList aria-hidden size={18} />
+          </div>
+          <h2 className="text-lg font-semibold tracking-tight text-slate-900">Orders list</h2>
+          <Badge variant="secondary" className="ml-1 bg-slate-100 text-slate-700 hover:bg-slate-100 font-medium">
+            {orders.length}
+          </Badge>
         </div>
 
         {loading ? (
           <div className="space-y-3">
             {Array.from({ length: 5 }).map((_, index) => (
               <div
-                className="h-28 animate-pulse rounded-lg border border-[var(--border)] bg-[var(--surface-2)]/70"
+                className="h-[104px] animate-pulse rounded-xl border border-slate-200 bg-slate-50/50"
                 key={index}
               />
             ))}
@@ -194,8 +212,8 @@ export function OrdersPageClient() {
             ))}
           </div>
         ) : (
-          <Card>
-            <p className="text-sm text-[var(--muted)]">No orders were returned for this hotel yet.</p>
+          <Card className="rounded-xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+            <p className="text-sm font-medium text-slate-500">No orders were returned for this hotel yet.</p>
           </Card>
         )}
       </section>
@@ -218,30 +236,42 @@ function OrderRow({
   const nextStatus = getNextOrderStatus(status);
 
   return (
-    <Card className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr_0.8fr_0.8fr_auto] lg:items-center">
+    <Card className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md grid gap-4 lg:gap-6 lg:grid-cols-[1.2fr_0.8fr_0.8fr_0.8fr_auto] lg:items-center">
       <div className="min-w-0">
-        <p className="text-xs uppercase tracking-[0.14em] text-[var(--muted)]">Order</p>
-        <Link className="mt-2 block truncate text-lg font-bold text-[var(--foreground)] hover:text-[var(--accent)]" href={`/orders/${order.id}`}>
+        <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Order</p>
+        <Link className="mt-1.5 block truncate text-base font-semibold text-slate-900 transition-colors hover:text-[var(--accent)]" href={`/orders/${order.id}`}>
           {order.order_number}
         </Link>
-        <p className="mt-1 truncate text-sm text-[var(--muted)]">
-          {order.customer_name || "Walk-in customer"} · {formatOrderType(order.order_type)}
+        <p className="mt-0.5 truncate text-sm text-slate-500">
+          {order.customer_name || "Walk-in customer"} &middot; {formatOrderType(order.order_type)}
         </p>
       </div>
-      <Badge className={getStatusClassName(status)}>{formatOrderStatus(status)}</Badge>
       <div>
-        <p className="text-xs uppercase tracking-[0.14em] text-[var(--muted)]">Table</p>
-        <p className="mt-2 text-sm font-semibold text-[var(--foreground)]">{order.table ?? "No table"}</p>
+        <Badge className={`font-medium ${getStatusClassName(status)}`}>
+          {formatOrderStatus(status)}
+        </Badge>
       </div>
       <div>
-        <p className="text-xs uppercase tracking-[0.14em] text-[var(--muted)]">Total</p>
-        <p className="mt-2 text-sm font-semibold text-[var(--foreground)]">{formatMoney(order.total_amount, currency)}</p>
+        <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Table</p>
+        <p className="mt-1.5 text-sm font-medium text-slate-900">{order.table ?? "No table"}</p>
       </div>
-      <div className="flex flex-wrap gap-2">
-        <Link className="inline-flex h-11 items-center justify-center rounded-md border border-[var(--border)] bg-[var(--surface-2)] px-4 text-sm font-semibold text-[var(--foreground)] transition-colors hover:bg-[var(--surface-2)]" href={`/orders/${order.id}`}>
+      <div>
+        <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Total</p>
+        <p className="mt-1.5 text-sm font-medium text-slate-900">{formatMoney(order.total_amount, currency)}</p>
+      </div>
+      <div className="flex flex-wrap items-center gap-2.5">
+        <Link
+          className="inline-flex h-9 items-center justify-center rounded-lg border border-slate-200 bg-white px-4 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 shadow-sm"
+          href={`/orders/${order.id}`}
+        >
           Details
         </Link>
-        <Button disabled={busy || !nextStatus} onClick={() => onAdvance(order)} type="button">
+        <Button
+          className="h-9 rounded-lg font-medium shadow-sm"
+          disabled={busy || !nextStatus}
+          onClick={() => onAdvance(order)}
+          type="button"
+        >
           {nextStatus ? `Mark ${formatOrderStatus(nextStatus)}` : "Done"}
         </Button>
       </div>

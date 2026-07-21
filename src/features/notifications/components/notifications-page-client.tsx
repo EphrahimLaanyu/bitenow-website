@@ -88,28 +88,36 @@ export function NotificationsPageClient() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 md:space-y-8">
       <div>
-        <Badge>Notifications API</Badge>
-        <h1 className="mt-3 text-3xl font-bold text-[var(--foreground)]">Notifications</h1>
+        <Badge variant="outline" className="font-medium text-slate-600 border-slate-200">
+          Notifications API
+        </Badge>
+        <h1 className="mt-3 text-2xl md:text-3xl font-bold tracking-tight text-slate-900">Notifications</h1>
         <div className="mt-2 flex flex-wrap items-center justify-between gap-4">
-          <p className="max-w-2xl text-sm text-[var(--muted)]">
+          <p className="max-w-2xl text-base text-slate-500">
             Review operational alerts for the active hotel and mark them as read.
           </p>
-          <Button disabled={loading} onClick={() => loadNotifications()} type="button" variant="secondary">
-            <RefreshCw aria-hidden size={18} />
+          <Button 
+            className="h-10 rounded-lg font-medium shadow-sm" 
+            disabled={loading} 
+            onClick={() => loadNotifications()} 
+            type="button" 
+            variant="secondary"
+          >
+            <RefreshCw aria-hidden size={16} className="mr-2 text-slate-500" />
             Refresh
           </Button>
         </div>
       </div>
 
       {error ? (
-        <div className="rounded-md border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-100">
+        <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-800">
           {error}
         </div>
       ) : null}
 
-      <Card>
+      <Card className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
         <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-end">
           <Select
             disabled={loading || hotels.length === 0}
@@ -124,25 +132,29 @@ export function NotificationsPageClient() {
               </option>
             ))}
           </Select>
-          <div className="rounded-md border border-[var(--border)] bg-[var(--surface)] px-4 py-3">
-            <p className="text-xs uppercase tracking-[0.14em] text-[var(--muted)]">Unread</p>
-            <p className="mt-1 text-2xl font-bold text-[var(--foreground)]">{unreadCount}</p>
+          <div className="rounded-lg border border-slate-200 bg-slate-50 px-6 py-3.5 text-center md:text-left">
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Unread</p>
+            <p className="mt-1 text-3xl font-bold tracking-tight text-slate-900">{unreadCount}</p>
           </div>
         </div>
       </Card>
 
       <section className="space-y-4">
-        <div className="flex items-center gap-2">
-          <Bell aria-hidden className="text-[var(--accent)]" size={20} />
-          <h2 className="text-lg font-semibold text-[var(--foreground)]">Notification panel</h2>
-          <Badge>{notifications.length}</Badge>
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-8 w-8 items-center justify-center rounded-md bg-slate-50 text-slate-500">
+            <Bell aria-hidden size={18} />
+          </div>
+          <h2 className="text-lg font-semibold tracking-tight text-slate-900">Notification panel</h2>
+          <Badge variant="secondary" className="ml-1 bg-slate-100 text-slate-700 hover:bg-slate-100 font-medium">
+            {notifications.length}
+          </Badge>
         </div>
 
         {loading ? (
           <div className="space-y-3">
             {Array.from({ length: 5 }).map((_, index) => (
               <div
-                className="h-28 animate-pulse rounded-lg border border-[var(--border)] bg-[var(--surface-2)]/70"
+                className="h-[120px] animate-pulse rounded-xl border border-slate-200 bg-slate-50/50"
                 key={index}
               />
             ))}
@@ -159,8 +171,8 @@ export function NotificationsPageClient() {
             ))}
           </div>
         ) : (
-          <Card>
-            <p className="text-sm text-[var(--muted)]">No notifications were returned for this hotel.</p>
+          <Card className="rounded-xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+            <p className="text-sm font-medium text-slate-500">No notifications were returned for this hotel.</p>
           </Card>
         )}
       </section>
@@ -180,32 +192,50 @@ function NotificationCard({
   const isRead = notification.is_read === true;
 
   return (
-    <Card className={isRead ? "bg-[var(--surface-2)]/55" : "border-[var(--accent)]/45 bg-[var(--surface-2)]/80"}>
-      <div className="grid gap-4 lg:grid-cols-[auto_1fr_auto] lg:items-start">
-        <div className="mt-1 text-[var(--accent)]">
-          {isRead ? <Check aria-hidden size={18} /> : <Circle aria-hidden size={18} />}
+    <Card 
+      className={`rounded-xl border p-5 transition-all ${
+        isRead 
+          ? "border-slate-200 bg-slate-50/50 shadow-none" 
+          : "border-slate-200 bg-white shadow-sm hover:shadow-md"
+      }`}
+    >
+      <div className="grid gap-4 lg:gap-6 lg:grid-cols-[auto_1fr_auto] lg:items-start">
+        <div className={`mt-0.5 shrink-0 ${isRead ? "text-slate-300" : "text-[var(--accent)]"}`}>
+          {isRead ? <Check aria-hidden size={20} /> : <Circle aria-hidden size={20} className="fill-[var(--accent)]/10" />}
         </div>
         <div className="min-w-0">
-          <div className="flex flex-wrap items-center gap-2">
-            <Badge className={isRead ? "border-[var(--border)] bg-[var(--surface)] text-[var(--muted)]" : undefined}>
+          <div className="flex flex-wrap items-center gap-2.5">
+            <Badge 
+              variant={isRead ? "secondary" : "default"} 
+              className={isRead ? "bg-slate-100 text-slate-500 font-medium border border-slate-200" : "font-medium"}
+            >
               {notification.category || "General"}
             </Badge>
-            {!isRead ? <Badge>Unread</Badge> : null}
+            {!isRead ? (
+              <Badge variant="outline" className="font-medium text-[var(--accent)] border-[var(--accent)]/20 bg-[var(--accent)]/5">
+                Unread
+              </Badge>
+            ) : null}
           </div>
-          <h3 className="mt-3 text-lg font-bold text-[var(--foreground)]">{notification.title}</h3>
-          <p className="mt-2 text-sm leading-6 text-[var(--muted)]">{notification.message}</p>
-          <p className="mt-3 text-xs text-[var(--muted)]">
+          <h3 className={`mt-2.5 text-base font-semibold ${isRead ? "text-slate-600" : "text-slate-900"}`}>
+            {notification.title}
+          </h3>
+          <p className="mt-1 text-sm leading-relaxed text-slate-600">
+            {notification.message}
+          </p>
+          <p className="mt-3 text-[13px] font-medium text-slate-400">
             {new Date(notification.created_at).toLocaleString()}
             {notification.read_at ? ` · Read ${new Date(notification.read_at).toLocaleString()}` : ""}
           </p>
         </div>
         <Button
+          className={`h-9 font-medium ${isRead ? "text-slate-500 hover:bg-slate-200/50" : "shadow-sm"}`}
           disabled={busy || isRead}
           onClick={() => onMarkRead(notification)}
           type="button"
-          variant={isRead ? "secondary" : "primary"}
+          variant={isRead ? "ghost" : "secondary"}
         >
-          <Check aria-hidden size={16} />
+          <Check aria-hidden size={16} className={isRead ? "mr-1.5" : "mr-1.5 text-slate-500"} />
           {isRead ? "Read" : "Mark read"}
         </Button>
       </div>
