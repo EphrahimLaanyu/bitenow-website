@@ -21,7 +21,7 @@ import { getActiveHotelId } from "@/lib/hotels/active-hotel-storage";
 import { cn } from "@/lib/utils";
 
 const primaryNavItems = [
-  { href: "/client/hotels", label: "Hotels", icon: Hotel },
+  { href: "/", label: "Hotels", icon: Hotel },
   { href: "/client/menu", label: "Menu", icon: Menu },
   { href: "/client/orders", label: "Orders", icon: ClipboardList },
   { href: "/client/checkout", label: "Checkout", icon: CreditCard }
@@ -33,7 +33,7 @@ const actionNavItems = [
 ];
 
 const mobileNavItems = [
-  { href: "/client/hotels", label: "Hotels", icon: Search },
+  { href: "/", label: "Hotels", icon: Search },
   { href: "/client/menu", label: "Menu", icon: Menu },
   { href: "/client/cart", label: "Cart", icon: ShoppingCart, cart: true },
   { href: "/client/orders", label: "Orders", icon: ClipboardList },
@@ -50,7 +50,7 @@ export function ClientLayout({ children }: Readonly<{ children: React.ReactNode 
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
           
           {/* LOGO AREA */}
-          <Link className="group flex min-w-0 items-center gap-3" href="/client/hotels">
+          <Link className="group flex min-w-0 items-center gap-3" href="/">
             <span className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#101f3f]/10 bg-[#101f3f]/[0.03] text-[#101f3f] shadow-[inset_0_1px_1px_rgba(255,255,255,1)] transition-all duration-500 ease-out group-hover:rotate-12 group-hover:scale-105 group-hover:border-[#f97316]/20 group-hover:bg-[#f97316]/10 group-hover:text-[#f97316]">
               <Utensils aria-hidden size={18} />
             </span>
@@ -228,5 +228,6 @@ function useCartCount() {
 }
 
 function isActivePath(pathname: string, href: string) {
+  if (href === "/") return pathname === "/";
   return pathname === href || pathname.startsWith(`${href}/`);
 }
