@@ -306,18 +306,19 @@ function MenuItemCard({
           </p>
         </div>
 
-        <Button
+<Button
           className={`mt-5 w-full h-11 rounded-lg font-medium shadow-sm transition-all ${
-            added ? "bg-emerald-600 hover:bg-emerald-700 text-white" : ""
+            added ? "bg-emerald-600 hover:bg-emerald-700 text-white border-transparent" : ""
           }`}
           disabled={item.is_available === false}
           onClick={() => onAdd(item)}
           type="button"
-          variant={added ? "default" : "secondary"} 
+          // Changed "default" to "primary" to match your button.tsx interface
+          variant={added ? "primary" : "secondary"} 
         >
           {added ? <Check aria-hidden size={18} className="mr-2" /> : <ShoppingCart aria-hidden size={18} className="mr-2 text-slate-500" />}
           {added ? "Added to cart" : "Add to cart"}
-        </Button>
+        </Button> 
       </div>
     </Card>
   );
