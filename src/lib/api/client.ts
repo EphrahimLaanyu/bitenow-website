@@ -13,7 +13,7 @@ type ApiRequestOptions = RequestInit & {
   retryOnUnauthorized?: boolean;
 };
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://34.61.93.13";
 const API_PROXY_BASE = "/api/backend";
 
 function buildUrl(path: string, params?: ApiRequestOptions["params"]) {
