@@ -50,13 +50,13 @@ export function formatOrderType(type: OrderType | string | undefined) {
 }
 
 export function getStatusClassName(status: OrderStatus | undefined) {
-  if (status === "completed") return "border-emerald-500/30 bg-emerald-500/10 text-emerald-100";
-  if (status === "ready") return "border-lime-500/30 bg-lime-500/10 text-lime-100";
-  if (status === "in_preparation") return "border-orange-500/40 bg-orange-500/10 text-orange-100";
-  if (status === "accepted") return "border-sky-500/30 bg-sky-500/10 text-sky-100";
-  if (status === "placed") return "border-blue-500/30 bg-blue-500/10 text-blue-100";
-  if (status === "cancelled") return "border-red-500/30 bg-red-500/10 text-red-100";
-  return "border-slate-500/30 bg-slate-500/10 text-slate-100";
+  if (status === "completed") return "border-emerald-500/30 bg-emerald-50 text-emerald-700";
+  if (status === "ready") return "border-lime-500/30 bg-lime-50 text-lime-700";
+  if (status === "in_preparation") return "border-orange-500/30 bg-orange-50 text-orange-700";
+  if (status === "accepted") return "border-sky-500/30 bg-sky-50 text-sky-700";
+  if (status === "placed") return "border-[var(--primary)]/20 bg-[var(--surface-2)] text-[var(--primary)]";
+  if (status === "cancelled") return "border-red-500/30 bg-red-50 text-red-700";
+  return "border-slate-500/20 bg-slate-50 text-slate-700";
 }
 
 export function formatMoney(value: string | number | undefined, currency = "KES") {

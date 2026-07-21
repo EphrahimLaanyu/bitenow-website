@@ -159,13 +159,13 @@ export function ClientCheckoutPageClient() {
           </div>
 
           {error ? (
-            <div className="rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-600 dark:text-red-100">
+            <div className="rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-600">
               {error}
             </div>
           ) : null}
 
           {validationErrors.length > 0 ? (
-            <div className="rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-600 dark:text-red-100">
+            <div className="rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-600">
               <p className="font-bold">Validation errors</p>
               <ul className="mt-2 list-disc space-y-1 pl-5">
                 {validationErrors.map((validationError) => (

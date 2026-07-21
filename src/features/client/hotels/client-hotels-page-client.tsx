@@ -18,6 +18,7 @@ import {
   getHotelInitials,
   getHotelLocation
 } from "@/features/client/hotels/hotel-display";
+import { cn } from "@/lib/utils";
 
 export function ClientHotelsPageClient() {
   const [hotels, setHotels] = useState<Hotel[]>([]);
@@ -76,128 +77,206 @@ export function ClientHotelsPageClient() {
   }
 
   return (
-    <div className="space-y-6">
-      <section className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
-        <div>
-          <Badge>Guest ordering</Badge>
-          <h1 className="mt-3 text-3xl font-bold text-[var(--foreground)] md:text-4xl">Browse hotels</h1>
-          <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--muted)]">
-            Find the hotel you are ordering from, open its guest menu, and start a food order.
-          </p>
-        </div>
+    <div className="space-y-10 selection:bg-[#f97316] selection:text-white">
+      {/* HEADER SECTION */}
+{/* HEADER SECTION */}
+      <section className="relative overflow-hidden rounded-[2.5rem] border border-[#101f3f]/5 bg-white px-8 py-12 shadow-[0_20px_40px_rgb(0,0,0,0.03)] lg:px-12 lg:py-16">
+        {/* Subtle ambient background glow */}
+        <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-gradient-to-br from-[#f97316]/10 to-transparent blur-3xl" />
+        <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-gradient-to-tr from-[#101f3f]/5 to-transparent blur-3xl" />
 
-        <form className="grid gap-3 sm:grid-cols-[1fr_auto]" onSubmit={handleSearch}>
-          <Input
-            disabled={loading}
-            label="Search hotels"
-            onChange={(event) => setSearch(event.target.value)}
-            placeholder="Hotel name, location, code..."
-            value={search}
-          />
-          <Button className="self-end" disabled={loading} type="submit" variant="secondary">
-            <Search aria-hidden size={18} />
-            Search
-          </Button>
-        </form>
+        <div className="relative z-10 flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-2xl">
+            <span className="inline-flex items-center gap-2 rounded-full bg-[#f97316]/10 px-4 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.25em] text-[#f97316]">
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#f97316]"></span>
+              Guest ordering
+            </span>
+            <h1 className="font-display mt-6 text-5xl font-extrabold tracking-tight text-[#101f3f] md:text-6xl">
+              Browse hotels
+            </h1>
+            <p className="mt-5 max-w-xl text-[17px] font-medium leading-relaxed text-[#101f3f]/60">
+              Find the hotel you are ordering from, open its guest menu, and start a food order in seconds.
+            </p>
+          </div>
+
+          <form className="w-full shrink-0 lg:w-[420px]" onSubmit={handleSearch}>
+            {/* Unified Search Pill */}
+            <div className="relative flex items-center rounded-full border border-[#101f3f]/10 bg-[#fafbfc] p-1.5 shadow-sm transition-all focus-within:border-[#f97316]/40 focus-within:bg-white focus-within:ring-4 focus-within:ring-[#f97316]/10 hover:border-[#101f3f]/20">
+              <Search aria-hidden size={20} className="ml-4 shrink-0 text-[#101f3f]/40" />
+              <Input
+                className="h-12 w-full border-none bg-transparent px-4 text-[15px] font-bold text-[#101f3f] placeholder:font-medium placeholder:text-[#101f3f]/40 focus-visible:ring-0 focus-visible:ring-offset-0"
+                disabled={loading}
+                onChange={(event) => setSearch(event.target.value)}
+                placeholder="Search by name, location..."
+                value={search}
+              />
+              <Button
+                className="h-12 shrink-0 rounded-full bg-[#101f3f] px-8 text-[14px] font-bold text-white shadow-[0_4px_14px_0_rgba(16,31,63,0.15)] transition-all duration-300 hover:scale-105 hover:bg-[#f97316] hover:shadow-[0_6px_20px_rgba(249,115,22,0.25)] active:scale-95"
+                disabled={loading}
+                type="submit"
+              >
+                Search
+              </Button>
+            </div>
+          </form>
+        </div>
       </section>
 
+      {/* ERROR STATE */}
       {error ? (
-        <div className="rounded-md border border-[var(--accent)]/30 bg-[var(--accent)]/10 px-4 py-3 text-sm text-[var(--accent)]">
-          <p>{error}</p>
-          {error.includes("requires sign-in") ? (
-            <Link
-              className="mt-3 inline-flex h-10 items-center justify-center rounded-md bg-[var(--accent)] px-3 text-sm font-semibold text-[var(--accent-foreground)] transition-colors hover:bg-[var(--accent-hover)]"
-              href="/login?next=%2Fclient%2Fhotels"
-            >
-              Sign in to browse hotels
-            </Link>
-          ) : null}
+        <div className="relative overflow-hidden rounded-[2rem] border border-[#f97316]/20 bg-gradient-to-r from-[#f97316]/5 to-transparent p-6 shadow-sm">
+          {/* Bold left accent line */}
+          <div className="absolute left-0 top-0 h-full w-1.5 bg-[#f97316]" />
+          
+          <div className="flex w-full flex-col justify-between gap-5 pl-2 sm:flex-row sm:items-center">
+            <p className="max-w-3xl text-[14px] font-bold leading-relaxed text-[#101f3f]">
+              <span className="mr-2 text-[#f97316]">Notice:</span>
+              {error}
+            </p>
+            {error.includes("requires sign-in") ? (
+              <Link
+                className="inline-flex h-11 shrink-0 items-center justify-center rounded-full bg-[#101f3f] px-6 text-[13px] font-bold tracking-wide text-white shadow-[0_4px_14px_0_rgba(16,31,63,0.15)] transition-all duration-300 hover:scale-105 hover:bg-[#f97316] hover:shadow-[0_6px_20px_rgba(249,115,22,0.25)]"
+                href="/login?next=%2Fclient%2Fhotels"
+              >
+                Sign in to browse
+              </Link>
+            ) : null}
+          </div>
         </div>
       ) : null}
 
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <Building2 aria-hidden className="text-[var(--accent)]" size={20} />
-          <h2 className="text-lg font-semibold text-[var(--foreground)]">Available hotels</h2>
-          <Badge>{filteredHotels.length}</Badge>
+      {/* TOOLBAR */}
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#101f3f]/5 pb-6">
+        <div className="flex items-center gap-3">
+          <span className="flex h-12 w-12 items-center justify-center rounded-[1rem] bg-[#101f3f]/[0.03] text-[#101f3f]">
+            <Building2 aria-hidden size={22} strokeWidth={1.5} />
+          </span>
+          <h2 className="font-display text-2xl font-extrabold tracking-tight text-[#101f3f]">Available hotels</h2>
+          <span className="ml-2 flex h-7 min-w-[28px] items-center justify-center rounded-full bg-[#101f3f] px-2.5 text-[12px] font-extrabold text-white shadow-sm">
+            {filteredHotels.length}
+          </span>
         </div>
-        <Button disabled={loading} onClick={() => loadHotels()} type="button" variant="secondary">
-          <RefreshCw aria-hidden size={18} />
+        <Button
+          className="h-11 rounded-full border border-[#101f3f]/10 bg-white px-5 text-[13px] font-bold text-[#101f3f]/70 shadow-sm transition-all hover:border-[#101f3f]/20 hover:text-[#101f3f] hover:bg-[#fafbfc]"
+          disabled={loading}
+          onClick={() => loadHotels()}
+          type="button"
+          variant="outline"
+        >
+          <RefreshCw aria-hidden size={16} className={cn("mr-2", loading && "animate-spin")} />
           Refresh
         </Button>
       </div>
 
+      {/* GRID */}
       {loading ? (
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {Array.from({ length: 6 }).map((_, index) => (
             <div
-              className="h-80 animate-pulse rounded-lg border border-[var(--border)] bg-[var(--surface-2)]/70"
+              className="h-[420px] animate-pulse rounded-[2rem] border border-[#101f3f]/5 bg-white shadow-sm"
               key={index}
-            />
+            >
+              <div className="h-52 w-full rounded-t-[2rem] bg-[#101f3f]/5" />
+              <div className="p-6 space-y-4">
+                <div className="h-6 w-2/3 rounded-full bg-[#101f3f]/10" />
+                <div className="h-4 w-1/3 rounded-full bg-[#101f3f]/5" />
+                <div className="mt-6 h-12 w-full rounded-full bg-[#101f3f]/5" />
+              </div>
+            </div>
           ))}
         </div>
       ) : filteredHotels.length > 0 ? (
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {filteredHotels.map((hotel) => (
             <HotelCard hotel={hotel} key={hotel.id} />
           ))}
         </div>
       ) : (
-        <Card>
-          <p className="text-sm text-[var(--muted)]">No hotels matched your search.</p>
+        <Card className="flex flex-col items-center justify-center rounded-[2.5rem] border-dashed border-[#101f3f]/10 bg-[#fafbfc] py-20 text-center shadow-none">
+          <Search size={40} className="mb-4 text-[#101f3f]/20" />
+          <p className="font-display text-xl font-extrabold text-[#101f3f]">No hotels found</p>
+          <p className="mt-2 text-[14px] font-medium text-[#101f3f]/50">Try adjusting your search terms.</p>
         </Card>
       )}
     </div>
   );
 }
 
+// -------------------------------------------------------------
+// HELPER COMPONENTS
+// -------------------------------------------------------------
+
 function HotelCard({ hotel }: { hotel: Hotel }) {
   const imageUrl = getHotelImageUrl(hotel);
 
   return (
-    <Card className="overflow-hidden p-0">
-      {imageUrl ? (
-        <div
-          aria-label={hotel.name}
-          className="h-44 bg-cover bg-center"
-          role="img"
-          style={{ backgroundImage: `url("${imageUrl}")` }}
-        />
-      ) : (
-        <div className="flex h-44 items-center justify-center bg-[var(--surface-2)]">
-          <div className="flex h-20 w-20 items-center justify-center rounded-md bg-[var(--accent)] text-2xl font-bold text-[var(--accent-foreground)]">
-            {getHotelInitials(hotel.name) || "H"}
+    <Card className="group flex h-full flex-col overflow-hidden rounded-[2rem] border border-[#101f3f]/5 bg-white p-0 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)]">
+      {/* IMAGE / HEADER AREA */}
+      <div className="relative h-52 w-full overflow-hidden bg-[#101f3f]">
+        {imageUrl ? (
+          <>
+            <div
+              aria-label={hotel.name}
+              className="absolute inset-0 h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+              role="img"
+              style={{ backgroundImage: `url("${imageUrl}")` }}
+            />
+            {/* Subtle overlay for contrast */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#101f3f]/60 via-transparent to-[#101f3f]/20 mix-blend-multiply" />
+          </>
+        ) : (
+          <div className="absolute inset-0 flex h-full w-full items-center justify-center bg-gradient-to-br from-[#101f3f] to-[#182d58] transition-transform duration-700 group-hover:scale-105">
+            <div className="font-display text-5xl font-extrabold text-white/30">
+              {getHotelInitials(hotel.name) || "H"}
+            </div>
           </div>
-        </div>
-      )}
+        )}
+        
+        {/* STATUS BADGE */}
+        {hotel.is_active && (
+          <div className="absolute right-4 top-4">
+            <Badge className="border-none bg-white/95 px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider text-[#f97316] shadow-lg backdrop-blur-md">
+              Open
+            </Badge>
+          </div>
+        )}
+      </div>
 
-      <div className="space-y-4 p-5">
+      {/* CONTENT AREA */}
+      <div className="flex flex-1 flex-col p-6">
         <div>
-          <div className="flex flex-wrap items-start justify-between gap-3">
-            <h3 className="text-xl font-bold text-[var(--foreground)]">{hotel.name}</h3>
-            {hotel.is_active ? <Badge>Open</Badge> : null}
-          </div>
-          <p className="mt-2 flex items-center gap-2 text-sm text-[var(--muted)]">
-            <MapPin aria-hidden size={16} />
+          <h3 className="font-display text-2xl font-extrabold tracking-tight text-[#101f3f]">{hotel.name}</h3>
+          <p className="mt-2 flex items-center gap-1.5 text-[13px] font-bold text-[#101f3f]/50">
+            <MapPin aria-hidden size={14} className="text-[#f97316]" />
             {getHotelLocation(hotel)}
           </p>
         </div>
 
-        <p className="line-clamp-3 text-sm leading-6 text-[var(--muted)]">{getHotelDescription(hotel)}</p>
+        <p className="mt-4 line-clamp-2 text-[14px] font-medium leading-relaxed text-[#101f3f]/60">
+          {getHotelDescription(hotel)}
+        </p>
 
-        <div className="grid gap-2 text-xs text-[var(--muted)] sm:grid-cols-2">
-          <span>Currency: {hotel.currency || "Not set"}</span>
-          <span>Timezone: {hotel.timezone || "Not set"}</span>
+        {/* META TAGS */}
+        <div className="mt-5 mb-6 flex flex-wrap gap-2">
+          <span className="inline-flex items-center rounded-lg bg-[#fafbfc] border border-[#101f3f]/5 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider text-[#101f3f]/50">
+            {hotel.currency || "No Currency"}
+          </span>
+          <span className="inline-flex items-center rounded-lg bg-[#fafbfc] border border-[#101f3f]/5 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider text-[#101f3f]/50">
+            {hotel.timezone || "No Timezone"}
+          </span>
         </div>
 
-        <Link
-          className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-md bg-[var(--accent)] px-4 text-sm font-semibold text-[var(--accent-foreground)] transition-colors hover:bg-[var(--accent-hover)]"
-          href={`/client/hotels/${hotel.id}`}
-          onClick={() => saveActiveHotelId(hotel.id)}
-        >
-          View Hotel
-          <ArrowRight aria-hidden size={18} />
-        </Link>
+        {/* CTA BUTTON */}
+        <div className="mt-auto pt-2">
+          <Link
+            className="group/btn inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#fafbfc] text-[14px] font-bold text-[#101f3f] transition-all duration-300 hover:bg-[#f97316] hover:text-white hover:shadow-[0_8px_25px_rgba(249,115,22,0.35)]"
+            href={`/client/hotels/${hotel.id}`}
+            onClick={() => saveActiveHotelId(hotel.id)}
+          >
+            View Hotel
+            <ArrowRight aria-hidden size={18} className="transition-transform duration-300 group-hover/btn:translate-x-1" />
+          </Link>
+        </div>
       </div>
     </Card>
   );

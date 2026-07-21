@@ -61,7 +61,7 @@ export function ClientProfilePageClient() {
         <Card>
           <div className="flex flex-wrap items-start justify-between gap-5">
             <div className="flex items-start gap-4">
-              <span className="flex h-16 w-16 items-center justify-center rounded-3xl bg-[var(--primary)] text-[var(--primary-foreground)] shadow-lg shadow-blue-500/20">
+              <span className="flex h-16 w-16 items-center justify-center rounded-3xl bg-[var(--primary)] text-white shadow-[0_16px_34px_rgba(16,31,63,0.20)]">
                 <User aria-hidden size={28} />
               </span>
               <div>

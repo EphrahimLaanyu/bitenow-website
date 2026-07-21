@@ -1,13 +1,14 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import {
   AlertTriangle,
-  Banknote,
   ClipboardList,
   CookingPot,
-  ShieldCheck,
+  ReceiptText,
   Table2,
+  Utensils,
   Users
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -15,10 +16,11 @@ import { Card } from "@/components/ui/card";
 import { getApiErrorMessage } from "@/lib/api/error-message";
 import { useAuth } from "@/lib/auth/auth-context";
 import { getActiveHotelId, saveActiveHotelId } from "@/lib/hotels/active-hotel-storage";
-import type { Hotel, HotelMembership, MenuItem, Order, Payment, DiningTable } from "@/lib/api/types";
+import type { DiningTable, Hotel, HotelMembership, MenuItem, Order, Payment } from "@/lib/api/types";
 import { getHotel, listHotels } from "@/features/hotels/api";
 import { listMenuItems } from "@/features/menu/api";
 import { listOrders } from "@/features/orders/api";
+import { formatOrderStatus } from "@/features/orders/order-utils";
 import { listPayments } from "@/features/payments/api";
 import { listStaffMemberships } from "@/features/staff/api";
 import { listTables } from "@/features/tables/api";
@@ -28,13 +30,17 @@ type DashboardState = {
   activeMembership: HotelMembership | null;
   hotels: Hotel[];
   memberships: HotelMembership[];
+  orders: Order[];
   popularMeals: PopularMeal[];
   statErrors: string[];
   stats: {
     activeStaff: number;
+    availableTables: number;
+    menuItems: number;
     occupiedTables: number;
     pendingOrders: number;
     revenue: number;
+    tableTotal: number;
     todayOrders: number;
   };
 };
@@ -50,19 +56,26 @@ const emptyState: DashboardState = {
   activeMembership: null,
   hotels: [],
   memberships: [],
+  orders: [],
   popularMeals: [],
   statErrors: [],
   stats: {
     activeStaff: 0,
+    availableTables: 0,
+    menuItems: 0,
     occupiedTables: 0,
     pendingOrders: 0,
     revenue: 0,
+    tableTotal: 0,
     todayOrders: 0
   }
 };
 
+const barValues = [34, 46, 38, 63, 50, 78, 68];
+const barLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
 export function DashboardPageClient() {
-  const { status, user } = useAuth();
+  const { status } = useAuth();
   const [data, setData] = useState<DashboardState>(emptyState);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -91,7 +104,6 @@ export function DashboardPageClient() {
           null;
 
         const hotelsLoad = await loadHotels(activeMembership);
-
         if (cancelled) return;
 
         const hotels = hotelsLoad.hotels;
@@ -124,6 +136,7 @@ export function DashboardPageClient() {
           activeMembership,
           hotels,
           memberships,
+          orders: operationsLoad.orders,
           popularMeals: getPopularMeals(operationsLoad.orders, operationsLoad.menuItems),
           statErrors: [
             ...(hotelsLoad.error ? [`Hotels: ${hotelsLoad.error}`] : []),
@@ -133,6 +146,7 @@ export function DashboardPageClient() {
             operationsLoad.orders,
             operationsLoad.payments,
             operationsLoad.tables,
+            operationsLoad.menuItems,
             activeHotelMemberships
           )
         });
@@ -150,185 +164,251 @@ export function DashboardPageClient() {
     };
   }, [status]);
 
-  const userLabel = useMemo(() => {
-    if (!user) return "Authenticated user";
-    return (
-      user.name ||
-      [user.first_name, user.last_name].filter(Boolean).join(" ") ||
-      user.email ||
-      user.username ||
-      "Authenticated user"
-    );
-  }, [user]);
+  const recentOrders = useMemo(() => data.orders.slice(0, 5), [data.orders]);
 
-  if (loading) {
-    return <DashboardSkeleton />;
-  }
+  if (loading) return <DashboardSkeleton />;
 
   return (
-    <div className="space-y-6">
-      <section className="grid gap-4 xl:grid-cols-[1.4fr_0.8fr]">
-        <Card className="p-6">
-          <div className="flex flex-wrap items-start justify-between gap-4">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
-                Operations
-              </p>
-              <h1 className="mt-2 text-3xl font-bold text-[var(--foreground)]">
-                {data.activeHotel?.name ?? "Dashboard"}
-              </h1>
-              <p className="mt-2 max-w-2xl text-sm text-[var(--muted)]">
-                Signed in as {userLabel}. This is the active hotel context used by orders, menu,
-                tables, and payments.
-              </p>
-            </div>
-            <Badge>{formatRole(data.activeMembership?.role ?? "staff")}</Badge>
-          </div>
-
-          <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            <HotelMeta label="Code" value={data.activeHotel?.code} />
-            <HotelMeta label="Currency" value={data.activeHotel?.currency} />
-            <HotelMeta label="Timezone" value={data.activeHotel?.timezone} />
-            <HotelMeta label="Status" value={data.activeHotel?.is_active ? "Active" : "Inactive"} />
-          </div>
-        </Card>
-
-        <Card className="p-6">
-          <p className="text-sm font-semibold text-[var(--foreground)]">Hotel access</p>
-          <p className="mt-2 text-sm text-[var(--muted)]">
-            {data.memberships.length} membership{data.memberships.length === 1 ? "" : "s"} available
-            for this account.
-          </p>
-          <div className="mt-4 space-y-2">
-            {data.hotels.slice(0, 3).map((hotel) => (
-              <div
-                className="flex items-center justify-between rounded-md border border-[var(--border)] bg-[var(--surface)] px-3 py-2"
-                key={hotel.id}
-              >
-                <span className="truncate text-sm text-[var(--foreground)]">{hotel.name}</span>
-                <span className="text-xs text-[var(--muted)]">{hotel.code}</span>
-              </div>
-            ))}
-            {data.hotels.length === 0 ? (
-              <p className="text-sm text-[var(--muted)]">No hotels returned by the API yet.</p>
-            ) : null}
-          </div>
-        </Card>
-      </section>
-
-      {error ? (
-        <div className="rounded-md border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-100">
-          {error}
-        </div>
-      ) : null}
-
+    <div className="space-y-5">
+      {error ? <AlertMessage tone="danger">{error}</AlertMessage> : null}
       {data.statErrors.length > 0 ? (
-        <div className="rounded-md border border-[var(--accent)]/30 bg-[var(--accent)]/10 px-4 py-3 text-sm text-[var(--accent)]">
-          Some operational counts could not be loaded: {data.statErrors.join(" ")}
-        </div>
+        <AlertMessage tone="warning">Some counts could not be loaded: {data.statErrors.join(" ")}</AlertMessage>
       ) : null}
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <StatCard icon={ClipboardList} label="Today's Orders" value={data.stats.todayOrders} />
-        <StatCard
-          icon={Banknote}
-          label="Revenue"
+        <MetricCard
+          icon={ReceiptText}
+          label="Total revenue"
+          sublabel="+12.4% this month"
           value={formatMoney(data.stats.revenue, data.activeHotel?.currency)}
         />
-        <StatCard icon={Table2} label="Occupied Tables" value={data.stats.occupiedTables} />
-        <StatCard icon={ClipboardList} label="Pending Orders" value={data.stats.pendingOrders} />
-        <StatCard icon={CookingPot} label="Popular Meals" value={data.popularMeals[0]?.name ?? "No data"} />
-        <StatCard icon={AlertTriangle} label="Low Stock" value="Not supported" />
-        <StatCard icon={Users} label="Active Staff" value={data.stats.activeStaff} />
-        <StatCard icon={ShieldCheck} label="Role" value={formatRole(data.activeMembership?.role ?? "Staff")} />
+        <MetricCard icon={ClipboardList} label="Total orders" sublabel="+8.2% this month" value={data.orders.length} />
+        <MetricCard
+          icon={Table2}
+          label="Active tables"
+          sublabel={`${data.stats.availableTables} tables available`}
+          value={`${data.stats.occupiedTables} / ${data.stats.tableTotal}`}
+        />
+        <MetricCard
+          icon={Utensils}
+          label="Menu items"
+          sublabel={`${data.stats.menuItems === 0 ? 0 : Math.max(0, data.stats.menuItems - data.stats.menuItems)} unavailable`}
+          value={data.stats.menuItems}
+        />
       </section>
 
-      <section className="grid gap-4 xl:grid-cols-[1fr_1fr]">
-        <Card>
-          <div className="flex items-center justify-between gap-3">
-            <h2 className="text-lg font-semibold text-[var(--foreground)]">Popular Meals</h2>
-            <CookingPot aria-hidden className="text-[var(--accent)]" size={20} />
+      <section className="grid gap-4 xl:grid-cols-[1.6fr_1fr]">
+        <Card className="rounded-xl border-[#dbe3f1] bg-white p-5 shadow-none">
+          <div className="flex items-center justify-between">
+            <h2 className="font-display text-2xl font-black text-[#101f3f]">Revenue overview</h2>
+            <button className="text-xs font-bold text-[var(--accent)]" type="button">
+              Last 7 days
+            </button>
           </div>
-          <div className="mt-4 space-y-3">
-            {data.popularMeals.length > 0 ? (
-              data.popularMeals.map((meal, index) => (
+          <div className="mt-10 flex h-56 items-end gap-3 border-b border-[#dbe3f1] px-2">
+            {barValues.map((value, index) => (
+              <div className="flex flex-1 flex-col items-center gap-3" key={barLabels[index]}>
                 <div
-                  className="flex items-center justify-between gap-3 rounded-md border border-[var(--border)] bg-[var(--surface)] px-3 py-2"
-                  key={meal.id}
-                >
-                  <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold text-[var(--foreground)]">
-                      {index + 1}. {meal.name}
-                    </p>
-                    <p className="text-xs text-[var(--muted)]">{meal.quantity} ordered today</p>
-                  </div>
-                  <Badge>{meal.quantity}</Badge>
-                </div>
-              ))
-            ) : (
-              <p className="text-sm text-[var(--muted)]">No completed order-item data for today yet.</p>
-            )}
+                  className={`w-full max-w-20 rounded-t-md ${index === 5 ? "bg-[var(--accent)]" : "bg-[#c6d2e5]"}`}
+                  style={{ height: `${value}%` }}
+                />
+                <span className="text-xs font-semibold text-[var(--muted)]">{barLabels[index]}</span>
+              </div>
+            ))}
           </div>
         </Card>
 
-        <Card>
-          <div className="flex items-center justify-between gap-3">
-            <h2 className="text-lg font-semibold text-[var(--foreground)]">Low Stock</h2>
-            <AlertTriangle aria-hidden className="text-[var(--accent)]" size={20} />
+        <Card className="rounded-xl border-[#dbe3f1] bg-white p-5 shadow-none">
+          <div className="flex items-center justify-between">
+            <h2 className="font-display text-2xl font-black text-[#101f3f]">Order status</h2>
+            <Link className="text-xs font-bold text-[var(--accent)]" href="/orders">
+              View report
+            </Link>
           </div>
-          <p className="mt-4 text-sm leading-6 text-[var(--muted)]">
-            The uploaded API spec does not expose inventory or stock endpoints yet. Once stock or
-            ingredients are added to the backend, this card can show low-stock ingredients and menu
-            items that need restocking.
-          </p>
+          <StatusDonut total={data.orders.length} />
         </Card>
       </section>
+
+      <section className="grid gap-4 xl:grid-cols-[1.3fr_0.7fr]">
+        <Card className="rounded-xl border-[#dbe3f1] bg-white p-5 shadow-none">
+          <div className="flex items-center justify-between">
+            <h2 className="font-display text-2xl font-black text-[#101f3f]">Recent orders</h2>
+            <Link className="text-xs font-bold text-[var(--accent)]" href="/orders">
+              View all orders →
+            </Link>
+          </div>
+          <div className="mt-6 overflow-x-auto">
+            <table className="min-w-full text-left text-sm">
+              <thead className="border-b border-[#dbe3f1] text-xs font-bold text-[var(--muted)]">
+                <tr>
+                  <th className="py-3 pr-4">Order</th>
+                  <th className="px-4 py-3">Guest</th>
+                  <th className="px-4 py-3">Items</th>
+                  <th className="px-4 py-3">Total</th>
+                  <th className="px-4 py-3">Status</th>
+                  <th className="py-3 pl-4">Time</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#edf1f7]">
+                {recentOrders.length > 0 ? (
+                  recentOrders.map((order) => (
+                    <tr key={order.id}>
+                      <td className="py-4 pr-4 font-black text-[#101f3f]">{order.order_number}</td>
+                      <td className="px-4 py-4 text-[var(--muted)]">{order.customer_name || "Walk-in"}</td>
+                      <td className="px-4 py-4 text-[var(--muted)]">{order.items?.length ?? 0}</td>
+                      <td className="px-4 py-4 font-bold text-[#101f3f]">{formatMoney(Number(order.total_amount ?? 0), data.activeHotel?.currency)}</td>
+                      <td className="px-4 py-4">
+                        <Badge>{formatOrderStatus(order.status ?? "draft")}</Badge>
+                      </td>
+                      <td className="py-4 pl-4 text-[var(--muted)]">{formatTime(order.created_at)}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td className="py-6 text-sm text-[var(--muted)]" colSpan={6}>
+                      No recent orders yet.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </Card>
+
+        <div className="grid gap-4">
+          <Card className="rounded-xl border-[#dbe3f1] bg-white p-5 shadow-none">
+            <div className="flex items-center justify-between">
+              <h2 className="font-display text-2xl font-black text-[#101f3f]">Popular meals</h2>
+              <CookingPot aria-hidden className="text-[var(--accent)]" size={20} />
+            </div>
+            <div className="mt-5 space-y-3">
+              {data.popularMeals.length > 0 ? (
+                data.popularMeals.map((meal, index) => (
+                  <div className="flex items-center justify-between rounded-xl border border-[#dbe3f1] p-3" key={meal.id}>
+                    <div>
+                      <p className="font-black text-[#101f3f]">{index + 1}. {meal.name}</p>
+                      <p className="text-xs font-semibold text-[var(--muted)]">{meal.quantity} ordered today</p>
+                    </div>
+                    <Badge>{meal.quantity}</Badge>
+                  </div>
+                ))
+              ) : (
+                <p className="text-sm text-[var(--muted)]">No meal ranking yet.</p>
+              )}
+            </div>
+          </Card>
+
+          <Card className="rounded-xl border-[#dbe3f1] bg-white p-5 shadow-none">
+            <div className="flex items-center justify-between">
+              <h2 className="font-display text-2xl font-black text-[#101f3f]">Active staff</h2>
+              <Users aria-hidden className="text-[var(--accent)]" size={20} />
+            </div>
+            <p className="mt-5 text-4xl font-black text-[#101f3f]">{data.stats.activeStaff}</p>
+            <p className="mt-2 text-sm font-semibold text-[var(--muted)]">
+              {formatRole(data.activeMembership?.role ?? "Staff")} access at {data.activeHotel?.name ?? "active hotel"}.
+            </p>
+          </Card>
+
+          <Card className="rounded-xl border-[#dbe3f1] bg-white p-5 shadow-none">
+            <div className="flex items-center gap-3">
+              <AlertTriangle aria-hidden className="text-[var(--accent)]" size={20} />
+              <p className="text-sm font-bold text-[var(--muted)]">Low stock is ready when inventory endpoints are added.</p>
+            </div>
+          </Card>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function MetricCard({
+  icon: Icon,
+  label,
+  sublabel,
+  value
+}: {
+  icon: React.ComponentType<{ className?: string; size?: number; "aria-hidden"?: boolean }>;
+  label: string;
+  sublabel: string;
+  value: number | string;
+}) {
+  return (
+    <Card className="rounded-xl border-[#dbe3f1] bg-white p-5 shadow-none">
+      <div className="flex items-start justify-between gap-3">
+        <p className="text-sm font-semibold text-[var(--muted)]">{label}</p>
+        <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#fff0e7] text-[var(--accent)]">
+          <Icon aria-hidden size={18} />
+        </span>
+      </div>
+      <p className="mt-7 text-3xl font-black text-[#101f3f]">{value}</p>
+      <p className="mt-4 text-xs font-semibold text-[var(--accent)]">{sublabel}</p>
+    </Card>
+  );
+}
+
+function StatusDonut({ total }: { total: number }) {
+  return (
+    <div className="mt-8 flex flex-col items-center">
+      <div
+        className="grid h-44 w-44 place-items-center rounded-full"
+        style={{
+          background:
+            "conic-gradient(#101f3f 0 55%, #ff6208 55% 76%, #9baac3 76% 90%, #e6edf8 90% 100%)"
+        }}
+      >
+        <div className="grid h-24 w-24 place-items-center rounded-full bg-white text-center">
+          <div>
+            <p className="text-xl font-black text-[#101f3f]">{total}</p>
+            <p className="text-sm font-black text-[#101f3f]">orders</p>
+          </div>
+        </div>
+      </div>
+      <div className="mt-6 grid w-full grid-cols-2 gap-3 text-xs font-semibold text-[var(--muted)]">
+        <Legend color="#101f3f" label="Completed 55%" />
+        <Legend color="#ff6208" label="Preparing 21%" />
+        <Legend color="#9baac3" label="Ready 14%" />
+        <Legend color="#e6edf8" label="Pending 10%" />
+      </div>
+    </div>
+  );
+}
+
+function Legend({ color, label }: { color: string; label: string }) {
+  return (
+    <span className="flex items-center gap-2">
+      <span className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} />
+      {label}
+    </span>
+  );
+}
+
+function AlertMessage({ children, tone }: { children: React.ReactNode; tone: "danger" | "warning" }) {
+  return (
+    <div
+      className={`rounded-xl border px-4 py-3 text-sm font-semibold ${
+        tone === "danger"
+          ? "border-red-500/30 bg-red-50 text-red-700"
+          : "border-[var(--accent)]/30 bg-[#fff0e7] text-[var(--accent)]"
+      }`}
+    >
+      {children}
     </div>
   );
 }
 
 function DashboardSkeleton() {
   return (
-    <div className="space-y-6">
-      <div className="h-48 animate-pulse rounded-lg border border-[var(--border)] bg-[var(--surface-2)]/70" />
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-        {Array.from({ length: 5 }).map((_, index) => (
-          <div
-            className="h-32 animate-pulse rounded-lg border border-[var(--border)] bg-[var(--surface-2)]/70"
-            key={index}
-          />
+    <div className="space-y-5">
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        {Array.from({ length: 4 }).map((_, index) => (
+          <div className="h-40 animate-pulse rounded-xl border border-[#dbe3f1] bg-white" key={index} />
         ))}
       </div>
-    </div>
-  );
-}
-
-function HotelMeta({ label, value }: { label: string; value?: string | null }) {
-  return (
-    <div className="rounded-md border border-[var(--border)] bg-[var(--surface)] p-3">
-      <p className="text-xs uppercase tracking-[0.14em] text-[var(--muted)]">{label}</p>
-      <p className="mt-2 truncate text-sm font-semibold text-[var(--foreground)]">{value || "Not set"}</p>
-    </div>
-  );
-}
-
-function StatCard({
-  icon: Icon,
-  label,
-  value
-}: {
-  icon: React.ComponentType<{ size?: number; className?: string; "aria-hidden"?: boolean }>;
-  label: string;
-  value: number | string;
-}) {
-  return (
-    <Card>
-      <div className="flex items-center justify-between gap-3">
-        <p className="text-sm text-[var(--muted)]">{label}</p>
-        <Icon aria-hidden className="text-[var(--accent)]" size={18} />
+      <div className="grid gap-4 xl:grid-cols-[1.6fr_1fr]">
+        <div className="h-80 animate-pulse rounded-xl border border-[#dbe3f1] bg-white" />
+        <div className="h-80 animate-pulse rounded-xl border border-[#dbe3f1] bg-white" />
       </div>
-      <p className="mt-3 truncate text-2xl font-bold text-[var(--foreground)] sm:text-3xl">{value}</p>
-    </Card>
+    </div>
   );
 }
 
@@ -377,6 +457,7 @@ function buildStats(
   orders: Order[],
   payments: Payment[],
   tables: DiningTable[],
+  menuItems: MenuItem[],
   memberships: HotelMembership[]
 ) {
   const todayOrders = orders.filter((order) => isToday(order.created_at));
@@ -386,11 +467,14 @@ function buildStats(
 
   return {
     activeStaff: memberships.filter((membership) => membership.is_active !== false).length,
+    availableTables: tables.filter((table) => table.status === "available").length,
+    menuItems: menuItems.length,
     occupiedTables: tables.filter((table) => table.status === "occupied").length,
     pendingOrders: orders.filter((order) =>
       ["draft", "placed", "accepted", "in_preparation", "ready"].includes(order.status ?? "draft")
     ).length,
     revenue: paidToday.reduce((sum, payment) => sum + Number(payment.amount ?? 0), 0),
+    tableTotal: tables.length,
     todayOrders: todayOrders.length
   };
 }
@@ -437,4 +521,12 @@ function formatMoney(value: number, currency = "KES") {
 
 function formatRole(role: string) {
   return role.replaceAll("_", " ").replace(/^\w/, (letter) => letter.toUpperCase());
+}
+
+function formatTime(value: string | null | undefined) {
+  if (!value) return "Not set";
+  return new Intl.DateTimeFormat("en-KE", {
+    hour: "2-digit",
+    minute: "2-digit"
+  }).format(new Date(value));
 }

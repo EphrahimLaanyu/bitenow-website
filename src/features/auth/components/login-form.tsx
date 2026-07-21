@@ -83,7 +83,7 @@ export function LoginForm() {
       {error ? (
         <div
           aria-live="polite"
-          className="rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-600 dark:text-red-100"
+          className="rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-600"
           role="alert"
         >
           <div className="flex items-start justify-between gap-3">
@@ -94,7 +94,7 @@ export function LoginForm() {
               </span>
             ) : null}
           </div>
-          <ul className="mt-2 space-y-1 text-red-600/90 dark:text-red-100/90">
+          <ul className="mt-2 space-y-1 text-red-600/90">
             {error.messages.map((message) => (
               <li key={message}>{message}</li>
             ))}

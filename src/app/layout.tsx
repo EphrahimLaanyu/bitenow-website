@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Manrope, Plus_Jakarta_Sans } from "next/font/google";
+import { Manrope, Playfair_Display, Plus_Jakarta_Sans } from "next/font/google";
 import { AppProviders } from "@/app/providers";
 import "./globals.css";
 
@@ -13,6 +13,11 @@ const manrope = Manrope({
   variable: "--font-manrope"
 });
 
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-playfair"
+});
+
 export const metadata: Metadata = {
   title: "BiteNow",
   description: "Premium hotel and restaurant ordering."
@@ -24,7 +29,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html className={`${plusJakarta.variable} ${manrope.variable}`} lang="en" suppressHydrationWarning>
+    <html className={`${plusJakarta.variable} ${manrope.variable} ${playfair.variable}`} lang="en">
       <body>
         <AppProviders>{children}</AppProviders>
       </body>

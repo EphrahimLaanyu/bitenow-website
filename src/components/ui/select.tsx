@@ -13,7 +13,7 @@ export function Select({ children, className, id, label, name, ...props }: Selec
       {label ? <span className="text-sm font-bold text-[var(--foreground)]">{label}</span> : null}
       <select
         className={cn(
-          "h-12 w-full rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 text-sm text-[var(--foreground)] outline-none transition-all focus:border-[var(--primary)] focus:shadow-[0_0_0_4px_var(--ring)] disabled:cursor-not-allowed disabled:opacity-60",
+          "h-12 w-full rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 text-sm text-[var(--foreground)] outline-none transition-all focus:border-[var(--accent)] focus:shadow-[0_0_0_4px_var(--ring)] disabled:cursor-not-allowed disabled:opacity-60",
           className
         )}
         id={inputId}
