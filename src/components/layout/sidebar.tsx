@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -13,7 +14,6 @@ import {
   ReceiptText,
   Settings,
   Table2,
-  Utensils,
   Users
 } from "lucide-react";
 import { useAuth } from "@/lib/auth/auth-context";
@@ -43,12 +43,14 @@ export function Sidebar() {
   return (
     <aside className="hidden min-h-screen w-[248px] shrink-0 border-r border-slate-200 bg-slate-50/50 px-4 py-6 lg:flex lg:flex-col">
       <Link className="mb-8 flex items-center gap-3 px-2" href="/dashboard">
-        <span className="flex h-8 w-8 items-center justify-center rounded-md bg-[var(--accent)] text-white shadow-sm">
-          <Utensils aria-hidden size={16} />
-        </span>
-        <p className="text-xl font-bold tracking-tight text-slate-900">
-          Bite<span className="text-[var(--accent)]">Now</span>
-        </p>
+        <Image
+          src="/images/desktop-logo.png"
+          alt="Desktop Logo"
+          width={150}
+          height={40}
+          className="h-8 w-auto object-contain transition-transform duration-500 hover:scale-105"
+        />
+        <span className="sr-only">BiteNow</span>
       </Link>
 
       <nav className="space-y-1">
