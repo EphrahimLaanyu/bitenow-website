@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Select } from "@/components/ui/select";
 import { getApiErrorMessage } from "@/lib/api/error-message";
+import { cn } from "@/lib/utils";
 import type { Hotel, Order } from "@/lib/api/types";
 import { getActiveHotelId, saveActiveHotelId } from "@/lib/hotels/active-hotel-storage";
 import { listHotels } from "@/features/hotels/api";
@@ -107,34 +108,36 @@ export function KitchenViewPageClient() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-20 pt-4">
       <div>
-        <Link className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--muted)] hover:text-[var(--foreground)]" href="/orders">
+        <Link className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition-colors hover:text-slate-900" href="/orders">
           <ArrowLeft aria-hidden size={16} />
           Back to orders
         </Link>
         <div className="mt-4 flex flex-wrap items-start justify-between gap-4">
           <div>
-            <Badge>Kitchen view</Badge>
-            <h1 className="mt-3 text-3xl font-bold text-[var(--foreground)]">Kitchen</h1>
-            <p className="mt-2 max-w-2xl text-sm text-[var(--muted)]">
+            <Badge className="bg-slate-100 text-slate-700 hover:bg-slate-200 border-transparent shadow-none">
+              Kitchen view
+            </Badge>
+            <h1 className="mt-3 text-3xl font-bold tracking-tight text-slate-900">Kitchen</h1>
+            <p className="mt-2 max-w-2xl text-sm text-slate-500">
               Follow placed, accepted, preparing, and ready orders without completed work crowding the board.
             </p>
           </div>
-          <Button disabled={loading} onClick={() => loadKitchen()} type="button" variant="secondary">
-            <RefreshCw aria-hidden size={18} />
+          <Button disabled={loading} onClick={() => loadKitchen()} type="button" variant="secondary" className="text-slate-700">
+            <RefreshCw aria-hidden size={16} className={cn("mr-2", loading && "animate-spin")} />
             Refresh
           </Button>
         </div>
       </div>
 
       {error ? (
-        <div className="rounded-md border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-100">
+        <div className="rounded-xl border border-red-200 bg-red-50 px-5 py-3 text-sm font-medium text-red-900 shadow-sm">
           {error}
         </div>
       ) : null}
 
-      <Card>
+      <Card className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
         <Select
           disabled={loading || hotels.length === 0}
           label="Active hotel"
@@ -151,23 +154,27 @@ export function KitchenViewPageClient() {
       </Card>
 
       {loading ? (
-        <div className="grid gap-3 xl:grid-cols-4">
+        <div className="grid gap-4 xl:grid-cols-4">
           {Array.from({ length: 4 }).map((_, index) => (
-            <div className="h-96 animate-pulse rounded-lg border border-[var(--border)] bg-[var(--surface-2)]/70" key={index} />
+            <div className="h-[32rem] animate-pulse rounded-xl border border-slate-200 bg-slate-100" key={index} />
           ))}
         </div>
       ) : (
-        <div className="grid gap-3 xl:grid-cols-4">
+        <div className="grid gap-4 xl:grid-cols-4">
           {columns.map((column) => (
-            <Card className="min-h-96" key={column.status}>
+            <Card className="flex min-h-[32rem] flex-col rounded-xl border border-slate-200 bg-slate-50/50 p-4 shadow-sm" key={column.status}>
               <div className="mb-4 flex items-center justify-between gap-3">
-                <div className="flex items-center gap-2">
-                  <ChefHat aria-hidden className="text-[var(--accent)]" size={18} />
-                  <h2 className="text-lg font-semibold text-[var(--foreground)]">{column.label}</h2>
+                <div className="flex items-center gap-2.5">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-md bg-slate-200/50 text-slate-600">
+                    <ChefHat aria-hidden size={16} />
+                  </span>
+                  <h2 className="text-sm font-semibold text-slate-900">{column.label}</h2>
                 </div>
-                <Badge>{column.orders.length}</Badge>
+                <Badge className="bg-slate-200 text-slate-700 hover:bg-slate-300 border-transparent shadow-none">
+                  {column.orders.length}
+                </Badge>
               </div>
-              <div className="space-y-3">
+              <div className="flex-1 space-y-3">
                 {column.orders.length ? (
                   column.orders.map((order) => (
                     <KitchenOrderCard
@@ -178,7 +185,9 @@ export function KitchenViewPageClient() {
                     />
                   ))
                 ) : (
-                  <p className="text-sm text-[var(--muted)]">No orders.</p>
+                  <div className="flex h-full items-center justify-center rounded-lg border border-dashed border-slate-200 bg-transparent">
+                    <p className="text-xs font-medium text-slate-400">No orders.</p>
+                  </div>
                 )}
               </div>
             </Card>
@@ -202,19 +211,42 @@ function KitchenOrderCard({
   const nextStatus = getNextOrderStatus(status);
 
   return (
-    <div className="rounded-md border border-[var(--border)] bg-[var(--surface)] p-4">
+    <div className="group rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition-all hover:shadow-md">
       <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <Link className="truncate text-base font-bold text-[var(--foreground)] hover:text-[var(--accent)]" href={`/orders/${order.id}`}>
+        {/* ADDED: flex-1 to the container */}
+        <div className="min-w-0 flex-1">
+          <Link 
+            // ADDED: 'block' so 'truncate' works correctly, and added a title attribute so hover shows full text
+            className="block truncate text-sm font-bold text-slate-900 transition-colors hover:text-slate-600" 
+            href={`/orders/${order.id}`}
+            title={order.order_number} 
+          >
             {order.order_number}
           </Link>
-          <p className="mt-1 text-sm text-[var(--muted)]">{formatOrderType(order.order_type)}</p>
+          <p className="mt-0.5 text-xs font-medium text-slate-500">{formatOrderType(order.order_type)}</p>
         </div>
-        <Badge className={getStatusClassName(status)}>{formatOrderStatus(status)}</Badge>
+        {/* ADDED: shrink-0 so the badge always keeps its shape */}
+        <Badge className={cn("shrink-0 shadow-none", getStatusClassName(status))}>
+          {formatOrderStatus(status)}
+        </Badge>
       </div>
-      <p className="mt-3 text-sm text-[var(--muted)]">{order.customer_name || "Walk-in customer"}</p>
-      {order.notes ? <p className="mt-2 text-sm text-[var(--accent)]">{order.notes}</p> : null}
-      <Button className="mt-4 w-full" disabled={busy || !nextStatus} onClick={() => onAdvance(order)} type="button">
+      
+      <p className="mt-3 text-sm font-medium text-slate-700">
+        {order.customer_name || "Walk-in customer"}
+      </p>
+      
+      {order.notes ? (
+        <div className="mt-3 rounded-lg border border-amber-200/60 bg-amber-50 px-3 py-2">
+          <p className="text-xs font-medium text-amber-900">{order.notes}</p>
+        </div>
+      ) : null}
+      
+      <Button 
+        className="mt-4 w-full shadow-sm" 
+        disabled={busy || !nextStatus} 
+        onClick={() => onAdvance(order)} 
+        type="button"
+      >
         {nextStatus ? `Mark ${formatOrderStatus(nextStatus)}` : "Done"}
       </Button>
     </div>
