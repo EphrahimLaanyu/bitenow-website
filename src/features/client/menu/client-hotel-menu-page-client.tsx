@@ -14,6 +14,7 @@ import { saveActiveHotelId } from "@/lib/hotels/active-hotel-storage";
 import { addCartItem } from "@/features/client/cart/cart-storage";
 import { getHotel } from "@/features/hotels/api";
 import { listMenuCategories, listMenuItems } from "@/features/menu/api";
+import TiltedCard from "@/components/ui/tilted-card";
 
 export function ClientHotelMenuPageClient({ hotelId }: { hotelId: string }) {
   const [hotel, setHotel] = useState<Hotel | null>(null);
@@ -266,12 +267,21 @@ function MenuItemCard({
   return (
     <Card className="flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white p-0 shadow-sm transition-shadow hover:shadow-md">
       {item.image_url ? (
-        <div
-          aria-label={item.name}
-          className="h-48 bg-slate-100 bg-cover bg-center border-b border-slate-100"
-          role="img"
-          style={{ backgroundImage: `url("${item.image_url}")` }}
-        />
+        <div className="relative h-48 overflow-hidden border-b border-slate-100 bg-slate-100">
+          <TiltedCard
+            imageSrc={item.image_url}
+            altText={item.name}
+            captionText={item.name}
+            containerHeight="100%"
+            containerWidth="100%"
+            imageHeight="100%"
+            imageWidth="100%"
+            rotateAmplitude={12}
+            scaleOnHover={1.15}
+            showMobileWarning={false}
+            showTooltip={true}
+          />
+        </div>
       ) : (
         <div className="flex h-48 items-center justify-center bg-slate-50 text-slate-300 border-b border-slate-100">
           <ImageIcon aria-hidden size={40} />
@@ -306,14 +316,13 @@ function MenuItemCard({
           </p>
         </div>
 
-<Button
+        <Button
           className={`mt-5 w-full h-11 rounded-lg font-medium shadow-sm transition-all ${
             added ? "bg-emerald-600 hover:bg-emerald-700 text-white border-transparent" : ""
           }`}
           disabled={item.is_available === false}
           onClick={() => onAdd(item)}
           type="button"
-          // Changed "default" to "primary" to match your button.tsx interface
           variant={added ? "primary" : "secondary"} 
         >
           {added ? <Check aria-hidden size={18} className="mr-2" /> : <ShoppingCart aria-hidden size={18} className="mr-2 text-slate-500" />}

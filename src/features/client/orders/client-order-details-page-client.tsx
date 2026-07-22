@@ -27,6 +27,8 @@ import {
   formatOrderType,
   getStatusClassName
 } from "@/features/orders/order-utils";
+import { DecryptedText } from "@/components/ui/decrypted-text";
+import { MagicRings } from "@/components/ui/magic-rings";
 
 const trackingStatuses: Array<{ label: string; value: OrderStatus }> = [
   { label: "Draft", value: "draft" },
@@ -143,18 +145,18 @@ export function ClientOrderDetailsPageClient({ orderId }: { orderId: string }) {
   }
 
   return (
-    <div className="space-y-7">
+    <div className="space-y-7 min-h-screen bg-slate-950 text-slate-100 p-4 md:p-8">
       <BackLink />
 
       <section className="grid gap-5 lg:grid-cols-[1fr_22rem]">
-        <Card>
+        <Card className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
-              <Badge>Order tracking</Badge>
-              <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-[var(--foreground)] md:text-5xl">
-                {order.order_number}
+              <Badge className="bg-amber-400/20 text-amber-400 border-amber-400/50 hover:bg-amber-400/30">Order tracking</Badge>
+              <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-amber-400 md:text-5xl">
+                <DecryptedText text={order.order_number} />
               </h1>
-              <p className="mt-3 text-sm leading-6 text-[var(--muted)]">
+              <p className="mt-3 text-sm leading-6 text-slate-400">
                 {formatOrderType(order.order_type)} - {formatDate(order.created_at)}
               </p>
             </div>
@@ -178,17 +180,17 @@ export function ClientOrderDetailsPageClient({ orderId }: { orderId: string }) {
           </div>
 
           {order.notes ? (
-            <div className="mt-6 rounded-3xl border border-[var(--border)] bg-[var(--surface-3)] p-4">
-              <p className="text-xs font-bold uppercase text-[var(--muted)]">Order notes</p>
-              <p className="mt-2 text-sm leading-6 text-[var(--foreground)]">{order.notes}</p>
+            <div className="mt-6 rounded-3xl border border-white/10 bg-black/20 p-4">
+              <p className="text-xs font-bold uppercase text-slate-400">Order notes</p>
+              <p className="mt-2 text-sm leading-6 text-slate-100">{order.notes}</p>
             </div>
           ) : null}
         </Card>
 
-        <Card>
+        <Card className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl">
           <div className="flex items-center gap-2">
-            <ReceiptText aria-hidden className="text-[var(--primary)]" size={20} />
-            <h2 className="text-lg font-extrabold text-[var(--foreground)]">Total</h2>
+            <ReceiptText aria-hidden className="text-amber-400" size={20} />
+            <h2 className="text-lg font-extrabold text-slate-100">Total</h2>
           </div>
           <div className="mt-5 space-y-3 text-sm">
             <SummaryRow label="Subtotal" value={formatMoney(order.subtotal)} />
@@ -196,9 +198,9 @@ export function ClientOrderDetailsPageClient({ orderId }: { orderId: string }) {
             <SummaryRow label="Service charge" value={formatMoney(order.service_charge)} />
             <SummaryRow label="Discount" value={formatMoney(order.discount_amount)} />
           </div>
-          <div className="mt-5 flex items-center justify-between border-t border-[var(--border)] pt-5">
-            <span className="text-sm font-bold text-[var(--muted)]">Total amount</span>
-            <span className="text-2xl font-extrabold text-[var(--foreground)]">
+          <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-5">
+            <span className="text-sm font-bold text-slate-400">Total amount</span>
+            <span className="text-2xl font-extrabold text-amber-400">
               {formatMoney(order.total_amount)}
             </span>
           </div>
@@ -207,9 +209,9 @@ export function ClientOrderDetailsPageClient({ orderId }: { orderId: string }) {
 
       <section className="space-y-4">
         <div className="flex items-center gap-2">
-          <Utensils aria-hidden className="text-[var(--primary)]" size={20} />
-          <h2 className="text-lg font-extrabold text-[var(--foreground)]">Items ordered</h2>
-          <Badge>{items.length}</Badge>
+          <Utensils aria-hidden className="text-amber-400" size={20} />
+          <h2 className="text-lg font-extrabold text-slate-100">Items ordered</h2>
+          <Badge className="bg-amber-400/20 text-amber-400 border-amber-400/50 hover:bg-amber-400/30">{items.length}</Badge>
         </div>
 
         {items.length > 0 ? (
@@ -219,7 +221,7 @@ export function ClientOrderDetailsPageClient({ orderId }: { orderId: string }) {
             ))}
           </div>
         ) : (
-          <Card>
+          <Card className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl">
             <p className="text-sm text-[var(--muted)]">No order items were returned for this order.</p>
           </Card>
         )}
@@ -227,24 +229,24 @@ export function ClientOrderDetailsPageClient({ orderId }: { orderId: string }) {
 
       <section className="space-y-4">
         <div className="flex items-center gap-2">
-          <Clock3 aria-hidden className="text-[var(--primary)]" size={20} />
-          <h2 className="text-lg font-extrabold text-[var(--foreground)]">Status history</h2>
+          <Clock3 aria-hidden className="text-amber-400" size={20} />
+          <h2 className="text-lg font-extrabold text-slate-100">Status history</h2>
         </div>
 
         {order.status_history && order.status_history.length > 0 ? (
           <div className="grid gap-3">
             {order.status_history.map((entry) => (
-              <Card className="p-4" key={entry.id}>
-                <p className="text-sm font-bold text-[var(--foreground)]">
+              <Card className="p-4 bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl" key={entry.id}>
+                <p className="text-sm font-bold text-slate-100">
                   {formatOrderStatus(entry.from_status)} to {formatOrderStatus(entry.to_status)}
                 </p>
-                <p className="mt-1 text-xs text-[var(--muted)]">{formatDate(entry.created_at)}</p>
-                {entry.note ? <p className="mt-2 text-sm text-[var(--muted)]">{entry.note}</p> : null}
+                <p className="mt-1 text-xs text-slate-400">{formatDate(entry.created_at)}</p>
+                {entry.note ? <p className="mt-2 text-sm text-slate-400">{entry.note}</p> : null}
               </Card>
             ))}
           </div>
         ) : (
-          <Card>
+          <Card className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl">
             <p className="text-sm text-[var(--muted)]">No status history has been returned yet.</p>
           </Card>
         )}
@@ -255,7 +257,7 @@ export function ClientOrderDetailsPageClient({ orderId }: { orderId: string }) {
 
 function BackLink() {
   return (
-    <Link className="inline-flex items-center gap-2 text-sm font-bold text-[var(--muted)] hover:text-[var(--primary)]" href="/client/orders">
+    <Link className="inline-flex items-center gap-2 text-sm font-bold text-slate-400 hover:text-amber-400" href="/client/orders">
       <ArrowLeft aria-hidden size={16} />
       Back to my orders
     </Link>
@@ -297,21 +299,21 @@ function StatusTimeline({ status }: { status: OrderStatus }) {
 
   if (status === "cancelled") {
     return (
-      <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface-3)] p-4">
+      <div className="rounded-3xl border border-white/10 bg-black/20 p-4">
         <div className="flex items-center gap-3 rounded-2xl border border-red-500/30 bg-red-500/10 p-4">
           <XCircle aria-hidden className="text-red-500" size={22} />
-          <p className="text-sm font-bold text-[var(--foreground)]">This order was cancelled.</p>
+          <p className="text-sm font-bold text-slate-100">This order was cancelled.</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface-3)] p-4">
+    <div className="rounded-3xl border border-white/10 bg-black/20 p-4 overflow-hidden">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <p className="text-xs font-bold uppercase text-[var(--muted)]">Current status</p>
-          <p className="mt-1 text-lg font-extrabold text-[var(--foreground)]">
+          <p className="text-xs font-bold uppercase text-slate-400">Current status</p>
+          <p className="mt-1 text-lg font-extrabold text-amber-400">
             {formatOrderStatus(status)}
           </p>
         </div>
@@ -323,27 +325,37 @@ function StatusTimeline({ status }: { status: OrderStatus }) {
           const complete = currentIndex >= index;
           const current = currentIndex === index;
 
+          const StatusIcon = () => (
+            <span
+              className={`relative z-10 flex h-8 w-8 items-center justify-center rounded-full text-xs font-extrabold ${
+                complete
+                  ? "bg-amber-400 text-slate-950"
+                  : "bg-slate-800 text-slate-400"
+              }`}
+            >
+              {index + 1}
+            </span>
+          );
+
           return (
             <li key={item.value}>
               <div
                 className={`flex min-h-24 flex-col justify-between rounded-2xl border p-3 transition-colors ${
                   complete
-                    ? "border-[var(--primary)] bg-[var(--primary)]/10"
-                    : "border-[var(--border)] bg-[var(--surface)]"
+                    ? "border-amber-400/30 bg-amber-400/10"
+                    : "border-white/10 bg-black/20"
                 }`}
               >
-                <span
-                  className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-extrabold ${
-                    complete
-                      ? "bg-[var(--primary)] text-[var(--primary-foreground)]"
-                      : "bg-[var(--surface-2)] text-[var(--muted)]"
-                  }`}
-                >
-                  {index + 1}
-                </span>
-                <div>
-                  <p className="text-sm font-extrabold text-[var(--foreground)]">{item.label}</p>
-                  {current ? <p className="mt-1 text-xs font-bold text-[var(--primary)]">Now</p> : null}
+                {current ? (
+                  <MagicRings>
+                    <StatusIcon />
+                  </MagicRings>
+                ) : (
+                  <StatusIcon />
+                )}
+                <div className="mt-4">
+                  <p className="text-sm font-extrabold text-slate-100">{item.label}</p>
+                  {current ? <p className="mt-1 text-xs font-bold text-amber-400">Now</p> : null}
                 </div>
               </div>
             </li>
@@ -356,20 +368,20 @@ function StatusTimeline({ status }: { status: OrderStatus }) {
 
 function OrderItemRow({ item, menuItem }: { item: OrderItem; menuItem?: MenuItem }) {
   return (
-    <Card className="grid gap-4 md:grid-cols-[1fr_auto_auto] md:items-center">
+    <Card className="grid gap-4 md:grid-cols-[1fr_auto_auto] md:items-center bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl">
       <div className="min-w-0">
-        <h3 className="truncate text-lg font-extrabold text-[var(--foreground)]">
+        <h3 className="truncate text-lg font-extrabold text-amber-400">
           {menuItem?.name ?? item.menu_item}
         </h3>
-        {item.notes ? <p className="mt-1 text-sm text-[var(--muted)]">{item.notes}</p> : null}
+        {item.notes ? <p className="mt-1 text-sm text-slate-400">{item.notes}</p> : null}
       </div>
       <div>
-        <p className="text-xs font-bold uppercase text-[var(--muted)]">Quantity</p>
-        <p className="mt-1 text-sm font-extrabold text-[var(--foreground)]">{item.quantity ?? 0}</p>
+        <p className="text-xs font-bold uppercase text-slate-400">Quantity</p>
+        <p className="mt-1 text-sm font-extrabold text-slate-100">{item.quantity ?? 0}</p>
       </div>
       <div className="md:text-right">
-        <p className="text-xs font-bold uppercase text-[var(--muted)]">Line total</p>
-        <p className="mt-1 text-sm font-extrabold text-[var(--foreground)]">
+        <p className="text-xs font-bold uppercase text-slate-400">Line total</p>
+        <p className="mt-1 text-sm font-extrabold text-amber-400">
           {formatMoney(item.line_total ?? Number(item.unit_price) * (item.quantity ?? 0))}
         </p>
       </div>
@@ -380,8 +392,8 @@ function OrderItemRow({ item, menuItem }: { item: OrderItem; menuItem?: MenuItem
 function SummaryRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between gap-3">
-      <span className="text-[var(--muted)]">{label}</span>
-      <span className="font-bold text-[var(--foreground)]">{value}</span>
+      <span className="text-slate-400">{label}</span>
+      <span className="font-bold text-slate-100">{value}</span>
     </div>
   );
 }
