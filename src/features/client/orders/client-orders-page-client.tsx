@@ -19,7 +19,6 @@ import {
   getStatusClassName,
   sortOrders
 } from "@/features/orders/order-utils";
-import { ShinyText } from "@/components/ui/shiny-text";
 
 const currentStatuses = new Set(["draft", "placed", "accepted", "in_preparation", "ready", "served"]);
 
@@ -82,14 +81,14 @@ export function ClientOrdersPageClient() {
   );
 
   return (
-    <div className="space-y-7 min-h-screen bg-slate-950 text-slate-100 p-4 md:p-8">
+    <div className="space-y-7">
       <section className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <Badge className="bg-amber-400/20 text-amber-400 hover:bg-amber-400/30 border-amber-400/50">My orders</Badge>
-          <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-slate-100 md:text-5xl">
+          <Badge>My orders</Badge>
+          <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-[var(--foreground)] md:text-5xl">
             Track your orders
           </h1>
-          <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-400">
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--muted)]">
             Follow current orders in real time and review previous meals from this hotel.
           </p>
         </div>
@@ -101,19 +100,19 @@ export function ClientOrdersPageClient() {
       </section>
 
       {status === "checking" ? (
-        <Card className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl">
-          <p className="text-sm text-slate-400">Checking your session...</p>
+        <Card>
+          <p className="text-sm text-[var(--muted)]">Checking your session...</p>
         </Card>
       ) : null}
 
       {status === "unauthenticated" && !getAccessToken() ? (
-        <Card className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl">
-          <h2 className="text-lg font-bold text-slate-100">Sign in to view orders</h2>
-          <p className="mt-2 text-sm leading-6 text-slate-400">
+        <Card>
+          <h2 className="text-lg font-bold text-[var(--foreground)]">Sign in to view orders</h2>
+          <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
             Your orders are attached to your authenticated BiteNow account.
           </p>
           <Link
-            className="mt-4 inline-flex h-11 items-center justify-center rounded-2xl bg-amber-400 px-4 text-sm font-bold text-slate-950"
+            className="mt-4 inline-flex h-11 items-center justify-center rounded-2xl bg-[var(--primary)] px-4 text-sm font-bold text-[var(--primary-foreground)]"
             href="/login?next=%2Fclient%2Forders"
           >
             Sign in
@@ -122,12 +121,12 @@ export function ClientOrdersPageClient() {
       ) : null}
 
       {!activeHotelId ? (
-        <Card className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl">
-          <h2 className="text-lg font-bold text-slate-100">Choose a hotel first</h2>
-          <p className="mt-2 text-sm leading-6 text-slate-400">
+        <Card>
+          <h2 className="text-lg font-bold text-[var(--foreground)]">Choose a hotel first</h2>
+          <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
             Open a hotel before viewing the orders connected to that dining session.
           </p>
-          <Link className="mt-4 inline-flex items-center gap-2 font-bold text-amber-400 hover:text-amber-300" href="/client/hotels">
+          <Link className="app-link mt-4 inline-flex items-center gap-2" href="/client/hotels">
             Browse hotels
             <ArrowRight aria-hidden size={16} />
           </Link>
@@ -160,9 +159,9 @@ function OrderSection({
   return (
     <section className="space-y-4">
       <div className="flex items-center gap-2">
-        <ClipboardList aria-hidden className="text-amber-400" size={20} />
-        <h2 className="text-lg font-extrabold text-slate-100">{title}</h2>
-        <Badge className="bg-amber-400/20 text-amber-400 border-amber-400/50 hover:bg-amber-400/30">{orders.length}</Badge>
+        <ClipboardList aria-hidden className="text-[var(--primary)]" size={20} />
+        <h2 className="text-lg font-extrabold text-[var(--foreground)]">{title}</h2>
+        <Badge>{orders.length}</Badge>
       </div>
 
       {loading ? (
@@ -181,12 +180,12 @@ function OrderSection({
           ))}
         </div>
       ) : (
-        <Card className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl">
+        <Card>
           <div className="flex items-center gap-3">
-            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-800 text-slate-400">
+            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[var(--surface-2)] text-[var(--primary)]">
               <ShoppingBag aria-hidden size={20} />
             </span>
-            <p className="text-sm font-semibold text-slate-400">{emptyText}</p>
+            <p className="text-sm font-semibold text-[var(--muted)]">{emptyText}</p>
           </div>
         </Card>
       )}
@@ -198,32 +197,30 @@ function OrderCard({ order }: { order: Order }) {
   const status = order.status ?? "draft";
 
   return (
-    <Card className="grid gap-4 md:grid-cols-[1fr_auto] md:items-center bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl">
+    <Card className="grid gap-4 md:grid-cols-[1fr_auto] md:items-center">
       <div className="min-w-0">
         <div className="flex flex-wrap items-center gap-2">
           <Link
-            className="truncate text-xl font-extrabold text-amber-400 hover:text-amber-300"
+            className="truncate text-xl font-extrabold text-[var(--foreground)] hover:text-[var(--primary)]"
             href={`/client/orders/${order.id}`}
           >
             {order.order_number}
           </Link>
-          <Badge className={getStatusClassName(status)}>
-            <ShinyText>{formatOrderStatus(status)}</ShinyText>
-          </Badge>
+          <Badge className={getStatusClassName(status)}>{formatOrderStatus(status)}</Badge>
         </div>
-        <p className="mt-2 text-sm text-slate-400">
+        <p className="mt-2 text-sm text-[var(--muted)]">
           {formatOrderType(order.order_type)} · {formatDate(order.created_at)}
         </p>
-        <p className="mt-3 text-sm leading-6 text-slate-400">
+        <p className="mt-3 text-sm leading-6 text-[var(--muted)]">
           {order.items?.length ?? 0} item{order.items?.length === 1 ? "" : "s"} · Total{" "}
-          <span className="font-extrabold text-slate-100">
+          <span className="font-extrabold text-[var(--foreground)]">
             {formatMoney(order.total_amount)}
           </span>
         </p>
       </div>
 
       <Link
-        className="inline-flex h-11 items-center justify-center gap-2 rounded-2xl border border-white/10 bg-black/20 px-4 text-sm font-bold text-slate-100 shadow-sm transition-colors hover:border-amber-400 hover:text-amber-400"
+        className="inline-flex h-11 items-center justify-center gap-2 rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 text-sm font-bold text-[var(--foreground)] shadow-sm transition-colors hover:border-[var(--primary)]"
         href={`/client/orders/${order.id}`}
       >
         Details

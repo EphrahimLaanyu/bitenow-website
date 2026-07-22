@@ -18,9 +18,6 @@ import {
 } from "@/features/client/cart/cart-storage";
 import { listHotels } from "@/features/hotels/api";
 import type { Hotel } from "@/lib/api/types";
-import { getAccessToken } from "@/lib/auth/token-storage";
-import { AnimatedList, AnimatedListItem } from "@/components/ui/animated-list";
-import { CountUp } from "@/components/ui/count-up";
 
 export function ClientCartPageClient() {
   const [items, setItems] = useState<CartItem[]>([]);
@@ -45,14 +42,10 @@ export function ClientCartPageClient() {
   useEffect(() => {
     async function loadHotels() {
       try {
-        if (!getAccessToken()) {
-          // No token — skip the API call; hotel names will fall back to "Unknown Hotel"
-          return;
-        }
         const response = await listHotels({ page_size: 100 });
         setHotels(response.results);
-      } catch {
-        // Silently ignore — cart still works, hotel names just show fallback
+      } catch (error) {
+        console.error("Failed to load hotels for cart mapping", error);
       } finally {
         setLoading(false);
       }
@@ -98,28 +91,28 @@ export function ClientCartPageClient() {
   }
 
   return (
-    <div className="space-y-8 pb-20 min-h-screen bg-slate-950 text-slate-100 p-4 md:p-8">
+    <div className="space-y-8 pb-20">
       <section className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <Badge className="bg-amber-400/20 text-amber-400 hover:bg-amber-400/30 border-amber-400/50">Guest cart</Badge>
-          <h1 className="mt-3 text-3xl font-bold text-slate-100 md:text-4xl">Your cart</h1>
-          <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-400">
+          <Badge>Guest cart</Badge>
+          <h1 className="mt-3 text-3xl font-bold text-[var(--foreground)] md:text-4xl">Your cart</h1>
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--muted)]">
             Review your selected items, adjust quantities, add notes, and continue to checkout.
           </p>
         </div>
       </section>
 
       {items.length === 0 ? (
-        <Card className="text-center py-16 bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl">
-          <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-slate-800 text-amber-400">
+        <Card className="text-center py-16">
+          <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[var(--surface-2)] text-[var(--accent)]">
             <ShoppingCart aria-hidden size={28} />
           </span>
-          <h2 className="mt-5 text-2xl font-bold text-amber-400">Your cart is empty</h2>
-          <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-slate-400">
+          <h2 className="mt-5 text-2xl font-bold text-[var(--foreground)]">Your cart is empty</h2>
+          <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-[var(--muted)]">
             Add meals from a hotel menu and they will appear here before checkout.
           </p>
           <Link
-            className="mt-6 inline-flex h-11 items-center justify-center gap-2 rounded-md bg-amber-400 px-4 text-sm font-semibold text-slate-950 transition-colors hover:bg-amber-500"
+            className="mt-6 inline-flex h-11 items-center justify-center gap-2 rounded-md bg-[var(--accent)] px-4 text-sm font-semibold text-[var(--accent-foreground)] transition-colors hover:bg-[var(--accent-hover)]"
             href="/client/menu"
           >
             Browse global menu
@@ -136,60 +129,57 @@ export function ClientCartPageClient() {
 
             return (
               <section key={hotelId} className="space-y-6 relative">
-                <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                <div className="flex items-center justify-between border-b border-slate-200 pb-4">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-400/10 border border-amber-400/20 text-amber-400">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-50 border border-slate-100 text-slate-500">
                       <Building2 aria-hidden size={20} />
                     </div>
                     <div>
-                      <h2 className="text-xl font-bold text-amber-400">{hotelName}</h2>
-                      <p className="text-sm text-slate-400">{hotelItems.length} item{hotelItems.length === 1 ? "" : "s"} in this cart</p>
+                      <h2 className="text-xl font-bold text-slate-900">{hotelName}</h2>
+                      <p className="text-sm text-slate-500">{hotelItems.length} item{hotelItems.length === 1 ? "" : "s"} in this cart</p>
                     </div>
                   </div>
-                  <Button onClick={() => refreshCart(clearCart(hotelId))} type="button" variant="ghost" className="text-red-400 hover:text-red-300 hover:bg-red-400/20">
+                  <Button onClick={() => refreshCart(clearCart(hotelId))} type="button" variant="ghost" className="text-red-500 hover:text-red-600 hover:bg-red-50">
                     <Trash2 aria-hidden size={16} className="mr-2" />
                     Clear this cart
                   </Button>
                 </div>
 
                 <div className="grid gap-6 lg:grid-cols-[1fr_22rem]">
-                  <AnimatedList className="space-y-4">
+                  <div className="space-y-4">
                     {hotelItems.map((item) => {
                       const globalIndex = getGlobalIndex(item);
                       return (
-                        <AnimatedListItem key={`${item.hotelId}-${item.itemId}-${item.notes ?? "none"}`}>
-                          <CartItemCard
-                            index={globalIndex}
-                            item={item}
-                            onChange={refreshCart}
-                          />
-                        </AnimatedListItem>
+                        <CartItemCard
+                          index={globalIndex}
+                          item={item}
+                          key={`${item.hotelId}-${item.itemId}-${item.notes ?? "none"}`}
+                          onChange={refreshCart}
+                        />
                       );
                     })}
-                  </AnimatedList>
+                  </div>
 
-                  <Card className="h-fit shadow-sm border border-white/10 bg-black/40 backdrop-blur-xl lg:sticky lg:top-24">
+                  <Card className="h-fit shadow-sm border-slate-200 lg:sticky lg:top-24">
                     <div className="flex items-center justify-between gap-3">
-                      <h3 className="text-lg font-semibold text-slate-100">Order summary</h3>
+                      <h3 className="text-lg font-semibold text-[var(--foreground)]">Order summary</h3>
                     </div>
-                    <div className="mt-5 space-y-3 border-b border-white/10 pb-5">
+                    <div className="mt-5 space-y-3 border-b border-[var(--border)] pb-5">
                       {hotelItems.map((item) => (
                         <div className="flex items-center justify-between gap-3 text-sm" key={`${item.itemId}-${item.notes ?? ""}`}>
-                          <span className="truncate text-slate-400">
+                          <span className="truncate text-[var(--muted)]">
                             {item.quantity} x {item.name}
                           </span>
-                          <span className="font-semibold text-slate-200">{formatMoney(Number(item.price) * item.quantity, item.currency)}</span>
+                          <span className="font-semibold text-[var(--foreground)]">{formatMoney(Number(item.price) * item.quantity, item.currency)}</span>
                         </div>
                       ))}
                     </div>
                     <div className="mt-5 flex items-center justify-between">
-                      <span className="text-sm font-semibold text-slate-400">Estimated total</span>
-                      <span className="text-2xl font-bold text-amber-400">
-                        <CountUp value={total} currency={currency} />
-                      </span>
+                      <span className="text-sm font-semibold text-[var(--muted)]">Estimated total</span>
+                      <span className="text-2xl font-bold text-[var(--foreground)]">{formatMoney(total, currency)}</span>
                     </div>
                     <Link
-                      className="mt-6 inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-amber-400 px-4 text-sm font-semibold text-slate-950 shadow-sm transition-all hover:bg-amber-500 hover:scale-[1.02]"
+                      className="mt-6 inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-[var(--accent)] px-4 text-sm font-semibold text-[var(--accent-foreground)] shadow-sm transition-all hover:bg-[var(--accent-hover)] hover:scale-[1.02]"
                       href={`/client/checkout?hotelId=${encodeURIComponent(hotelId)}`}
                     >
                       Checkout for {hotelName}
@@ -216,24 +206,24 @@ function CartItemCard({
   onChange: (items: CartItem[]) => void;
 }) {
   return (
-    <Card className="grid gap-4 shadow-sm border border-white/10 bg-black/40 backdrop-blur-xl rounded-2xl md:grid-cols-[8rem_1fr_auto] md:items-start p-4">
+    <Card className="grid gap-4 shadow-sm border-slate-200 md:grid-cols-[8rem_1fr_auto] md:items-start p-4">
       {item.imageUrl ? (
         <div
           aria-label={item.name}
-          className="h-28 rounded-lg bg-slate-800 bg-cover bg-center border border-white/10"
+          className="h-28 rounded-lg bg-[var(--surface-2)] bg-cover bg-center border border-slate-100"
           role="img"
           style={{ backgroundImage: `url("${item.imageUrl}")` }}
         />
       ) : (
-        <div className="flex h-28 items-center justify-center rounded-lg bg-slate-800 text-slate-500 border border-white/10">
+        <div className="flex h-28 items-center justify-center rounded-lg bg-[var(--surface-2)] text-[var(--muted)] border border-slate-100">
           <ImageIcon aria-hidden size={30} />
         </div>
       )}
 
       <div className="min-w-0 space-y-3">
         <div>
-          <h3 className="text-lg font-bold text-amber-400">{item.name}</h3>
-          <p className="mt-1 text-sm font-medium text-slate-400">
+          <h3 className="text-lg font-bold text-[var(--foreground)]">{item.name}</h3>
+          <p className="mt-1 text-sm font-medium text-[var(--muted)]">
             {formatMoney(item.price, item.currency)}
             {item.prepTimeMinutes ? ` - ${item.prepTimeMinutes} min` : ""}
           </p>
@@ -243,34 +233,34 @@ function CartItemCard({
           label="Item notes (optional)"
           onBlur={(event) => onChange(updateCartItemNotes(index, event.target.value))}
           placeholder="No onions, extra sauce, allergy notes..."
-          className="h-10 text-sm bg-black/20 border-white/10 text-slate-200 placeholder:text-slate-500 focus:border-amber-400"
+          className="h-10 text-sm placeholder:text-slate-400 focus:border-[var(--accent)]"
         />
       </div>
 
       <div className="flex flex-wrap items-center gap-2 md:justify-end">
-        <div className="flex items-center rounded-lg border border-white/10 bg-black/20 shadow-sm">
+        <div className="flex items-center rounded-lg border border-slate-200 bg-white shadow-sm">
           <Button
             disabled={item.quantity <= 1}
             onClick={() => onChange(updateCartItemQuantity(index, item.quantity - 1))}
             type="button"
             variant="ghost"
-            className="h-9 w-9 rounded-none rounded-l-lg p-0 hover:bg-white/10 text-slate-200"
+            className="h-9 w-9 rounded-none rounded-l-lg p-0 hover:bg-slate-50"
           >
             <Minus aria-hidden size={14} />
           </Button>
-          <span className="flex h-9 w-10 items-center justify-center text-sm font-bold text-amber-400 border-x border-white/10">
+          <span className="flex h-9 w-10 items-center justify-center text-sm font-bold text-[var(--foreground)] border-x border-slate-200">
             {item.quantity}
           </span>
           <Button
             onClick={() => onChange(updateCartItemQuantity(index, item.quantity + 1))}
             type="button"
             variant="ghost"
-            className="h-9 w-9 rounded-none rounded-r-lg p-0 hover:bg-white/10 text-slate-200"
+            className="h-9 w-9 rounded-none rounded-r-lg p-0 hover:bg-slate-50"
           >
             <Plus aria-hidden size={14} />
           </Button>
         </div>
-        <Button onClick={() => onChange(removeCartItem(index))} type="button" variant="ghost" className="h-9 text-slate-500 hover:text-red-400 hover:bg-red-400/20">
+        <Button onClick={() => onChange(removeCartItem(index))} type="button" variant="ghost" className="h-9 text-slate-500 hover:text-red-600 hover:bg-red-50">
           <Trash2 aria-hidden size={16} />
         </Button>
       </div>

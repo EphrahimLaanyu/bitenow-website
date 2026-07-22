@@ -14,7 +14,6 @@ import { addCartItem } from "@/features/client/cart/cart-storage";
 import { listHotels } from "@/features/hotels/api";
 import { listMenuCategories, listMenuItems } from "@/features/menu/api";
 import { cn } from "@/lib/utils";
-import TiltedCard from "@/components/ui/tilted-card";
 
 export function ClientMenuPageClient() {
   const [hotels, setHotels] = useState<Hotel[]>([]);
@@ -202,18 +201,9 @@ export function ClientMenuPageClient() {
               <Card className="group flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white p-0 shadow-sm transition-shadow hover:shadow-md" key={item.id}>
                 <div className="relative aspect-video w-full overflow-hidden bg-slate-100 border-b border-slate-100">
                   {item.image_url ? (
-                    <TiltedCard
-                      imageSrc={item.image_url}
-                      altText={item.name}
-                      captionText={`${item.name}${hotel ? ` — ${hotel.name}` : ""}`}
-                      containerHeight="100%"
-                      containerWidth="100%"
-                      imageHeight="100%"
-                      imageWidth="100%"
-                      rotateAmplitude={12}
-                      scaleOnHover={1.15}
-                      showMobileWarning={false}
-                      showTooltip={true}
+                    <div
+                      className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+                      style={{ backgroundImage: `url("${item.image_url}")` }}
                     />
                   ) : (
                     <div className="absolute inset-0 flex items-center justify-center bg-slate-50 text-slate-300">
@@ -221,7 +211,7 @@ export function ClientMenuPageClient() {
                     </div>
                   )}
                   {hotel && (
-                    <div className="absolute left-3 top-3 z-10">
+                    <div className="absolute left-3 top-3">
                       <Badge variant="secondary" className="bg-white/95 text-slate-700 shadow-sm backdrop-blur-md border border-slate-200 font-medium flex items-center gap-1.5">
                         <Building2 aria-hidden size={12} className="text-slate-400" />
                         {hotel.name}
