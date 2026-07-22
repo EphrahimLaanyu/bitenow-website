@@ -171,39 +171,27 @@ export function DashboardPageClient() {
   if (loading) return <DashboardSkeleton />;
 
   return (
-    <div className="space-y-8 pb-20 pt-4">
-      <div className="flex flex-col gap-2">
-        <h1 className="animate-fade-in-up font-display text-4xl font-black tracking-tight text-[#101f3f]">
-          Good morning.
-        </h1>
-        <p className="animate-fade-in-up delay-100 text-[15px] font-semibold text-[var(--muted)]">
-          Here is what&apos;s happening at {data.activeHotel?.name ?? "your hotel"} today.
-        </p>
-      </div>
-
+    <div className="space-y-6 pb-20 pt-4">
       {error ? <AlertMessage tone="danger">{error}</AlertMessage> : null}
       {data.statErrors.length > 0 ? (
         <AlertMessage tone="warning">Some counts could not be loaded: {data.statErrors.join(" ")}</AlertMessage>
       ) : null}
 
-      <section className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <MetricCard
-          className="animate-fade-in-up delay-100"
           icon={ReceiptText}
           label="Total revenue"
           sublabel="+12.4% this month"
           value={formatMoney(data.stats.revenue, data.activeHotel?.currency)}
         />
-        <MetricCard className="animate-fade-in-up delay-200" icon={ClipboardList} label="Total orders" sublabel="+8.2% this month" value={data.orders.length} />
+        <MetricCard icon={ClipboardList} label="Total orders" sublabel="+8.2% this month" value={data.orders.length} />
         <MetricCard
-          className="animate-fade-in-up delay-300"
           icon={Table2}
           label="Active tables"
           sublabel={`${data.stats.availableTables} tables available`}
           value={`${data.stats.occupiedTables} / ${data.stats.tableTotal}`}
         />
         <MetricCard
-          className="animate-fade-in-up delay-400"
           icon={Utensils}
           label="Menu items"
           sublabel={`${data.stats.menuItems === 0 ? 0 : Math.max(0, data.stats.menuItems - data.stats.menuItems)} unavailable`}
@@ -211,36 +199,36 @@ export function DashboardPageClient() {
         />
       </section>
 
-      <section className="grid gap-6 xl:grid-cols-[1.6fr_1fr]">
-        <Card className="glass-panel animate-fade-in-up delay-300 rounded-[2rem] p-8">
+      <section className="grid gap-4 xl:grid-cols-[1.6fr_1fr]">
+        <Card className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex items-center justify-between">
-            <h2 className="font-display text-2xl font-extrabold text-[#101f3f]">Revenue overview</h2>
-            <button className="rounded-full bg-[#101f3f]/[0.03] px-4 py-1.5 text-xs font-bold text-[var(--accent)] transition-colors hover:bg-[var(--accent)] hover:text-white" type="button">
+            <h2 className="text-lg font-semibold text-slate-900">Revenue overview</h2>
+            <button className="rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-medium text-slate-900 transition-colors hover:bg-slate-200" type="button">
               Last 7 days
             </button>
           </div>
-          <div className="mt-12 flex h-64 items-end gap-4 px-2">
+          <div className="mt-8 flex h-52 items-end gap-2 px-2">
             {barValues.map((value, index) => (
-              <div className="flex flex-1 flex-col items-center gap-4 group" key={barLabels[index]}>
-                <div className="relative w-full max-w-[4rem] flex-1 rounded-2xl bg-[#f4f7fd] overflow-hidden shadow-inner transition-transform duration-300 group-hover:scale-[1.02]">
+              <div className="group flex flex-1 flex-col items-center gap-3" key={barLabels[index]}>
+                <div className="relative w-full max-w-[3rem] flex-1 rounded-t-md bg-slate-100 overflow-hidden">
                   <div
                     className={cn(
-                      "absolute bottom-0 w-full rounded-2xl animate-grow-up",
-                      index === 5 ? "bg-gradient-to-t from-[#ff6208] to-[#ff8c4a]" : "bg-gradient-to-t from-[#c6d2e5] to-[#dce5f3]"
+                      "absolute bottom-0 w-full rounded-t-md transition-all duration-500",
+                      index === 5 ? "bg-slate-900" : "bg-slate-300 group-hover:bg-slate-400"
                     )}
-                    style={{ height: `${value}%`, animationDelay: `${index * 100}ms` }}
+                    style={{ height: `${value}%` }}
                   />
                 </div>
-                <span className="text-xs font-extrabold text-[var(--muted)]">{barLabels[index]}</span>
+                <span className="text-xs font-medium text-slate-500">{barLabels[index]}</span>
               </div>
             ))}
           </div>
         </Card>
 
-        <Card className="glass-panel animate-fade-in-up delay-400 rounded-[2rem] p-8">
+        <Card className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex items-center justify-between">
-            <h2 className="font-display text-2xl font-extrabold text-[#101f3f]">Order status</h2>
-            <Link className="rounded-full bg-[#101f3f]/[0.03] px-4 py-1.5 text-xs font-bold text-[var(--accent)] transition-colors hover:bg-[var(--accent)] hover:text-white" href="/dashboard/orders">
+            <h2 className="text-lg font-semibold text-slate-900">Order status</h2>
+            <Link className="rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-medium text-slate-900 transition-colors hover:bg-slate-200" href="/dashboard/orders">
               View report
             </Link>
           </div>
@@ -248,44 +236,44 @@ export function DashboardPageClient() {
         </Card>
       </section>
 
-      <section className="grid gap-6 xl:grid-cols-[1.3fr_0.7fr]">
-        <Card className="glass-panel animate-fade-in-up delay-500 rounded-[2rem] p-8">
+      <section className="grid gap-4 xl:grid-cols-[1.3fr_0.7fr]">
+        <Card className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex items-center justify-between">
-            <h2 className="font-display text-2xl font-extrabold text-[#101f3f]">Recent orders</h2>
-            <Link className="group flex items-center text-xs font-bold text-[var(--accent)]" href="/dashboard/orders">
+            <h2 className="text-lg font-semibold text-slate-900">Recent orders</h2>
+            <Link className="group flex items-center text-sm font-medium text-slate-600 hover:text-slate-900" href="/dashboard/orders">
               View all orders
-              <ChevronRight aria-hidden size={14} className="ml-1 transition-transform duration-300 group-hover:translate-x-1" />
+              <ChevronRight aria-hidden size={16} className="ml-1 transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
-          <div className="mt-8 overflow-x-auto">
+          <div className="mt-6 overflow-x-auto">
             <table className="min-w-full text-left text-sm">
-              <thead className="border-b-2 border-[#101f3f]/5 text-[11px] uppercase tracking-widest font-extrabold text-[#101f3f]/40">
+              <thead className="border-b border-slate-200 text-xs font-medium text-slate-500">
                 <tr>
-                  <th className="py-4 pr-4">Order</th>
-                  <th className="px-4 py-4">Guest</th>
-                  <th className="px-4 py-4">Items</th>
-                  <th className="px-4 py-4">Total</th>
-                  <th className="px-4 py-4">Status</th>
-                  <th className="py-4 pl-4 text-right">Time</th>
+                  <th className="pb-3 pr-4 font-medium">Order</th>
+                  <th className="px-4 pb-3 font-medium">Guest</th>
+                  <th className="px-4 pb-3 font-medium">Items</th>
+                  <th className="px-4 pb-3 font-medium">Total</th>
+                  <th className="px-4 pb-3 font-medium">Status</th>
+                  <th className="pb-3 pl-4 text-right font-medium">Time</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#101f3f]/5">
+              <tbody className="divide-y divide-slate-100">
                 {recentOrders.length > 0 ? (
                   recentOrders.map((order) => (
-                    <tr className="group transition-colors hover:bg-[#101f3f]/[0.02]" key={order.id}>
-                      <td className="py-4 pr-4 font-black text-[#101f3f]">{order.order_number}</td>
-                      <td className="px-4 py-4 font-semibold text-[var(--muted)]">{order.customer_name || "Walk-in"}</td>
-                      <td className="px-4 py-4 font-semibold text-[var(--muted)]">{order.items?.length ?? 0}</td>
-                      <td className="px-4 py-4 font-extrabold text-[#101f3f]">{formatMoney(Number(order.total_amount ?? 0), data.activeHotel?.currency)}</td>
-                      <td className="px-4 py-4">
-                        <Badge className="bg-white shadow-sm border border-[#101f3f]/10 text-[#101f3f] font-bold">{formatOrderStatus(order.status ?? "draft")}</Badge>
+                    <tr className="transition-colors hover:bg-slate-50" key={order.id}>
+                      <td className="py-3 pr-4 font-medium text-slate-900">{order.order_number}</td>
+                      <td className="px-4 py-3 text-slate-600">{order.customer_name || "Walk-in"}</td>
+                      <td className="px-4 py-3 text-slate-600">{order.items?.length ?? 0}</td>
+                      <td className="px-4 py-3 font-medium text-slate-900">{formatMoney(Number(order.total_amount ?? 0), data.activeHotel?.currency)}</td>
+                      <td className="px-4 py-3">
+                        <Badge className="bg-slate-100 text-slate-700 hover:bg-slate-200 border-transparent font-medium">{formatOrderStatus(order.status ?? "draft")}</Badge>
                       </td>
-                      <td className="py-4 pl-4 text-right font-semibold text-[var(--muted)]">{formatTime(order.created_at)}</td>
+                      <td className="py-3 pl-4 text-right text-slate-500">{formatTime(order.created_at)}</td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td className="py-8 text-center text-sm font-semibold text-[var(--muted)]" colSpan={6}>
+                    <td className="py-8 text-center text-sm text-slate-500" colSpan={6}>
                       No recent orders yet.
                     </td>
                   </tr>
@@ -295,44 +283,43 @@ export function DashboardPageClient() {
           </div>
         </Card>
 
-        <div className="grid gap-6">
-          <Card className="glass-panel animate-fade-in-up delay-500 rounded-[2rem] p-8">
+        <div className="grid gap-4">
+          <Card className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
             <div className="flex items-center justify-between">
-              <h2 className="font-display text-2xl font-extrabold text-[#101f3f]">Popular meals</h2>
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#fff0e7] text-[var(--accent)]">
-                <CookingPot aria-hidden size={20} />
+              <h2 className="text-lg font-semibold text-slate-900">Popular meals</h2>
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 text-slate-500">
+                <CookingPot aria-hidden size={16} />
               </span>
             </div>
-            <div className="mt-6 space-y-4">
+            <div className="mt-4 space-y-3">
               {data.popularMeals.length > 0 ? (
                 data.popularMeals.map((meal, index) => (
-                  <div className="group flex items-center justify-between rounded-2xl border border-[#101f3f]/5 bg-white/50 p-4 transition-all hover:bg-white hover:shadow-md" key={meal.id}>
-                    <div className="flex items-center gap-4">
-                      <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#101f3f]/[0.03] font-extrabold text-[#101f3f]">
+                  <div className="flex items-center justify-between rounded-lg border border-slate-100 p-3 transition-colors hover:bg-slate-50" key={meal.id}>
+                    <div className="flex items-center gap-3">
+                      <span className="flex h-6 w-6 items-center justify-center rounded-md bg-slate-100 text-xs font-semibold text-slate-700">
                         {index + 1}
                       </span>
                       <div>
-                        <p className="font-black text-[#101f3f]">{meal.name}</p>
-                        <p className="text-[11px] font-bold uppercase tracking-wider text-[var(--muted)]">{meal.quantity} ordered today</p>
+                        <p className="text-sm font-medium text-slate-900">{meal.name}</p>
+                        <p className="text-xs text-slate-500">{meal.quantity} ordered today</p>
                       </div>
                     </div>
                   </div>
                 ))
               ) : (
-                <p className="text-sm font-semibold text-[var(--muted)]">No meal ranking yet.</p>
+                <p className="text-sm text-slate-500">No meal ranking yet.</p>
               )}
             </div>
           </Card>
 
-          <Card className="glass-panel animate-fade-in-up delay-500 rounded-[2rem] p-8 overflow-hidden relative">
-            <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-[var(--accent)] opacity-5 blur-[30px]" />
-            <div className="relative z-10">
-              <div className="flex items-center justify-between">
-                <h2 className="font-display text-2xl font-extrabold text-[#101f3f]">Active staff</h2>
-                <Users aria-hidden className="text-[var(--accent)]" size={20} />
-              </div>
-              <p className="mt-6 text-6xl font-black tracking-tighter text-[#101f3f]">{data.stats.activeStaff}</p>
-              <p className="mt-3 text-sm font-semibold text-[var(--muted)] leading-relaxed">
+          <Card className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-slate-900">Active staff</h2>
+              <Users aria-hidden className="text-slate-500" size={18} />
+            </div>
+            <div className="mt-4">
+              <p className="text-4xl font-bold tracking-tight text-slate-900">{data.stats.activeStaff}</p>
+              <p className="mt-2 text-sm text-slate-500">
                 {formatRole(data.activeMembership?.role ?? "Staff")} access at {data.activeHotel?.name ?? "active hotel"}.
               </p>
             </div>
@@ -342,6 +329,10 @@ export function DashboardPageClient() {
     </div>
   );
 }
+
+// -------------------------------------------------------------
+// HELPER COMPONENTS
+// -------------------------------------------------------------
 
 function MetricCard({
   icon: Icon,
@@ -357,45 +348,42 @@ function MetricCard({
   className?: string;
 }) {
   return (
-    <Card className={cn("glass-panel group relative overflow-hidden rounded-[2rem] p-8 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(16,31,63,0.08)]", className)}>
-      <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-[var(--accent)] opacity-5 blur-[40px] transition-opacity duration-500 group-hover:opacity-10" />
-      <div className="relative z-10">
-        <div className="flex items-start justify-between gap-3">
-          <p className="font-display text-[15px] font-extrabold tracking-tight text-[var(--muted)]">{label}</p>
-          <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#fff0e7] to-white text-[var(--accent)] shadow-[inset_0_1px_1px_rgba(255,255,255,1)] transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6">
-            <Icon aria-hidden size={20} />
-          </span>
-        </div>
-        <p className="mt-8 text-5xl font-black tracking-tighter text-[#101f3f]">{value}</p>
-        <p className="mt-3 text-xs font-extrabold tracking-wide text-[var(--accent)] uppercase">{sublabel}</p>
+    <Card className={cn("rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md", className)}>
+      <div className="flex items-start justify-between gap-3">
+        <p className="text-sm font-medium text-slate-500">{label}</p>
+        <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-slate-900">
+          <Icon aria-hidden size={18} />
+        </span>
       </div>
+      <p className="mt-4 text-3xl font-bold tracking-tight text-slate-900">{value}</p>
+      <p className="mt-1 text-xs text-slate-500">{sublabel}</p>
     </Card>
   );
 }
 
 function StatusDonut({ total }: { total: number }) {
   return (
-    <div className="mt-12 flex flex-col items-center">
+    <div className="mt-8 flex flex-col items-center">
       <div
-        className="group relative grid h-56 w-56 place-items-center rounded-full shadow-[0_20px_40px_rgba(16,31,63,0.08)] transition-transform duration-500 hover:scale-105"
+        className="relative grid h-48 w-48 place-items-center rounded-full"
         style={{
           background:
-            "conic-gradient(#101f3f 0 55%, #ff6208 55% 76%, #9baac3 76% 90%, #e6edf8 90% 100%)"
+            "conic-gradient(#0f172a 0 55%, #64748b 55% 76%, #cbd5e1 76% 90%, #f1f5f9 90% 100%)"
         }}
       >
-        <div className="absolute inset-0 rounded-full border-4 border-white/20" />
-        <div className="grid h-40 w-40 place-items-center rounded-full bg-white text-center shadow-[inset_0_4px_10px_rgba(16,31,63,0.1)]">
+        <div className="absolute inset-0 rounded-full border-[6px] border-white" />
+        <div className="grid h-36 w-36 place-items-center rounded-full bg-white text-center shadow-sm">
           <div>
-            <p className="text-4xl font-black tracking-tighter text-[#101f3f]">{total}</p>
-            <p className="text-xs font-bold uppercase tracking-widest text-[var(--muted)] mt-1">orders</p>
+            <p className="text-3xl font-bold tracking-tight text-slate-900">{total}</p>
+            <p className="text-xs font-medium text-slate-500 mt-1">Orders</p>
           </div>
         </div>
       </div>
-      <div className="mt-10 grid w-full grid-cols-2 gap-4 text-xs font-extrabold text-[#101f3f]/70">
-        <Legend color="#101f3f" label="Completed 55%" />
-        <Legend color="#ff6208" label="Preparing 21%" />
-        <Legend color="#9baac3" label="Ready 14%" />
-        <Legend color="#e6edf8" label="Pending 10%" />
+      <div className="mt-8 grid w-full grid-cols-2 gap-3 text-xs font-medium text-slate-600">
+        <Legend color="#0f172a" label="Completed 55%" />
+        <Legend color="#64748b" label="Preparing 21%" />
+        <Legend color="#cbd5e1" label="Ready 14%" />
+        <Legend color="#f1f5f9" label="Pending 10%" />
       </div>
     </div>
   );
@@ -403,8 +391,8 @@ function StatusDonut({ total }: { total: number }) {
 
 function Legend({ color, label }: { color: string; label: string }) {
   return (
-    <span className="flex items-center gap-3 transition-transform hover:translate-x-1">
-      <span className="h-3 w-3 rounded-full shadow-sm" style={{ backgroundColor: color }} />
+    <span className="flex items-center gap-2">
+      <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: color }} />
       {label}
     </span>
   );
@@ -414,10 +402,10 @@ function AlertMessage({ children, tone }: { children: React.ReactNode; tone: "da
   return (
     <div
       className={cn(
-        "animate-fade-in-up rounded-2xl border px-6 py-4 text-[15px] font-bold shadow-sm",
+        "rounded-xl border px-5 py-3 text-sm font-medium shadow-sm",
         tone === "danger"
-          ? "border-red-500/20 bg-red-50 text-red-700"
-          : "border-[var(--accent)]/20 bg-[#fff0e7] text-[var(--accent)]"
+          ? "border-red-200 bg-red-50 text-red-900"
+          : "border-amber-200 bg-amber-50 text-amber-900"
       )}
     >
       {children}
@@ -428,18 +416,22 @@ function AlertMessage({ children, tone }: { children: React.ReactNode; tone: "da
 function DashboardSkeleton() {
   return (
     <div className="space-y-6 pt-4">
-      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {Array.from({ length: 4 }).map((_, index) => (
-          <div className="h-48 animate-pulse rounded-[2rem] bg-white/50" key={index} />
+          <div className="h-32 animate-pulse rounded-xl bg-slate-100" key={index} />
         ))}
       </div>
-      <div className="grid gap-6 xl:grid-cols-[1.6fr_1fr]">
-        <div className="h-96 animate-pulse rounded-[2rem] bg-white/50" />
-        <div className="h-96 animate-pulse rounded-[2rem] bg-white/50" />
+      <div className="grid gap-4 xl:grid-cols-[1.6fr_1fr]">
+        <div className="h-80 animate-pulse rounded-xl bg-slate-100" />
+        <div className="h-80 animate-pulse rounded-xl bg-slate-100" />
       </div>
     </div>
   );
 }
+
+// -------------------------------------------------------------
+// DATA LOADING & FORMATTING UTILS
+// -------------------------------------------------------------
 
 async function loadHotels(activeMembership: HotelMembership | null) {
   try {
