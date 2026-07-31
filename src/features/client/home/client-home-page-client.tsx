@@ -8,7 +8,7 @@ import {
   ChefHat,
   Clock3,
   CreditCard,
-  LayoutDashboard,
+  LogIn,
   MapPin,
   RefreshCw,
   Search,
@@ -88,26 +88,29 @@ export function ClientHomePageClient() {
     await loadHotels(nextSearch);
   }
 
+  const needsSignIn = error?.includes("requires sign-in");
+
   return (
-    <div className="space-y-12 pb-20">
+    <div className="space-y-12 pb-24 md:pb-20">
       {/* HERO SECTION */}
-      <section className="relative overflow-hidden bg-white px-5 pb-16 pt-10 md:px-8 md:pb-24 md:pt-16 rounded-[2.5rem] shadow-sm border border-slate-100">
+      <section className="hero-surface relative isolate overflow-hidden bg-white px-5 pb-16 pt-10 md:px-8 md:pb-24 md:pt-16 rounded-[2.5rem] shadow-sm border border-slate-100">
         {/* Subtle background glow */}
-        <div className="absolute left-1/2 top-0 -z-10 h-[800px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-b from-[#f97316]/5 to-transparent blur-3xl" />
+        <div className="hero-glow absolute left-1/2 top-0 -z-10 h-[800px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-b from-[#f97316]/10 to-transparent blur-3xl" />
+        <div aria-hidden className="hero-dots absolute inset-0 -z-10 opacity-50" />
         
         <div className="mx-auto grid max-w-7xl gap-16 lg:grid-cols-[1.04fr_0.96fr] lg:items-center">
           <div className="relative z-10">
-            <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-[#f97316]">
+            <p className="animate-fade-in-up text-[11px] font-bold uppercase tracking-[0.3em] text-[#f97316]">
               Order fast. Eat now.
             </p>
-            <h1 className="mt-6 max-w-4xl text-5xl font-extrabold tracking-tight text-[#101f3f] leading-[1.05] md:text-7xl">
+            <h1 className="animate-fade-in-up delay-100 mt-6 max-w-4xl text-5xl font-extrabold tracking-tight text-[#101f3f] leading-[1.05] md:text-7xl">
               Food ordering for hotels that feels <span className="text-[#f97316]">instant.</span>
             </h1>
-            <p className="mt-8 max-w-xl text-[17px] leading-relaxed text-[#101f3f]/60">
+            <p className="animate-fade-in-up delay-200 mt-8 max-w-xl text-[17px] leading-relaxed text-[#101f3f]/60">
               BiteNow gives guests a beautiful way to discover hotels, browse menus, place orders,
               and track every step while teams manage service from a focused dashboard.
             </p>
-            <div className="mt-10 flex flex-wrap items-center gap-4">
+            <div className="animate-fade-in-up delay-300 mt-10 flex flex-wrap items-center gap-4">
               <Button
                 className="group inline-flex h-14 items-center gap-2.5 rounded-full bg-[#f97316] px-8 text-[14px] font-bold text-white shadow-[0_10px_30px_rgba(249,115,22,0.25)] transition-all duration-300 ease-out hover:scale-105 hover:bg-[#ea6505] hover:shadow-[0_15px_40px_rgba(249,115,22,0.35)]"
                 onClick={() => {
@@ -121,7 +124,7 @@ export function ClientHomePageClient() {
           </div>
 
           {/* HERO APP UI MOCKUP */}
-          <div className="relative rounded-[2.5rem] border border-[#101f3f]/5 bg-white p-2.5 shadow-[0_30px_80px_rgba(16,31,63,0.08)] transition-transform duration-700 hover:-translate-y-2">
+          <div className="animate-scale-in delay-200 relative rounded-[2.5rem] border border-[#101f3f]/5 bg-white p-2.5 shadow-[0_30px_80px_rgba(16,31,63,0.08)] transition-transform duration-700 hover:-translate-y-2">
             <div className="overflow-hidden rounded-[2rem] border border-[#101f3f]/5 bg-[#fafbfc]">
               <div className="relative h-40 bg-[#101f3f] p-6 text-white overflow-hidden">
                 <img 
@@ -156,7 +159,7 @@ export function ClientHomePageClient() {
 
       {/* HOTELS BROWSE SECTION */}
       <div id="hotels-section" className="space-y-6 md:space-y-8 scroll-mt-24">
-        <section className="flex flex-col gap-6 rounded-xl border border-slate-200 bg-white p-6 md:p-8 lg:flex-row lg:items-end lg:justify-between shadow-sm">
+        <section className="glass-panel flex flex-col gap-6 rounded-[1.5rem] p-6 md:p-8 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl">
             <Badge variant="outline" className="font-medium text-slate-600 border-slate-200">
               <span className="mr-1.5 flex h-1.5 w-1.5 items-center justify-center rounded-full bg-[var(--accent)]"></span>
@@ -174,14 +177,14 @@ export function ClientHomePageClient() {
             <div className="relative flex items-center">
               <Search aria-hidden size={18} className="absolute left-3 text-slate-400" />
               <Input
-                className="h-10 w-full rounded-lg border-slate-200 pl-10 pr-24 text-sm placeholder:text-slate-400 focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] shadow-sm transition-all"
+                className="h-12 w-full rounded-xl border-slate-200 pl-10 pr-24 text-sm placeholder:text-slate-400 focus:border-[var(--accent)] focus:ring-4 focus:ring-[var(--ring)] shadow-sm transition-all"
                 disabled={loading}
                 onChange={(event) => setSearch(event.target.value)}
                 placeholder="Search by name, location..."
                 value={search}
               />
               <Button
-                className="absolute right-1 h-8 rounded-md px-3 text-xs font-medium"
+                className="absolute right-1 h-10 rounded-lg px-4 text-xs font-bold shadow-[0_5px_14px_rgba(249,115,22,0.22)]"
                 disabled={loading}
                 type="submit"
               >
@@ -193,17 +196,15 @@ export function ClientHomePageClient() {
 
         {/* ERROR STATE */}
         {error ? (
-          <div className="flex flex-col gap-4 rounded-lg border border-amber-200 bg-amber-50 p-4 sm:flex-row sm:items-center sm:justify-between shadow-sm">
-            <p className="text-sm font-medium text-amber-800">
-              <span className="font-bold">Notice: </span>
-              {error}
-            </p>
-            {error.includes("requires sign-in") ? (
+          <div className={cn("flex flex-col gap-4 rounded-[1.5rem] border p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between", needsSignIn ? "border-[#f97316]/20 bg-[#fff7f2]" : "border-amber-200 bg-amber-50")}>
+            <div className="flex items-start gap-3"><div className={cn("flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl", needsSignIn ? "bg-[#f97316] text-white shadow-[0_8px_20px_rgba(249,115,22,0.25)]" : "bg-amber-100 text-amber-800")}>{needsSignIn ? <LogIn aria-hidden size={19} /> : <Search aria-hidden size={19} />}</div><div><p className={cn("font-bold", needsSignIn ? "text-[#101f3f]" : "text-amber-900")}>{needsSignIn ? "Sign in to see hotels available to your stay" : "We couldn’t load hotels"}</p><p className={cn("mt-1 text-sm leading-relaxed", needsSignIn ? "text-[#101f3f]/60" : "text-amber-800")}>{needsSignIn ? "Your saved hotels, menus, and live availability will appear here after you sign in." : error}</p></div></div>
+            {needsSignIn ? (
               <Link
-                className="inline-flex h-9 shrink-0 items-center justify-center rounded-lg bg-amber-600 px-4 text-sm font-medium text-white transition-colors hover:bg-amber-700 shadow-sm"
+                className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#f97316] px-5 text-sm font-bold text-white shadow-[0_8px_20px_rgba(249,115,22,0.22)] transition-all hover:-translate-y-0.5 hover:bg-[#ea6505]"
                 href="/login?next=%2F"
               >
                 Sign in to browse
+                <ArrowRight aria-hidden size={16} />
               </Link>
             ) : null}
           </div>
@@ -256,12 +257,12 @@ export function ClientHomePageClient() {
             ))}
           </div>
         ) : (
-          <Card className="flex flex-col items-center justify-center rounded-xl border border-slate-200 bg-white py-16 text-center shadow-sm">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-50 text-slate-400 mb-4">
+          <Card className="flex flex-col items-center justify-center rounded-[1.5rem] border border-slate-200 bg-white py-16 text-center shadow-sm">
+            <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#101f3f]/[0.04] text-[#f97316]">
               <Search size={24} />
             </div>
             <p className="text-lg font-semibold text-slate-900">No hotels found</p>
-            <p className="mt-1 text-sm text-slate-500">Try adjusting your search terms.</p>
+            <p className="mt-1 text-sm text-slate-500">Try a hotel name, city, or a nearby landmark.</p>
           </Card>
         )}
       </div>
@@ -277,12 +278,12 @@ function HotelCard({ hotel }: { hotel: Hotel }) {
   const imageUrl = getHotelImageUrl(hotel);
 
   return (
-    <Card className="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white p-0 shadow-sm transition-shadow hover:shadow-md">
+    <Card className="group/card flex h-full flex-col overflow-hidden rounded-[1.5rem] border border-slate-200 bg-white p-0 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#f97316]/20 hover:shadow-[0_18px_46px_rgba(16,31,63,0.12)]">
       <div className="relative h-44 w-full overflow-hidden bg-slate-100 border-b border-slate-100">
         {imageUrl ? (
           <div
             aria-label={hotel.name}
-            className="absolute inset-0 h-full w-full bg-cover bg-center"
+            className="absolute inset-0 h-full w-full bg-cover bg-center transition-transform duration-700 group-hover/card:scale-105"
             role="img"
             style={{ backgroundImage: `url("${imageUrl}")` }}
           />
@@ -327,7 +328,7 @@ function HotelCard({ hotel }: { hotel: Hotel }) {
 
         <div className="mt-auto pt-1">
           <Link
-            className="group/btn inline-flex h-9 w-full items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 shadow-sm"
+            className="group/btn inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white text-sm font-bold text-slate-700 transition-all hover:border-[#f97316]/30 hover:bg-[#fff7f2] hover:text-[#e95705] shadow-sm"
             href={`/client/menu`}
             onClick={() => saveActiveHotelId(hotel.id)}
           >
@@ -357,7 +358,7 @@ function HeroMeal({
   const imageUrl = imageMap[title];
 
   return (
-    <div className="group flex items-center justify-between gap-4 rounded-[1.5rem] border border-[#101f3f]/5 bg-white p-3.5 shadow-sm transition-all hover:shadow-md">
+    <div className="group flex cursor-default items-center justify-between gap-4 rounded-[1.5rem] border border-[#101f3f]/5 bg-white p-3.5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#f97316]/15 hover:shadow-md">
       <div className="flex items-center gap-4">
         {imageUrl ? (
           <img src={imageUrl} alt={title} className="h-14 w-14 rounded-[1rem] object-cover shadow-sm transition-transform duration-500 group-hover:scale-105" />

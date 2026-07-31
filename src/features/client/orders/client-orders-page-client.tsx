@@ -81,8 +81,8 @@ export function ClientOrdersPageClient() {
   );
 
   return (
-    <div className="space-y-7">
-      <section className="flex flex-wrap items-end justify-between gap-4">
+    <div className="space-y-7 pb-24 md:pb-12">
+      <section className="guest-page-hero flex flex-wrap items-end justify-between gap-4 p-6 md:p-8">
         <div>
           <Badge>My orders</Badge>
           <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-[var(--foreground)] md:text-5xl">
@@ -197,7 +197,7 @@ function OrderCard({ order }: { order: Order }) {
   const status = order.status ?? "draft";
 
   return (
-    <Card className="grid gap-4 md:grid-cols-[1fr_auto] md:items-center">
+    <Card className="grid gap-4 rounded-[1.5rem] border-slate-200 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#f97316]/20 hover:shadow-[0_14px_34px_rgba(16,31,63,0.09)] md:grid-cols-[1fr_auto] md:items-center">
       <div className="min-w-0">
         <div className="flex flex-wrap items-center gap-2">
           <Link
@@ -206,7 +206,7 @@ function OrderCard({ order }: { order: Order }) {
           >
             {order.order_number}
           </Link>
-          <Badge className={getStatusClassName(status)}>{formatOrderStatus(status)}</Badge>
+          <Badge className={`${getStatusClassName(status)} ${status === "in_preparation" ? "status-pulse" : ""}`}>{formatOrderStatus(status)}</Badge>
         </div>
         <p className="mt-2 text-sm text-[var(--muted)]">
           {formatOrderType(order.order_type)} · {formatDate(order.created_at)}
