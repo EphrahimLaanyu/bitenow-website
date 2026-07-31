@@ -54,7 +54,6 @@ body {
 }
 
 a {
-  color: inherit;
   text-decoration: none;
 }
 
@@ -192,3 +191,38 @@ textarea {
   border: 1px solid rgba(255, 255, 255, 0.5);
   box-shadow: 0 30px 60px rgba(16, 31, 63, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
+
+.guest-page-hero {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(16, 31, 63, 0.08);
+  border-radius: 1.75rem;
+  background: radial-gradient(circle at 88% 12%, rgba(255, 98, 8, 0.13), transparent 31%), linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(248, 251, 255, 0.92));
+  box-shadow: 0 20px 60px rgba(16, 31, 63, 0.07);
+}
+
+.guest-page-hero::after {
+  position: absolute;
+  top: -6rem;
+  right: 18%;
+  width: 15rem;
+  height: 15rem;
+  border-radius: 999px;
+  background-image: radial-gradient(rgba(16, 31, 63, 0.14) 1px, transparent 1px);
+  background-size: 18px 18px;
+  content: "";
+  mask-image: radial-gradient(circle, #000 0%, transparent 69%);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.guest-page-hero > * { position: relative; z-index: 1; }
+.status-pulse { position: relative; }
+.status-pulse::before { position: absolute; inset: -0.35rem; z-index: -1; border-radius: inherit; background: rgba(255, 98, 8, 0.22); content: ""; animation: statusPulse 1.8s ease-out infinite; }
+@keyframes statusPulse { 0% { transform: scale(0.85); opacity: 0.9; } 100% { transform: scale(1.35); opacity: 0; } }
+
+.hero-surface::after { position: absolute; inset: auto -10% -45% 35%; z-index: -1; width: 32rem; height: 32rem; border-radius: 999px; background: radial-gradient(circle, rgba(255, 98, 8, 0.09), transparent 67%); content: ""; filter: blur(16px); pointer-events: none; }
+.hero-dots { background-image: radial-gradient(rgba(16, 31, 63, 0.14) 1px, transparent 1px); background-size: 22px 22px; mask-image: linear-gradient(110deg, transparent 0%, rgba(0, 0, 0, 0.2) 28%, #000 66%, transparent 100%); }
+@media (prefers-reduced-motion: no-preference) { .hero-glow { animation: heroGlow 9s ease-in-out infinite alternate; } }
+@keyframes heroGlow { from { transform: translateX(-50%) translateY(-50%) scale(0.94); opacity: 0.7; } to { transform: translateX(-46%) translateY(-44%) scale(1.08); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; } }

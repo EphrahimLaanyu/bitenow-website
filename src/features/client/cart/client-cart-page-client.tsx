@@ -91,8 +91,8 @@ export function ClientCartPageClient() {
   }
 
   return (
-    <div className="space-y-8 pb-20">
-      <section className="flex flex-wrap items-end justify-between gap-4">
+    <div className="space-y-8 pb-24 md:pb-20">
+      <section className="guest-page-hero flex flex-wrap items-end justify-between gap-4 p-6 md:p-8">
         <div>
           <Badge>Guest cart</Badge>
           <h1 className="mt-3 text-3xl font-bold text-[var(--foreground)] md:text-4xl">Your cart</h1>
@@ -160,7 +160,7 @@ export function ClientCartPageClient() {
                     })}
                   </div>
 
-                  <Card className="h-fit shadow-sm border-slate-200 lg:sticky lg:top-24">
+                  <Card className="glass-panel h-fit rounded-[1.5rem] border-white/70 shadow-[0_18px_46px_rgba(16,31,63,0.10)] lg:sticky lg:top-24">
                     <div className="flex items-center justify-between gap-3">
                       <h3 className="text-lg font-semibold text-[var(--foreground)]">Order summary</h3>
                     </div>
@@ -176,7 +176,7 @@ export function ClientCartPageClient() {
                     </div>
                     <div className="mt-5 flex items-center justify-between">
                       <span className="text-sm font-semibold text-[var(--muted)]">Estimated total</span>
-                      <span className="text-2xl font-bold text-[var(--foreground)]">{formatMoney(total, currency)}</span>
+                      <span className="text-2xl font-extrabold text-[#e95705]">{formatMoney(total, currency)}</span>
                     </div>
                     <Link
                       className="mt-6 inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-[var(--accent)] px-4 text-sm font-semibold text-[var(--accent-foreground)] shadow-sm transition-all hover:bg-[var(--accent-hover)] hover:scale-[1.02]"
@@ -206,11 +206,11 @@ function CartItemCard({
   onChange: (items: CartItem[]) => void;
 }) {
   return (
-    <Card className="grid gap-4 shadow-sm border-slate-200 md:grid-cols-[8rem_1fr_auto] md:items-start p-4">
+    <Card className="group grid gap-4 rounded-[1.5rem] border-slate-200 shadow-sm transition-all duration-300 hover:border-[#f97316]/20 hover:shadow-[0_14px_34px_rgba(16,31,63,0.09)] md:grid-cols-[8rem_1fr_auto] md:items-start p-4">
       {item.imageUrl ? (
         <div
           aria-label={item.name}
-          className="h-28 rounded-lg bg-[var(--surface-2)] bg-cover bg-center border border-slate-100"
+          className="h-28 rounded-xl border border-slate-100 bg-[var(--surface-2)] bg-cover bg-center transition-transform duration-500 group-hover:scale-[1.02]"
           role="img"
           style={{ backgroundImage: `url("${item.imageUrl}")` }}
         />

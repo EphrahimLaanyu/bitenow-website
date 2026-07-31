@@ -128,7 +128,7 @@ href="/client/cart"
         </div>
       </header>
 
-      <main className="mx-auto max-w-7xl px-4 pb-28 pt-6 md:px-6 lg:px-8 lg:pb-8">{children}</main>
+      <main className="mx-auto max-w-7xl px-4 pb-[calc(8rem+env(safe-area-inset-bottom))] pt-6 md:px-6 lg:px-8 lg:pb-8">{children}</main>
       
       {/* FOOTER */}
       <footer className="mt-auto border-t border-[#101f3f]/5 bg-slate-50 py-12">
@@ -189,7 +189,7 @@ function MobileBottomNav({ cartCount, pathname }: { cartCount: number; pathname:
   return (
     <nav
       aria-label="Mobile guest navigation"
-      className="fixed inset-x-4 bottom-4 z-50 rounded-[2rem] border border-[#101f3f]/5 bg-white/90 p-2 shadow-[0_8px_30px_rgb(0,0,0,0.08)] backdrop-blur-xl lg:hidden"
+      className="fixed inset-x-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-50 rounded-[2rem] border border-white/70 bg-white/85 p-2 shadow-[0_12px_34px_rgb(16,31,63,0.14)] backdrop-blur-xl lg:hidden"
     >
       <div className="grid grid-cols-5 gap-1">
         {mobileNavItems.map((item) => {

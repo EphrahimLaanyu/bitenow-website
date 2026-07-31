@@ -134,8 +134,8 @@ export function ClientMenuPageClient() {
   }
 
   return (
-    <div className="space-y-6 md:space-y-8 pb-20">
-      <section className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
+    <div className="space-y-6 pb-24 md:space-y-8 md:pb-20">
+      <section className="guest-page-hero grid gap-6 p-6 md:p-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
         <div>
           <Badge variant="outline" className="font-medium text-slate-600 border-slate-200">
             Global Menu
@@ -150,13 +150,13 @@ export function ClientMenuPageClient() {
 
         <form className="grid gap-3 sm:gap-4 sm:grid-cols-[1fr_auto]" onSubmit={handleSearch}>
           <Input
-            className="h-10 border-slate-200 bg-white placeholder:text-slate-400 focus:border-[var(--accent)] shadow-sm"
+            className="h-12 rounded-xl border-slate-200 bg-white/90 placeholder:text-slate-400 focus:border-[var(--accent)] focus:ring-4 focus:ring-[var(--ring)] shadow-sm"
             label="Search all menus"
             onChange={(event) => setSearch(event.target.value)}
             placeholder="Burger, fries, hotel..."
             value={search}
           />
-          <Button className="h-10 self-end font-medium shadow-sm" type="submit" variant="secondary">
+          <Button className="h-12 self-end rounded-xl" type="submit" variant="secondary">
             <Search aria-hidden size={16} className="mr-2 text-slate-500" />
             Search
           </Button>
@@ -198,7 +198,7 @@ export function ClientMenuPageClient() {
             const hotel = hotelMap.get(item.hotel);
             
             return (
-              <Card className="group flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white p-0 shadow-sm transition-shadow hover:shadow-md" key={item.id}>
+              <Card className="group flex flex-col overflow-hidden rounded-[1.5rem] border border-slate-200 bg-white p-0 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#f97316]/25 hover:shadow-[0_18px_46px_rgba(16,31,63,0.12)]" key={item.id}>
                 <div className="relative aspect-video w-full overflow-hidden bg-slate-100 border-b border-slate-100">
                   {item.image_url ? (
                     <div
@@ -249,8 +249,8 @@ export function ClientMenuPageClient() {
                   <div className="mt-auto pt-1">
                     <Button
                       className={cn(
-                        "w-full h-10 rounded-lg font-medium shadow-sm transition-all duration-300",
-                        isAdded ? "bg-green-600 hover:bg-green-700" : "bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white"
+                        "h-11 w-full rounded-xl font-bold shadow-sm transition-all duration-300 active:scale-[0.98]",
+                        isAdded ? "bg-emerald-600 text-white shadow-[0_10px_22px_rgba(5,150,105,0.22)] hover:bg-emerald-700" : "bg-[var(--accent)] text-white shadow-[0_10px_22px_rgba(255,98,8,0.22)] hover:-translate-y-0.5 hover:bg-[var(--accent-hover)]"
                       )}
                       disabled={!item.is_available}
                       onClick={() => handleAddToCart(item)}
@@ -306,10 +306,10 @@ function CategoryTab({
   return (
     <button
       className={cn(
-        "group flex shrink-0 items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-all duration-200",
+        "group flex shrink-0 items-center gap-2 rounded-full border px-4 py-2 text-sm font-bold transition-all duration-300 hover:-translate-y-0.5",
         active
-          ? "border-[var(--accent)] bg-[var(--accent)] text-white shadow-sm"
-          : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50"
+          ? "border-[var(--accent)] bg-[var(--accent)] text-white shadow-[0_8px_18px_rgba(255,98,8,0.24)]"
+          : "border-slate-200 bg-white text-slate-600 shadow-sm hover:border-[#f97316]/35 hover:bg-[#fff7f2] hover:text-[#e95705]"
       )}
       onClick={onClick}
       type="button"

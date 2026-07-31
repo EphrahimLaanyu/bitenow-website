@@ -37,7 +37,7 @@ export function ClientProfilePageClient() {
     return (
       <div className="space-y-6">
         <ProfileHeader />
-        <Card>
+        <Card className="guest-page-hero border-none">
           <h2 className="text-xl font-extrabold text-[var(--foreground)]">Sign in required</h2>
           <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
             Your profile is loaded from the authenticated `/auth/me` session.
@@ -58,7 +58,7 @@ export function ClientProfilePageClient() {
       <ProfileHeader />
 
       <section className="grid gap-5 lg:grid-cols-[1fr_22rem]">
-        <Card>
+        <Card className="rounded-[1.5rem] border-slate-200 shadow-[0_14px_34px_rgba(16,31,63,0.07)]">
           <div className="flex flex-wrap items-start justify-between gap-5">
             <div className="flex items-start gap-4">
               <span className="flex h-16 w-16 items-center justify-center rounded-3xl bg-[var(--primary)] text-white shadow-[0_16px_34px_rgba(16,31,63,0.20)]">
@@ -100,7 +100,7 @@ export function ClientProfilePageClient() {
         </Card>
       </section>
 
-      <Card>
+      <Card className="rounded-[1.5rem] border-slate-200 shadow-[0_14px_34px_rgba(16,31,63,0.07)]">
         <h2 className="text-lg font-extrabold text-[var(--foreground)]">Profile fields</h2>
         <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
           These fields are read from `GET /api/v1/auth/me/`. Profile editing can be added later when
@@ -119,7 +119,7 @@ export function ClientProfilePageClient() {
 
 function ProfileHeader() {
   return (
-    <div>
+    <div className="guest-page-hero p-6 md:p-8">
       <Badge>Profile</Badge>
       <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-[var(--foreground)] md:text-5xl">
         Your BiteNow account
