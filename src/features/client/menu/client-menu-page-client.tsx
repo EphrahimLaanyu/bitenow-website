@@ -135,7 +135,7 @@ export function ClientMenuPageClient() {
 
   return (
     <div className="space-y-6 pb-24 md:space-y-8 md:pb-20">
-      <section className="guest-page-hero grid gap-6 p-6 md:p-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
+      <section className="guest-page-hero hero-surface food-spotlight grid gap-6 p-6 md:p-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
         <div>
           <Badge variant="outline" className="font-medium text-slate-600 border-slate-200">
             Global Menu
