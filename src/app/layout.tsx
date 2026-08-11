@@ -29,7 +29,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html className={`${plusJakarta.variable} ${manrope.variable} ${playfair.variable}`} lang="en">
+    <html className={`${plusJakarta.variable} ${manrope.variable} ${playfair.variable}`} lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "try { const theme = localStorage.getItem('bitenow-theme'); const dark = theme ? theme === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches; document.documentElement.classList.toggle('dark', dark); } catch {}"
+          }}
+        />
+      </head>
       <body>
         <AppProviders>{children}</AppProviders>
       </body>

@@ -82,7 +82,7 @@ export function ClientOrdersPageClient() {
 
   return (
     <div className="space-y-7 pb-24 md:pb-12">
-      <section className="guest-page-hero flex flex-wrap items-end justify-between gap-4 p-6 md:p-8">
+      <section className="guest-page-hero hero-surface food-spotlight flex flex-wrap items-end justify-between gap-4 p-6 md:p-8">
         <div>
           <Badge>My orders</Badge>
           <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-[var(--foreground)] md:text-5xl">
