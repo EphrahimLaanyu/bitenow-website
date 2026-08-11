@@ -13,6 +13,7 @@ import {
   RefreshCw,
   Search,
   Star,
+  Sparkles,
   Utensils
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -93,7 +94,7 @@ export function ClientHomePageClient() {
   return (
     <div className="space-y-12 pb-24 md:pb-20">
       {/* HERO SECTION */}
-      <section className="hero-surface relative isolate overflow-hidden bg-white px-5 pb-16 pt-10 md:px-8 md:pb-24 md:pt-16 rounded-[2.5rem] shadow-sm border border-slate-100">
+      <section className="hero-surface food-spotlight relative isolate overflow-hidden rounded-[2.5rem] border border-slate-100 bg-white px-5 pb-16 pt-10 shadow-sm md:px-8 md:pb-24 md:pt-16">
         {/* Subtle background glow */}
         <div className="hero-glow absolute left-1/2 top-0 -z-10 h-[800px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-b from-[#f97316]/10 to-transparent blur-3xl" />
         <div aria-hidden className="hero-dots absolute inset-0 -z-10 opacity-50" />
@@ -103,10 +104,10 @@ export function ClientHomePageClient() {
             <p className="animate-fade-in-up text-[11px] font-bold uppercase tracking-[0.3em] text-[#f97316]">
               Order fast. Eat now.
             </p>
-            <h1 className="animate-fade-in-up delay-100 mt-6 max-w-4xl text-5xl font-extrabold tracking-tight text-[#101f3f] leading-[1.05] md:text-7xl">
+            <h1 className="animate-fade-in-up delay-100 mt-6 max-w-4xl text-[2.75rem] font-extrabold tracking-[-0.045em] text-[#101f3f] leading-[0.98] sm:text-6xl lg:text-7xl">
               Food ordering for hotels that feels <span className="text-[#f97316]">instant.</span>
             </h1>
-            <p className="animate-fade-in-up delay-200 mt-8 max-w-xl text-[17px] leading-relaxed text-[#101f3f]/60">
+            <p className="animate-fade-in-up delay-200 mt-8 max-w-xl text-[15px] leading-relaxed text-[#101f3f]/60 sm:text-[17px]">
               BiteNow gives guests a beautiful way to discover hotels, browse menus, place orders,
               and track every step while teams manage service from a focused dashboard.
             </p>
@@ -120,11 +121,13 @@ export function ClientHomePageClient() {
                 Start ordering
                 <ArrowRight aria-hidden size={18} className="transition-transform duration-300 group-hover:translate-x-1" />
               </Button>
+              <p className="flex items-center gap-2 text-xs font-semibold text-[#101f3f]/55"><Sparkles aria-hidden size={15} className="text-[#f97316]" /> Secure checkout. Live updates.</p>
             </div>
+
           </div>
 
           {/* HERO APP UI MOCKUP */}
-          <div className="animate-scale-in delay-200 relative rounded-[2.5rem] border border-[#101f3f]/5 bg-white p-2.5 shadow-[0_30px_80px_rgba(16,31,63,0.08)] transition-transform duration-700 hover:-translate-y-2">
+          <div className="shimmer-border animate-scale-in delay-200 relative rounded-[2.5rem] border border-[#101f3f]/5 bg-white p-2.5 shadow-[0_30px_80px_rgba(16,31,63,0.08)] transition-transform duration-700 hover:-translate-y-2">
             <div className="overflow-hidden rounded-[2rem] border border-[#101f3f]/5 bg-[#fafbfc]">
               <div className="relative h-40 bg-[#101f3f] p-6 text-white overflow-hidden">
                 <img 
@@ -146,7 +149,7 @@ export function ClientHomePageClient() {
               <div className="grid gap-4 p-6">
                 <HeroMeal title="Spiced chicken bowl" price="KES 1,250" icon={ChefHat} />
                 <HeroMeal title="Citrus breakfast plate" price="KES 980" icon={Utensils} />
-                <div className="mt-2 grid gap-3 sm:grid-cols-3">
+                <div className="mt-2 grid grid-cols-3 gap-2 sm:gap-3">
                   <MiniMetric icon={Clock3} label="Avg prep" value="18 min" />
                   <MiniMetric icon={CreditCard} label="Checkout" value="Secure" />
                   <MiniMetric icon={Star} label="Rating" value="4.9" />
@@ -159,7 +162,7 @@ export function ClientHomePageClient() {
 
       {/* HOTELS BROWSE SECTION */}
       <div id="hotels-section" className="space-y-6 md:space-y-8 scroll-mt-24">
-        <section className="glass-panel flex flex-col gap-6 rounded-[1.5rem] p-6 md:p-8 lg:flex-row lg:items-end lg:justify-between">
+        <section className="glass-panel theme-section flex flex-col gap-6 rounded-[1.5rem] p-6 md:p-8 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl">
             <Badge variant="outline" className="font-medium text-slate-600 border-slate-200">
               <span className="mr-1.5 flex h-1.5 w-1.5 items-center justify-center rounded-full bg-[var(--accent)]"></span>

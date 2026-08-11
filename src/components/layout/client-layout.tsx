@@ -17,6 +17,7 @@ import {
   User
 } from "lucide-react";
 import { getCartItems } from "@/features/client/cart/cart-storage";
+import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { cn } from "@/lib/utils";
 
 const primaryNavItems = [
@@ -45,7 +46,7 @@ export function ClientLayout({ children }: Readonly<{ children: React.ReactNode 
 
   return (
     <div className="app-shell selection:bg-[#f97316] selection:text-white">
-      <header className="sticky top-0 z-50 w-full border-b border-[#101f3f]/5 bg-white/80 px-4 py-4 antialiased backdrop-blur-xl md:px-6">
+      <header className="theme-header sticky top-0 z-50 w-full border-b px-4 py-3 antialiased backdrop-blur-xl md:px-6 md:py-4">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
           
           {/* LOGO AREA */}
@@ -76,6 +77,7 @@ export function ClientLayout({ children }: Readonly<{ children: React.ReactNode 
 
           {/* DESKTOP ACTIONS */}
           <div className="flex items-center gap-3">
+            <ThemeToggle />
             
             <Link
               aria-label={`Cart with ${cartCount} item${cartCount === 1 ? "" : "s"}`}
@@ -131,7 +133,7 @@ href="/client/cart"
       <main className="mx-auto max-w-7xl px-4 pb-[calc(8rem+env(safe-area-inset-bottom))] pt-6 md:px-6 lg:px-8 lg:pb-8">{children}</main>
       
       {/* FOOTER */}
-      <footer className="mt-auto border-t border-[#101f3f]/5 bg-slate-50 py-12">
+      <footer className="theme-footer mt-auto border-t py-12">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-center gap-4 px-4 text-center md:px-6 lg:px-8">
           <Image
             src="/images/desktop-logo.png"
@@ -189,7 +191,7 @@ function MobileBottomNav({ cartCount, pathname }: { cartCount: number; pathname:
   return (
     <nav
       aria-label="Mobile guest navigation"
-      className="fixed inset-x-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-50 rounded-[2rem] border border-white/70 bg-white/85 p-2 shadow-[0_12px_34px_rgb(16,31,63,0.14)] backdrop-blur-xl lg:hidden"
+      className="theme-mobile-nav fixed inset-x-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-50 rounded-[2rem] border p-2 shadow-[0_12px_34px_rgb(16,31,63,0.14)] backdrop-blur-xl lg:hidden"
     >
       <div className="grid grid-cols-5 gap-1">
         {mobileNavItems.map((item) => {
