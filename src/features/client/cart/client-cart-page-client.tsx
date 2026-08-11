@@ -92,7 +92,7 @@ export function ClientCartPageClient() {
 
   return (
     <div className="space-y-8 pb-24 md:pb-20">
-      <section className="guest-page-hero flex flex-wrap items-end justify-between gap-4 p-6 md:p-8">
+      <section className="guest-page-hero hero-surface food-spotlight flex flex-wrap items-end justify-between gap-4 p-6 md:p-8">
         <div>
           <Badge>Guest cart</Badge>
           <h1 className="mt-3 text-3xl font-bold text-[var(--foreground)] md:text-4xl">Your cart</h1>
@@ -129,14 +129,14 @@ export function ClientCartPageClient() {
 
             return (
               <section key={hotelId} className="space-y-6 relative">
-                <div className="flex items-center justify-between border-b border-slate-200 pb-4">
+                <div className="flex items-center justify-between border-b border-[var(--border)] pb-4">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-50 border border-slate-100 text-slate-500">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--surface-3)] text-[var(--muted)]">
                       <Building2 aria-hidden size={20} />
                     </div>
                     <div>
-                      <h2 className="text-xl font-bold text-slate-900">{hotelName}</h2>
-                      <p className="text-sm text-slate-500">{hotelItems.length} item{hotelItems.length === 1 ? "" : "s"} in this cart</p>
+                      <h2 className="text-xl font-bold text-[var(--foreground)]">{hotelName}</h2>
+                      <p className="text-sm text-[var(--muted)]">{hotelItems.length} item{hotelItems.length === 1 ? "" : "s"} in this cart</p>
                     </div>
                   </div>
                   <Button onClick={() => refreshCart(clearCart(hotelId))} type="button" variant="ghost" className="text-red-500 hover:text-red-600 hover:bg-red-50">
@@ -206,7 +206,7 @@ function CartItemCard({
   onChange: (items: CartItem[]) => void;
 }) {
   return (
-    <Card className="group grid gap-4 rounded-[1.5rem] border-slate-200 shadow-sm transition-all duration-300 hover:border-[#f97316]/20 hover:shadow-[0_14px_34px_rgba(16,31,63,0.09)] md:grid-cols-[8rem_1fr_auto] md:items-start p-4">
+    <Card className="group grid gap-4 rounded-[1.5rem] border-[var(--border)] shadow-sm transition-all duration-300 hover:border-[#f97316]/20 hover:shadow-[0_14px_34px_rgba(16,31,63,0.09)] md:grid-cols-[8rem_1fr_auto] md:items-start p-4">
       {item.imageUrl ? (
         <div
           aria-label={item.name}
@@ -238,7 +238,7 @@ function CartItemCard({
       </div>
 
       <div className="flex flex-wrap items-center gap-2 md:justify-end">
-        <div className="flex items-center rounded-lg border border-slate-200 bg-white shadow-sm">
+        <div className="flex items-center rounded-lg border border-[var(--border)] bg-[var(--surface)] shadow-sm">
           <Button
             disabled={item.quantity <= 1}
             onClick={() => onChange(updateCartItemQuantity(index, item.quantity - 1))}
@@ -248,7 +248,7 @@ function CartItemCard({
           >
             <Minus aria-hidden size={14} />
           </Button>
-          <span className="flex h-9 w-10 items-center justify-center text-sm font-bold text-[var(--foreground)] border-x border-slate-200">
+          <span className="flex h-9 w-10 items-center justify-center border-x border-[var(--border)] text-sm font-bold text-[var(--foreground)]">
             {item.quantity}
           </span>
           <Button

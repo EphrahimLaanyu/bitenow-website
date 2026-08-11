@@ -122,6 +122,8 @@ body {
 .theme-mobile-nav { border-color: color-mix(in srgb, var(--border) 82%, transparent); background: color-mix(in srgb, var(--surface) 88%, transparent); }
 .theme-section { border-color: var(--border); background: var(--surface); }
 .theme-subtle { color: var(--muted); }
+.signin-notice { border-color: color-mix(in srgb, var(--accent) 28%, var(--border)); background: #fff7f2; }
+.dark .signin-notice { background: #2b1a14; border-color: #6c4123; }
 
 .auth-page { background: var(--background); color: var(--foreground); }
 .auth-panel { background: var(--surface); }
